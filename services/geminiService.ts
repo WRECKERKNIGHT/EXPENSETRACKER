@@ -2,16 +2,19 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Expense, Category } from "../types";
 
-// Initialize the client
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 const modelName = 'gemini-2.5-flash';
+
+// Helper to get AI instance safely
+const getAI = () => {
+  return new GoogleGenAI({ apiKey: process.env.API_KEY });
+};
 
 /**
  * Parses a natural language string into structured expense/income data using Gemini.
  */
 export const parseExpenseNaturalLanguage = async (input: string): Promise<Partial<Expense> | null> => {
   try {
+    const ai = getAI();
     const response = await ai.models.generateContent({
       model: modelName,
       contents: `Parse the following financial transaction description into structured data. 
@@ -61,6 +64,7 @@ export const getFinancialAdvice = async (
   userMessage: string
 ): Promise<string> => {
   try {
+    const ai = getAI();
     // Summarize expenses for context to save tokens/complexity, or pass raw if list is small.
     // For this demo, we pass the last 50 expenses.
     const recentExpenses = expenses.slice(0, 50).map(e => 
