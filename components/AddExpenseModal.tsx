@@ -1,49 +1,58 @@
+
 import React, { useState, useEffect } from 'react';
 import { Category, Expense, TransactionType } from '../types';
-import { parseExpenseNaturalLanguage } from '../services/geminiService';
-import { X, Sparkles, Loader2, Check, ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
+import { parseTransactionsFromText } from '../services/geminiService';
+import { X, Sparkles, Loader2, Check, ArrowDownCircle, ArrowUpCircle, Copy, AlertCircle, ArrowRight } from 'lucide-react';
 
 interface AddExpenseModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (expense: Omit<Expense, 'id' | 'createdAt'>) => void;
+  onAdd: (expenses: Omit<Expense, 'id' | 'createdAt'>[]) => void;
 }
 
 const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAdd }) => {
-  const [activeTab, setActiveTab] = useState<'manual' | 'ai'>('ai');
+  const [activeTab, setActiveTab] = useState<'ai' | 'manual'>('ai');
+  
+  // AI Bulk State
+  const [aiInput, setAiInput] = useState('');
+  const [isParsing, setIsParsing] = useState(false);
+  const [aiError, setAiError] = useState('');
+  const [detectedTransactions, setDetectedTransactions] = useState<Partial<Expense>[] | null>(null);
+
+  // Manual State
   const [type, setType] = useState<TransactionType>('expense');
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState<Category>(Category.FOOD);
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-  
-  // AI State
-  const [aiInput, setAiInput] = useState('');
-  const [isParsing, setIsParsing] = useState(false);
-  const [aiError, setAiError] = useState('');
 
   useEffect(() => {
     if (isOpen) {
-      setAmount('');
-      setDescription('');
-      setCategory(Category.FOOD);
-      setType('expense');
-      setDate(new Date().toISOString().split('T')[0]);
-      setAiInput('');
-      setAiError('');
-      setActiveTab('ai'); 
+      resetForm();
     }
   }, [isOpen]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const resetForm = () => {
+    setAmount('');
+    setDescription('');
+    setCategory(Category.FOOD);
+    setType('expense');
+    setDate(new Date().toISOString().split('T')[0]);
+    setAiInput('');
+    setAiError('');
+    setDetectedTransactions(null);
+    setActiveTab('ai'); 
+  };
+
+  const handleManualSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onAdd({
+    onAdd([{
       amount: parseFloat(amount),
       description,
       category,
       date,
       type
-    });
+    }]);
     onClose();
   };
 
@@ -51,90 +60,155 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
     if (!aiInput.trim()) return;
     setIsParsing(true);
     setAiError('');
+    setDetectedTransactions(null);
 
     try {
-      const result = await parseExpenseNaturalLanguage(aiInput);
-      if (result) {
-        if (result.amount) setAmount(result.amount.toString());
-        if (result.description) setDescription(result.description);
-        if (result.category) setCategory(result.category);
-        if (result.date) setDate(result.date);
-        if (result.type) setType(result.type);
-        
-        setActiveTab('manual'); 
+      const results = await parseTransactionsFromText(aiInput);
+      if (results && results.length > 0) {
+        setDetectedTransactions(results);
       } else {
-        setAiError("Could not understand. Please try again.");
+        setAiError("No transactions detected. Please try pasting a clearer SMS format.");
       }
     } catch (e) {
-      setAiError("AI service unavailable. Please enter manually.");
+      setAiError("AI service unavailable. Please try again.");
     } finally {
       setIsParsing(false);
     }
   };
 
+  const confirmDetectedTransactions = () => {
+    if (!detectedTransactions) return;
+    
+    // Convert Partial<Expense> to required format
+    const validExpenses = detectedTransactions.map(t => ({
+      amount: t.amount || 0,
+      description: t.description || 'Unknown Transaction',
+      category: (t.category as Category) || Category.OTHER,
+      date: t.date || new Date().toISOString().split('T')[0],
+      type: (t.type as TransactionType) || 'expense'
+    }));
+
+    onAdd(validExpenses);
+    onClose();
+  };
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in font-sans">
-      <div className="bg-[#121215] border border-zinc-800 rounded-[2rem] w-full max-w-lg shadow-2xl overflow-hidden transform transition-all ring-1 ring-white/10 card-glow">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-fade-in font-sans">
+      <div className="bg-[#121215] border border-white/10 rounded-[2rem] w-full max-w-2xl shadow-2xl overflow-hidden transform transition-all flex flex-col max-h-[90vh]">
         
-        <div className="flex justify-between items-center p-8 border-b border-zinc-800/50">
-          <h2 className="text-2xl font-bold text-white tracking-tight text-glow-sm">Add Transaction</h2>
-          <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors bg-zinc-800/50 p-2.5 rounded-full hover:bg-zinc-700">
+        <div className="flex justify-between items-center p-6 border-b border-zinc-800/50 bg-zinc-900/50">
+          <div className="flex items-center gap-3">
+             <div className="bg-gradient-to-br from-indigo-500 to-purple-500 p-2 rounded-xl shadow-[0_0_15px_rgba(99,102,241,0.5)]">
+               <Sparkles size={20} className="text-white" />
+             </div>
+             <h2 className="text-xl font-bold text-white tracking-tight text-glow-sm">Smart Import</h2>
+          </div>
+          <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors bg-zinc-800/50 p-2 rounded-full hover:bg-zinc-700">
             <X size={20} />
           </button>
         </div>
 
-        {/* Mode Tabs */}
-        <div className="flex p-2 m-6 mb-0 gap-3 bg-zinc-900 rounded-2xl border border-zinc-800">
-          <button
-            onClick={() => setActiveTab('ai')}
-            className={`flex-1 py-4 text-sm font-bold rounded-xl flex items-center justify-center gap-2 transition-all ${
-              activeTab === 'ai' 
-                ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]' 
-                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800'
-            }`}
-          >
-            <Sparkles size={18} />
-            AI Smart Entry
-          </button>
-          <button
-            onClick={() => setActiveTab('manual')}
-            className={`flex-1 py-4 text-sm font-bold rounded-xl transition-all ${
-              activeTab === 'manual' 
-                ? 'bg-zinc-800 text-white shadow-inner ring-1 ring-zinc-700' 
-                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800'
-            }`}
-          >
-            Manual Entry
-          </button>
+        {/* Mode Toggle */}
+        <div className="px-6 pt-6">
+             <div className="flex p-1 gap-1 bg-zinc-900 rounded-xl border border-zinc-800">
+                <button
+                    onClick={() => setActiveTab('ai')}
+                    className={`flex-1 py-3 text-sm font-bold rounded-lg flex items-center justify-center gap-2 transition-all ${
+                    activeTab === 'ai' 
+                        ? 'bg-zinc-800 text-white shadow-inner ring-1 ring-zinc-700' 
+                        : 'text-zinc-500 hover:text-zinc-300'
+                    }`}
+                >
+                    Paste SMS / Text
+                </button>
+                <button
+                    onClick={() => setActiveTab('manual')}
+                    className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${
+                    activeTab === 'manual' 
+                        ? 'bg-zinc-800 text-white shadow-inner ring-1 ring-zinc-700' 
+                        : 'text-zinc-500 hover:text-zinc-300'
+                    }`}
+                >
+                    Manual Entry
+                </button>
+            </div>
         </div>
 
-        <div className="p-8 pt-6">
+        <div className="p-6 overflow-y-auto custom-scrollbar flex-1">
           {activeTab === 'ai' ? (
-            <div className="space-y-5">
-              <label className="block text-sm font-medium text-zinc-400 ml-1 tracking-wide">
-                TELL ME WHAT HAPPENED
-              </label>
-              <textarea
-                value={aiInput}
-                onChange={(e) => setAiInput(e.target.value)}
-                placeholder="e.g. 'Got my Salary of 85000' or 'Spent 450 on Pizza'"
-                className="w-full h-36 bg-black/30 border border-zinc-700 rounded-2xl p-5 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 resize-none placeholder:text-zinc-600 shadow-inner text-lg"
-              />
-              {aiError && <p className="text-red-400 text-sm bg-red-500/10 p-4 rounded-xl border border-red-500/20">{aiError}</p>}
+            <div className="space-y-6">
               
-              <button
-                onClick={handleAiParse}
-                disabled={isParsing || !aiInput.trim()}
-                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-5 rounded-2xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.5)] mt-4 tracking-wide"
-              >
-                {isParsing ? <Loader2 className="animate-spin" /> : <Sparkles size={18} />}
-                {isParsing ? 'ANALYZING...' : 'AUTO-FILL DETAILS'}
-              </button>
+              {!detectedTransactions ? (
+                  <>
+                    <div className="bg-indigo-500/10 border border-indigo-500/20 p-4 rounded-xl flex gap-3">
+                        <AlertCircle className="text-indigo-400 shrink-0" size={20} />
+                        <p className="text-sm text-indigo-200 leading-relaxed">
+                            Paste your <strong>Bank SMS</strong>, <strong>UPI alerts</strong>, or <strong>Notes</strong> here. 
+                            The AI will automatically detect amounts, categories, and dates. You can paste multiple messages at once.
+                        </p>
+                    </div>
+
+                    <textarea
+                        value={aiInput}
+                        onChange={(e) => setAiInput(e.target.value)}
+                        placeholder={`Example:\nHDFC: Rs 500 debited for Zomato on 12-04-2024.\nCredited Rs 50000 Salary.\nPaid 200 for Tea via UPI.`}
+                        className="w-full h-40 bg-black/30 border border-zinc-700 rounded-2xl p-5 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 resize-none placeholder:text-zinc-600 shadow-inner text-base font-mono leading-relaxed"
+                    />
+
+                    {aiError && <p className="text-red-400 text-sm bg-red-500/10 p-3 rounded-xl border border-red-500/20">{aiError}</p>}
+                    
+                    <button
+                        onClick={handleAiParse}
+                        disabled={isParsing || !aiInput.trim()}
+                        className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.5)] tracking-wide"
+                    >
+                        {isParsing ? <Loader2 className="animate-spin" /> : <Sparkles size={18} />}
+                        {isParsing ? 'ANALYZING TEXT...' : 'DETECT TRANSACTIONS'}
+                    </button>
+                  </>
+              ) : (
+                  <div className="space-y-4 animate-fade-in">
+                      <div className="flex items-center justify-between">
+                          <h3 className="text-zinc-300 font-semibold">Detected {detectedTransactions.length} Transactions</h3>
+                          <button onClick={() => setDetectedTransactions(null)} className="text-xs text-indigo-400 hover:underline">Clear & Try Again</button>
+                      </div>
+                      
+                      <div className="space-y-3 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                          {detectedTransactions.map((tx, idx) => (
+                              <div key={idx} className="bg-zinc-900/80 border border-zinc-800 p-4 rounded-xl flex items-center justify-between gap-4">
+                                  <div className="flex items-center gap-3">
+                                      <div className={`p-2 rounded-lg ${tx.type === 'income' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
+                                          {tx.type === 'income' ? <ArrowUpCircle size={18} /> : <ArrowDownCircle size={18} />}
+                                      </div>
+                                      <div>
+                                          <p className="text-zinc-200 font-medium text-sm">{tx.description}</p>
+                                          <div className="flex gap-2 text-xs text-zinc-500 mt-1">
+                                              <span className="bg-zinc-800 px-2 py-0.5 rounded">{tx.category}</span>
+                                              <span>{tx.date}</span>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <p className={`font-mono font-bold ${tx.type === 'income' ? 'text-emerald-400' : 'text-zinc-200'}`}>
+                                      {tx.type === 'income' ? '+' : '-'} ₹{tx.amount}
+                                  </p>
+                              </div>
+                          ))}
+                      </div>
+
+                      <button
+                        onClick={confirmDetectedTransactions}
+                        className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] tracking-wide mt-2"
+                      >
+                        <Check size={20} />
+                        CONFIRM & SAVE ALL
+                      </button>
+                  </div>
+              )}
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleManualSubmit} className="space-y-6">
               
               {/* Type Toggle */}
               <div className="grid grid-cols-2 gap-4">
@@ -215,13 +289,13 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                 </div>
               </div>
 
-              <div className="pt-4">
+              <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full bg-white text-black hover:bg-zinc-200 font-bold py-5 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] tracking-wide"
+                  className="w-full bg-white text-black hover:bg-zinc-200 font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] tracking-wide"
                 >
                   <Check size={20} />
-                  SAVE {type === 'income' ? 'INCOME' : 'EXPENSE'}
+                  SAVE TRANSACTION
                 </button>
               </div>
             </form>
