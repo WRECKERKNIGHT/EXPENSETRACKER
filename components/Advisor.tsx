@@ -70,10 +70,10 @@ const Advisor: React.FC<AdvisorProps> = ({ expenses }) => {
   };
 
   return (
-    <div className="flex flex-col h-[650px] bg-[#121215]/80 backdrop-blur-md border border-zinc-800 rounded-[2rem] overflow-hidden shadow-2xl animate-fade-in font-sans">
+    <div className="flex flex-col h-[650px] bg-[#0f172a]/80 backdrop-blur-md border border-zinc-800 rounded-[2rem] overflow-hidden shadow-2xl animate-fade-in font-sans">
       <div className="bg-zinc-900/50 p-6 border-b border-zinc-800 flex items-center gap-3">
-        <div className="p-2 bg-purple-500/10 rounded-xl border border-purple-500/20 shadow-[0_0_15px_rgba(168,85,247,0.2)]">
-            <Sparkles className="w-5 h-5 text-purple-400" />
+        <div className="p-2 bg-teal-500/10 rounded-xl border border-teal-500/20 shadow-[0_0_15px_rgba(20,184,166,0.2)]">
+            <Sparkles className="w-5 h-5 text-teal-400" />
         </div>
         <h3 className="font-bold text-zinc-100 text-lg text-glow-sm">Financial Advisor</h3>
       </div>
@@ -82,12 +82,12 @@ const Advisor: React.FC<AdvisorProps> = ({ expenses }) => {
         {messages.map((msg) => (
           <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}>
             <div className={`flex gap-4 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg ${msg.role === 'user' ? 'bg-indigo-600 shadow-indigo-500/20' : 'bg-zinc-800 shadow-black/20'}`}>
-                {msg.role === 'user' ? <User size={18} className="text-white" /> : <Bot size={18} className="text-purple-400" />}
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg ${msg.role === 'user' ? 'bg-emerald-600 shadow-emerald-500/20' : 'bg-zinc-800 shadow-black/20'}`}>
+                {msg.role === 'user' ? <User size={18} className="text-white" /> : <Bot size={18} className="text-teal-400" />}
               </div>
               <div className={`p-4 rounded-2xl text-[15px] leading-relaxed shadow-md ${
                 msg.role === 'user' 
-                  ? 'bg-indigo-600 text-white rounded-tr-none shadow-[0_0_15px_rgba(99,102,241,0.3)]' 
+                  ? 'bg-emerald-600 text-white rounded-tr-none shadow-[0_0_15px_rgba(16,185,129,0.3)]' 
                   : 'bg-zinc-800/80 text-zinc-200 rounded-tl-none border border-zinc-700/50'
               }`}>
                 {msg.text}
@@ -99,12 +99,12 @@ const Advisor: React.FC<AdvisorProps> = ({ expenses }) => {
           <div className="flex justify-start animate-fade-in">
              <div className="flex gap-4 max-w-[85%]">
               <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center shadow-lg">
-                <Bot size={18} className="text-purple-400" />
+                <Bot size={18} className="text-teal-400" />
               </div>
               <div className="bg-zinc-800/80 p-5 rounded-2xl rounded-tl-none border border-zinc-700/50 flex items-center gap-2">
-                <span className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                <span className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                <span className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                <span className="w-2 h-2 bg-teal-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                <span className="w-2 h-2 bg-teal-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                <span className="w-2 h-2 bg-teal-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
               </div>
             </div>
           </div>
@@ -120,13 +120,13 @@ const Advisor: React.FC<AdvisorProps> = ({ expenses }) => {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Ask about your spending..."
-            className="flex-1 bg-black/40 text-zinc-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 border border-zinc-700/50 shadow-inner placeholder:text-zinc-600"
+            className="flex-1 bg-black/40 text-zinc-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 border border-zinc-700/50 shadow-inner placeholder:text-zinc-600"
             disabled={loading}
           />
           <button
             onClick={handleSend}
             disabled={loading || !input.trim()}
-            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:hover:bg-indigo-600 text-white px-6 rounded-2xl transition-all shadow-[0_0_15px_rgba(99,102,241,0.4)]"
+            className="bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:hover:bg-emerald-600 text-white px-6 rounded-2xl transition-all shadow-[0_0_15px_rgba(16,185,129,0.4)]"
           >
             <Send size={22} />
           </button>
