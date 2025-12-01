@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { parseSMSAPI, bulkCreateExpensesAPI } from '../services/apiService';
+import { parseSMSAPI } from '../services/apiService';
 import { Expense } from '../types';
 
 interface SmsImportModalProps {
@@ -27,19 +27,8 @@ const SmsImportModal: React.FC<SmsImportModalProps> = ({ isOpen, onClose, onImpo
     try {
       const parsed: any = await parseSMSAPI(text, sender || '');
 
-      // If backend returns an array of transactions, try to bulk save them
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        const mapped = parsed.map((p: any) => ({
-          amount: p.amount || p.value || 0,
-          category: p.category || 'Uncategorized',
-          type: p.type === 'income' || p.type === 'expense' ? p.type : (p.amount > 0 ? 'expense' : 'expense'),
-          date: p.date || new Date().toISOString().split('T')[0],
-          description: p.description || p.memo || 'Imported SMS'
-        }));
-
-        await bulkCreateExpensesAPI(mapped);
-      }
-
+      // Backend returns a transaction object; we just imported it
+      // On success, refresh expenses and close
       setText('');
       setSender('');
       onImported && onImported();

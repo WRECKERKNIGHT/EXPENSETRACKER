@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Expense, ViewMode, AppScreen, UserProfile, Category } from './types';
 import { getExpenses, saveExpense, deleteExpense, getUserProfile, saveUserProfile, isSessionActive, setSessionActive } from './services/storageService';
-import { loginAPI, registerAPI, setAuthToken, getAuthToken, clearAuthToken, getExpensesAPI, deleteExpenseAPI, bulkCreateExpensesAPI } from './services/apiService';
+import { loginAPI, registerAPI, setAuthToken, getAuthToken, clearAuthToken, getExpensesAPI, deleteExpenseAPI, bulkCreateExpensesAPI, getCurrentUserAPI } from './services/apiService';
 import Overview from './components/Overview';
 import SmsImportModal from './components/SmsImportModal';
 import ExpenseList from './components/ExpenseList';
@@ -55,15 +55,21 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    // Check for existing token and user session
+    // Check for existing token and user session on app load
     const token = getAuthToken();
     if (token) {
-      const storedUser = getUserProfile();
-      if (storedUser) {
-        setUser(storedUser);
-        loadExpenses(storedUser);
-        setScreen('app');
-      }
+      // Try to load user profile from backend to verify token is still valid
+      getCurrentUserAPI()
+        .then((user) => {
+          setUser(user);
+          loadExpenses(user);
+          setScreen('app');
+        })
+        .catch((error) => {
+          console.error('Failed to load user profile:', error);
+          clearAuthToken();
+          setScreen('landing');
+        });
     }
   }, []);
 
