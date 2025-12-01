@@ -84,13 +84,11 @@ export const getCurrentUser = (): UserProfile | null => {
 
 // --- Expense Management (Scoped to User) ---
 
-export const getExpenses = (email: string): Expense[] => {
+export const getExpensesForEmail = (email: string): Expense[] => {
   if (!email) return [];
   try {
     const stored = localStorage.getItem(getUserExpenseKey(email));
     if (!stored) return [];
-    
-    // Parse and ensure date objects are handled if necessary (though strings in JSON are fine for our types)
     return JSON.parse(stored);
   } catch (e) {
     console.error("Failed to load expenses", e);
@@ -98,17 +96,17 @@ export const getExpenses = (email: string): Expense[] => {
   }
 };
 
-export const saveExpense = (email: string, expense: Expense): Expense[] => {
+export const saveExpenseForEmail = (email: string, expense: Expense): Expense[] => {
   if (!email) return [];
-  const current = getExpenses(email);
+  const current = getExpensesForEmail(email);
   const updated = [expense, ...current];
   localStorage.setItem(getUserExpenseKey(email), JSON.stringify(updated));
   return updated;
 };
 
-export const deleteExpense = (email: string, id: string): Expense[] => {
+export const deleteExpenseForEmail = (email: string, id: string): Expense[] => {
   if (!email) return [];
-  const current = getExpenses(email);
+  const current = getExpensesForEmail(email);
   const updated = current.filter(e => e.id !== id);
   localStorage.setItem(getUserExpenseKey(email), JSON.stringify(updated));
   return updated;
@@ -117,4 +115,51 @@ export const deleteExpense = (email: string, id: string): Expense[] => {
 export const clearUserExpenses = (email: string): void => {
   if (!email) return;
   localStorage.removeItem(getUserExpenseKey(email));
+};
+
+// Backwards-compatible wrappers (previous API expected no email param)
+export const getExpenses = (): Expense[] => {
+  const email = getCurrentUserEmail();
+  return getExpensesForEmail(email || '');
+};
+
+export const saveExpense = (expense: Expense): Expense[] => {
+  const email = getCurrentUserEmail();
+  if (!email) return [];
+  return saveExpenseForEmail(email, expense);
+};
+
+export const deleteExpense = (id: string): Expense[] => {
+  const email = getCurrentUserEmail();
+  if (!email) return [];
+  return deleteExpenseForEmail(email, id);
+};
+
+// Backwards-compatible user/profile helpers
+export const getUserProfile = (): UserProfile | null => {
+  return getCurrentUser();
+};
+
+export const saveUserProfile = (profile: UserProfile): void => {
+  const users = getAllUsers();
+  const exists = users.find(u => u.email === profile.email);
+  if (exists) {
+    updateUserProfile(profile);
+  } else {
+    registerUser(profile);
+  }
+};
+
+export const isSessionActive = (): boolean => {
+  return !!getCurrentUserEmail();
+};
+
+export const setSessionActive = (active: boolean): void => {
+  if (active) {
+    const users = getAllUsers();
+    const last = users[users.length - 1];
+    if (last) loginUserSession(last.email);
+  } else {
+    logoutUser();
+  }
 };
