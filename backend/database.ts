@@ -82,6 +82,20 @@ const createTables = async (): Promise<void> => {
       FOREIGN KEY(userId) REFERENCES users(id)
     )
   `);
+
+  await runAsync(`
+    CREATE TABLE IF NOT EXISTS recurringPayments (
+      id TEXT PRIMARY KEY,
+      userId TEXT NOT NULL,
+      name TEXT NOT NULL,
+      amount REAL NOT NULL,
+      category TEXT NOT NULL,
+      dueDay INTEGER NOT NULL,
+      createdAt INTEGER NOT NULL,
+      updatedAt INTEGER NOT NULL,
+      FOREIGN KEY(userId) REFERENCES users(id)
+    )
+  `);
 };
 
 export const getDatabase = (): sqlite3.Database => db;

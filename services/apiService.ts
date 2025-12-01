@@ -115,6 +115,28 @@ export const deleteBudgetAPI = async (id: string) => {
   return makeRequest(`/budgets/${id}`, { method: 'DELETE' });
 };
 
+// ===== RECURRING PAYMENTS API =====
+
+export const getRecurringAPI = async () => {
+  return makeRequest('/recurring', { method: 'GET' });
+};
+
+export const createRecurringAPI = async (data: {
+  name: string;
+  amount: number;
+  category: string;
+  dueDay: number;
+}) => {
+  return makeRequest('/recurring', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+};
+
+export const deleteRecurringAPI = async (id: string) => {
+  return makeRequest(`/recurring/${id}`, { method: 'DELETE' });
+};
+
 // ===== EXPENSE API =====
 
 export const createExpenseAPI = async (expenseData: {
