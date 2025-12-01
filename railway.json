@@ -1,0 +1,24 @@
+{
+  "name": "spendsmart-backend",
+  "displayName": "SpendSmart Backend API",
+  "services": [
+    {
+      "key": "web",
+      "type": "web",
+      "plan": "free",
+      "buildCommand": "npm install && npm run build",
+      "startCommand": "npm start",
+      "envVars": [
+        {
+          "key": "JWT_SECRET",
+          "scope": "build,runtime",
+          "generateValue": true
+        },
+        {
+          "key": "NODE_ENV",
+          "value": "production"
+        }
+      ]
+    }
+  ]
+}

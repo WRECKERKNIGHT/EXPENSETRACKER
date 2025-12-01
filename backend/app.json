@@ -1,0 +1,20 @@
+{
+  "name": "SpendSmart Express Backend",
+  "description": "Backend API for SpendSmart expense tracker",
+  "repository": "https://github.com/WRECKERKNIGHT/EXPENSETRACKER",
+  "keywords": ["node", "express", "typescript", "expense-tracker"],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "env": {
+    "JWT_SECRET": {
+      "description": "Secret key for JWT token signing",
+      "generator": "secret"
+    },
+    "NODE_ENV": {
+      "value": "production"
+    }
+  }
+}
