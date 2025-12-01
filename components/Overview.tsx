@@ -40,8 +40,9 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
 
   const checkBankConnection = async () => {
     try {
-      const connections = await getBankConnectionsAPI();
-      setIsBankConnected(connections && connections.length > 0);
+      const connections: any = await getBankConnectionsAPI();
+      const arr = Array.isArray(connections) ? connections : (connections && (connections.items || connections.connections)) || [];
+      setIsBankConnected(Array.isArray(arr) && arr.length > 0);
     } catch (error) {
       console.error('Failed to check bank connections:', error);
     }

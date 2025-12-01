@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_BASE || 'http://localhost:5000/api';
+const API_URL = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:5000/api';
 
 interface ApiResponse<T> {
   data?: T;
@@ -19,7 +19,7 @@ export const clearAuthToken = () => {
   localStorage.removeItem('spendsmart_token');
 };
 
-const makeRequest = async <T>(
+const makeRequest = async <T = any>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> => {
@@ -37,11 +37,12 @@ const makeRequest = async <T>(
   });
 
   if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || 'API Error');
+    const errorData: any = await response.json();
+    throw new Error(errorData?.error || 'API Error');
   }
 
-  return response.json();
+  const data: any = await response.json();
+  return data as T;
 };
 
 // ===== AUTH API =====

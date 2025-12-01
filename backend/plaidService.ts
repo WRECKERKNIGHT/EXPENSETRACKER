@@ -23,8 +23,8 @@ export const createPlaidLinkToken = async (userId: string) => {
   };
 
   const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error_description || data.error_message || 'Plaid create link token failed');
+  const data: any = await res.json();
+  if (!res.ok) throw new Error(data?.error_description || data?.error_message || 'Plaid create link token failed');
   return data;
 };
 
@@ -41,8 +41,8 @@ export const exchangePlaidPublicToken = async (userId: string, publicToken: stri
   };
 
   const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error_description || data.error_message || 'Plaid exchange failed');
+  const data: any = await res.json();
+  if (!res.ok) throw new Error(data?.error_description || data?.error_message || 'Plaid exchange failed');
   // data contains access_token, item_id
   return data;
 };
