@@ -5,6 +5,7 @@ import { initializeDatabase } from './database';
 import { registerUser, loginUser, verifyToken, getUserById, updateUserProfile } from './authService';
 import { createExpense, getExpenses, updateExpense, deleteExpense, bulkCreateExpenses } from './expenseService';
 import { connectBank, getBankConnections, saveSMSTransaction, getSMSTransactions, disconnectBank } from './bankService';
+import { createPlaidLinkToken, exchangePlaidPublicToken } from './plaidService';
 
 dotenv.config();
 
@@ -255,6 +256,53 @@ app.post('/api/bank/upload', authMiddleware, async (req: AuthRequest, res: Respo
 
     const created = await bulkCreateExpenses(req.userId!, expensesToCreate);
     res.json({ imported: created.length, items: created });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===== PLAID SCAFFOLD ROUTES (requires PLAID_CLIENT_ID, PLAID_SECRET env vars)
+app.post('/api/bank/plaid/link_token', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    const result = await createPlaidLinkToken(req.userId!);
+    res.json(result);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/bank/plaid/exchange', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    const { publicToken } = req.body;
+    if (!publicToken) return res.status(400).json({ error: 'publicToken required' });
+    const result = await exchangePlaidPublicToken(req.userId!, publicToken);
+    // In a real app you'd persist access_token and item_id securely
+    res.json(result);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===== SMS FORWARDER ENDPOINT =====
+// Accepts an array of SMS messages from a trusted mobile companion or forwarder
+app.post('/api/sms/forward', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    const { messages } = req.body;
+    if (!Array.isArray(messages)) return res.status(400).json({ error: 'messages must be an array' });
+
+    const results: any[] = [];
+    for (const msg of messages) {
+      // Expect each msg to have { messageContent, senderBank }
+      if (!msg.messageContent || !msg.senderBank) continue;
+      try {
+        const saved = await saveSMSTransaction(req.userId!, { messageContent: msg.messageContent, senderBank: msg.senderBank });
+        results.push({ ok: true, saved });
+      } catch (err: any) {
+        results.push({ ok: false, error: err.message });
+      }
+    }
+
+    res.json({ processed: results.length, results });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
