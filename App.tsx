@@ -62,6 +62,10 @@ const App: React.FC = () => {
         loadExpenses(storedUser);
         setScreen('app');
       }
+    }
+    }
+  }, []);
+
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!nameInput || !emailInput || !passwordInput || !incomeInput || !balanceInput) return;
@@ -79,7 +83,7 @@ const App: React.FC = () => {
 
       saveUserProfile(newUser);
       setUser(newUser);
-      
+
       // Clear form inputs
       setNameInput('');
       setEmailInput('');
@@ -94,16 +98,6 @@ const App: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };    initialExpenses = [initialTx];
-    }
-    
-    setExpenses(initialExpenses);
-    setNameInput('');
-    setEmailInput('');
-    setPasswordInput('');
-    setIncomeInput('');
-    setBalanceInput('');
-    setScreen('setup'); // Go to Setup Wizard immediately after signup
   };
 
   const handleGoogleAuth = () => {
