@@ -1,16 +1,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { Expense, ViewMode, AppScreen, UserProfile, Category } from './types';
-import { getExpenses, saveExpense, deleteExpense, getUserProfile, saveUserProfile, isSessionActive, setSessionActive } from './services/storageService';
+import { getExpenses, saveExpense, saveUserProfile, setSessionActive } from './services/storageService';
 import { loginAPI, registerAPI, setAuthToken, getAuthToken, clearAuthToken, getExpensesAPI, deleteExpenseAPI, bulkCreateExpensesAPI, getCurrentUserAPI } from './services/apiService';
 import Overview from './components/Overview';
 import SmsImportModal from './components/SmsImportModal';
 import ExpenseList from './components/ExpenseList';
 import Advisor from './components/Advisor';
+import Reports from './components/Reports';
 import AddExpenseModal from './components/AddExpenseModal';
 import SpaceBackground from './components/SpaceBackground';
 import SetupWizard from './components/SetupWizard';
-import { LayoutDashboard, Receipt, Sparkles, Plus, Wallet, LogOut, ArrowRight, Lock, User, ShieldCheck, Smartphone, Mail, Key } from 'lucide-react';
+import { LayoutDashboard, Receipt, Sparkles, Plus, Wallet, LogOut, ArrowRight, Lock, User, ShieldCheck, Smartphone, Mail, Key, BarChart2 } from 'lucide-react';
 
 // Google Icon Component
 const GoogleIcon = () => (
@@ -86,10 +87,26 @@ const App: React.FC = () => {
         email: emailInput,
         password: passwordInput,
         monthlyIncome: parseFloat(incomeInput),
+        // Default to INR for now; can be exposed as a dropdown later
+        currency: 'INR',
       });
 
       saveUserProfile(newUser);
       setUser(newUser);
+
+      // Create an opening balance transaction if user entered one
+      const openingBalance = parseFloat(balanceInput);
+      if (!Number.isNaN(openingBalance) && openingBalance > 0) {
+        await bulkCreateExpensesAPI([
+          {
+            amount: openingBalance,
+            category: Category.SALARY,
+            type: 'income',
+            date: new Date().toISOString().split('T')[0],
+            description: 'Opening Balance',
+          },
+        ]);
+      }
 
       // Clear form inputs
       setNameInput('');
@@ -532,6 +549,17 @@ const App: React.FC = () => {
             <Sparkles size={20} className={view === 'advisor' ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]' : ''} />
             AI Advisor
           </button>
+          <button 
+            onClick={() => setView('reports')}
+            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-medium ${
+              view === 'reports' 
+              ? 'bg-zinc-800/80 text-white shadow-[0_0_15px_rgba(255,255,255,0.05)] border border-white/5' 
+              : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/30'
+            }`}
+          >
+            <LayoutDashboard size={20} className={view === 'reports' ? 'text-sky-400 drop-shadow-[0_0_8px_rgba(56,189,248,0.6)]' : ''} />
+            Reports
+          </button>
         </nav>
 
         {/* Mobile Navigation Bar (Bottom) */}
@@ -547,6 +575,10 @@ const App: React.FC = () => {
            <button onClick={() => setView('advisor')} className={`flex flex-col items-center justify-center p-2 rounded-xl ${view === 'advisor' ? 'text-purple-400 bg-purple-500/10' : 'text-zinc-500'}`}>
               <Sparkles size={20} />
               <span className="text-[10px] font-medium mt-1">AI</span>
+           </button>
+           <button onClick={() => setView('reports')} className={`flex flex-col items-center justify-center p-2 rounded-xl ${view === 'reports' ? 'text-sky-400 bg-sky-500/10' : 'text-zinc-500'}`}>
+              <BarChart2 size={20} />
+              <span className="text-[10px] font-medium mt-1">Reports</span>
            </button>
            <button onClick={() => setIsModalOpen(true)} className="flex flex-col items-center justify-center p-2 rounded-xl text-white bg-indigo-600 shadow-lg">
               <Plus size={20} />
@@ -587,11 +619,13 @@ const App: React.FC = () => {
                  {view === 'dashboard' && 'Dashboard Overview'}
                  {view === 'expenses' && 'Manage Expenses'}
                  {view === 'advisor' && 'Financial Assistant'}
+                 {view === 'reports' && 'Spending Reports'}
                </h1>
                <p className="text-zinc-400 text-lg font-light">
                  {view === 'dashboard' && `Welcome back, ${user?.name}`}
                  {view === 'expenses' && 'Detailed breakdown of your transactions.'}
                  {view === 'advisor' && 'AI-powered financial insights.'}
+                 {view === 'reports' && 'High-level summaries and exportable statements.'}
                </p>
            </div>
            <div className="flex items-center gap-4">
@@ -613,18 +647,20 @@ const App: React.FC = () => {
         </div>
 
         <div className="max-w-7xl mx-auto pb-10">
-          {view === 'dashboard' && (
+          {view === 'dashboard' && user && (
             <Overview 
               expenses={expenses} 
-              monthlyIncome={user?.monthlyIncome || 0} 
+              monthlyIncome={user.monthlyIncome} 
+              currency={user.currency || 'INR'}
               onAddTx={() => setIsModalOpen(true)}
               onManageExpenses={() => setView('expenses')}
-              userName={user?.name}
-              onImportComplete={() => loadExpenses(user!)}
+              userName={user.name}
+              onImportComplete={() => loadExpenses(user)}
             />
           )}
           {view === 'expenses' && <ExpenseList expenses={expenses} onDelete={handleDeleteExpense} />}
           {view === 'advisor' && <Advisor expenses={expenses} />}
+          {view === 'reports' && user && <Reports expenses={expenses} currency={user.currency || 'INR'} />}
         </div>
 
       </main>

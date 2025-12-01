@@ -70,6 +70,18 @@ const createTables = async (): Promise<void> => {
       FOREIGN KEY(userId) REFERENCES users(id)
     )
   `);
+
+  await runAsync(`
+    CREATE TABLE IF NOT EXISTS budgets (
+      id TEXT PRIMARY KEY,
+      userId TEXT NOT NULL,
+      category TEXT NOT NULL,
+      monthlyLimit REAL NOT NULL,
+      createdAt INTEGER NOT NULL,
+      updatedAt INTEGER NOT NULL,
+      FOREIGN KEY(userId) REFERENCES users(id)
+    )
+  `);
 };
 
 export const getDatabase = (): sqlite3.Database => db;

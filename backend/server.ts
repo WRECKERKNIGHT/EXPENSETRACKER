@@ -6,6 +6,7 @@ import { registerUser, loginUser, verifyToken, getUserById, updateUserProfile } 
 import { createExpense, getExpenses, updateExpense, deleteExpense, bulkCreateExpenses } from './expenseService';
 import { connectBank, getBankConnections, saveSMSTransaction, getSMSTransactions, disconnectBank } from './bankService';
 import { createPlaidLinkToken, exchangePlaidPublicToken } from './plaidService';
+import { getBudgets, createBudget, updateBudget, deleteBudget } from './budgetService';
 
 dotenv.config();
 
@@ -134,6 +135,59 @@ app.get('/api/expenses', authMiddleware, async (req: AuthRequest, res: Response)
   try {
     const expenses = await getExpenses(req.userId!);
     res.json(expenses);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===== BUDGET ROUTES =====
+
+app.get('/api/budgets', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    const budgets = await getBudgets(req.userId!);
+    res.json(budgets);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/budgets', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    const { category, monthlyLimit } = req.body;
+
+    if (!category || !monthlyLimit) {
+      return res.status(400).json({ error: 'Category and monthlyLimit are required' });
+    }
+
+    const budget = await createBudget(req.userId!, category, Number(monthlyLimit));
+    res.status(201).json(budget);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.put('/api/budgets/:id', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    const { monthlyLimit } = req.body;
+    if (!monthlyLimit) {
+      return res.status(400).json({ error: 'monthlyLimit is required' });
+    }
+
+    const updated = await updateBudget(req.userId!, req.params.id, Number(monthlyLimit));
+    if (!updated) {
+      return res.status(404).json({ error: 'Budget not found' });
+    }
+
+    res.json(updated);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.delete('/api/budgets/:id', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    await deleteBudget(req.userId!, req.params.id);
+    res.json({ message: 'Budget deleted' });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
