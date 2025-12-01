@@ -230,11 +230,11 @@ app.post('/api/bank/upload', authMiddleware, async (req: AuthRequest, res: Respo
     if (!connectionId || !csvContent) return res.status(400).json({ error: 'connectionId and csvContent required' });
 
     // Simple CSV parser: expect header with date,description,amount,type (type optional)
-    const lines = csvContent.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    const lines = csvContent.split('\n').map((l: string) => l.trim()).filter((l: string) => l.length > 0);
     const header = lines.shift();
     if (!header) return res.status(400).json({ error: 'Empty CSV' });
 
-    const cols = header.split(',').map(c => c.trim().toLowerCase());
+    const cols = header.split(',').map((c: string) => c.trim().toLowerCase());
     const idxDate = cols.indexOf('date');
     const idxDesc = cols.indexOf('description');
     const idxAmount = cols.indexOf('amount');
@@ -244,7 +244,7 @@ app.post('/api/bank/upload', authMiddleware, async (req: AuthRequest, res: Respo
 
     const expensesToCreate: any[] = [];
     for (const line of lines) {
-      const parts = line.split(',').map(p => p.trim());
+      const parts = line.split(',').map((p: string) => p.trim());
       const date = parts[idxDate];
       const description = parts[idxDesc];
       const amountRaw = parts[idxAmount].replace(/[^0-9.-]/g, '');
