@@ -1,9 +1,10 @@
 
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { Expense } from '../types';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, AreaChart, Area, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
-import { TrendingUp, TrendingDown, Wallet, Plus, PieChart as PieChartIcon, Activity, ListChecks, Link as LinkIcon, CheckCircle2, Loader2, Sparkles } from 'lucide-react';
-import { connectBankAPI, getBankConnectionsAPI } from '../services/apiService';
+import { TrendingUp, TrendingDown, Wallet, Plus, PieChart as PieChartIcon, Activity, ListChecks, Link as LinkIcon, CheckCircle2, Loader2, Sparkles, UploadCloud, MessageSquare } from 'lucide-react';
+import { connectBankAPI, getBankConnectionsAPI, uploadBankCSVAPI } from '../services/apiService';
+import SmsImportModal from './SmsImportModal';
 
 interface OverviewProps {
   expenses: Expense[];
@@ -11,6 +12,7 @@ interface OverviewProps {
   onAddTx: () => void;
   onManageExpenses: () => void;
   userName?: string;
+  onImportComplete?: () => void;
 }
 
 const COLORS_CATEGORY = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#14b8a6', '#64748b'];
@@ -24,9 +26,11 @@ const formatCurrency = (amount: number) => {
   }).format(amount);
 };
 
-const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, onManageExpenses, userName }) => {
+const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, onManageExpenses, userName, onImportComplete }) => {
   const [isBankConnecting, setIsBankConnecting] = useState(false);
   const [isBankConnected, setIsBankConnected] = useState(false);
+  const [showSmsModal, setShowSmsModal] = useState(false);
+  const fileRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     checkBankConnection();
@@ -50,10 +54,30 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
       const accountNumber = '****1234';
       await connectBankAPI(bankName, accountNumber);
       setIsBankConnected(true);
+      onImportComplete && onImportComplete();
     } catch (error) {
       console.error('Failed to connect bank:', error);
     } finally {
       setIsBankConnecting(false);
+    }
+  };
+
+  const handleFilePick = () => {
+    fileRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    const text = await f.text();
+    try {
+      await uploadBankCSVAPI('', text);
+      onImportComplete && onImportComplete();
+    } catch (err) {
+      console.error('Failed to upload CSV:', err);
+    } finally {
+      // clear file input
+      if (fileRef.current) fileRef.current.value = '';
     }
   };
 
@@ -162,18 +186,30 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
                 <span className="text-zinc-400 font-semibold text-sm uppercase tracking-wider">Balance</span>
               </div>
               
-              <button 
-                onClick={handleConnectBank}
-                disabled={isBankConnecting || isBankConnected}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${
-                    isBankConnected 
-                    ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' 
-                    : 'bg-zinc-800 text-zinc-400 border-zinc-700 hover:bg-zinc-700'
-                }`}
-              >
-                  {isBankConnecting ? <Loader2 size={12} className="animate-spin" /> : isBankConnected ? <CheckCircle2 size={12} /> : <LinkIcon size={12} />}
-                  {isBankConnecting ? 'Syncing...' : isBankConnected ? 'Bank Connected' : 'Connect Bank'}
-              </button>
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={handleConnectBank}
+                  disabled={isBankConnecting || isBankConnected}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${
+                      isBankConnected 
+                      ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' 
+                      : 'bg-zinc-800 text-zinc-400 border-zinc-700 hover:bg-zinc-700'
+                  }`}
+                >
+                    {isBankConnecting ? <Loader2 size={12} className="animate-spin" /> : isBankConnected ? <CheckCircle2 size={12} /> : <LinkIcon size={12} />}
+                    {isBankConnecting ? 'Syncing...' : isBankConnected ? 'Bank Connected' : 'Connect Bank'}
+                </button>
+
+                <button onClick={() => setShowSmsModal(true)} className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-zinc-800 text-zinc-300 border border-zinc-700 hover:bg-zinc-700">
+                  <MessageSquare size={14} /> Import SMS
+                </button>
+
+                <button onClick={handleFilePick} className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-zinc-800 text-zinc-300 border border-zinc-700 hover:bg-zinc-700">
+                  <UploadCloud size={14} /> Import CSV
+                </button>
+                <input ref={fileRef} type="file" accept=".csv" className="hidden" onChange={handleFileChange} />
+
+              </div>
            </div>
            <div className="relative z-10">
                <p className="text-3xl font-bold text-white mb-1 text-glow-success">{formatCurrency(calculations.balance)}</p>
@@ -350,6 +386,8 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
             </ResponsiveContainer>
           </div>
         </div>
+
+        <SmsImportModal isOpen={showSmsModal} onClose={() => setShowSmsModal(false)} onImported={onImportComplete} />
 
     </div>
   );

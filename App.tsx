@@ -4,6 +4,7 @@ import { Expense, ViewMode, AppScreen, UserProfile, Category } from './types';
 import { getExpenses, saveExpense, deleteExpense, getUserProfile, saveUserProfile, isSessionActive, setSessionActive } from './services/storageService';
 import { loginAPI, registerAPI, setAuthToken, getAuthToken, clearAuthToken, getExpensesAPI, deleteExpenseAPI, bulkCreateExpensesAPI } from './services/apiService';
 import Overview from './components/Overview';
+import SmsImportModal from './components/SmsImportModal';
 import ExpenseList from './components/ExpenseList';
 import Advisor from './components/Advisor';
 import AddExpenseModal from './components/AddExpenseModal';
@@ -28,6 +29,7 @@ const App: React.FC = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [view, setView] = useState<ViewMode>('dashboard');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSmsModalOpen, setIsSmsModalOpen] = useState(false);
 
   // Auth Forms State
   const [nameInput, setNameInput] = useState('');
@@ -554,6 +556,12 @@ const App: React.FC = () => {
              Add Transaction
            </button>
            <button 
+             onClick={() => setIsSmsModalOpen(true)}
+             className="w-full mt-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold py-3 rounded-2xl transition-all flex items-center justify-center gap-2"
+           >
+             Import SMS
+           </button>
+           <button 
             onClick={handleLogout}
             className="w-full flex items-center justify-center gap-2 text-zinc-500 hover:text-red-400 py-2 text-sm transition-colors font-medium tracking-wide"
            >
@@ -605,6 +613,7 @@ const App: React.FC = () => {
               onAddTx={() => setIsModalOpen(true)}
               onManageExpenses={() => setView('expenses')}
               userName={user?.name}
+              onImportComplete={() => loadExpenses(user!)}
             />
           )}
           {view === 'expenses' && <ExpenseList expenses={expenses} onDelete={handleDeleteExpense} />}
@@ -618,6 +627,8 @@ const App: React.FC = () => {
         onClose={() => setIsModalOpen(false)} 
         onAdd={handleAddExpenses} 
       />
+
+      <SmsImportModal isOpen={isSmsModalOpen} onClose={() => setIsSmsModalOpen(false)} onImported={() => loadExpenses(user!)} />
 
     </div>
   );
