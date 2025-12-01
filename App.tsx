@@ -63,7 +63,6 @@ const App: React.FC = () => {
         setScreen('app');
       }
     }
-    }
   }, []);
 
   const handleSignup = async (e: React.FormEvent) => {
