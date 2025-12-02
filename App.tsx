@@ -252,53 +252,74 @@ const App: React.FC = () => {
              </div>
         </nav>
 
-        {/* Hero Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center flex-1 text-center px-4 -mt-20">
-          
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-zinc-500 drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] animate-fade-in leading-[1]">
-            Spend<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Smart</span>
-          </h1>
-          
-          <p className="text-lg md:text-xl text-zinc-300 max-w-2xl md:max-w-3xl mb-8 leading-relaxed font-light animate-fade-in delay-100">
-            The intelligent financial companion that transforms expense tracking into insights. 
-            <span className="text-indigo-300 font-medium text-glow-accent"> AI-powered analytics</span> meet real-time tracking.
-          </p>
-          
-          <div className="flex flex-col md:flex-row items-center gap-5 w-full max-w-md md:max-w-none justify-center animate-fade-in delay-200">
-              {/* Login Button */}
-              <button 
-                  onClick={() => setScreen('login')}
-                  className="w-full md:w-auto px-10 py-5 bg-zinc-900/50 backdrop-blur-md border border-zinc-700 text-zinc-300 hover:text-white text-lg font-bold rounded-full transition-all hover:bg-zinc-800 hover:border-zinc-500 flex items-center justify-center gap-2 group"
-              >
-                  <User size={20} /> Sign In
-              </button>
+        {/* Redesigned Hero */}
+        <div className="relative z-10 w-full flex-1 px-4 -mt-8">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center py-12">
+            {/* Left - copy & CTAs */}
+            <div className="text-center md:text-left">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-white to-cyan-300 leading-tight">
+                SpendSmart — Track. Analyze. Improve.
+              </h1>
+              <p className="text-lg text-zinc-300 max-w-xl mb-6">
+                A modern personal finance dashboard that helps you understand where your money goes — with intelligent categorization, effortless receipt capture, and actionable insights.
+              </p>
 
-              {/* Get Started Button */}
-              <button 
-                  onClick={() => setScreen('signup')}
-                  className="group relative w-full md:w-auto px-12 py-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-lg font-bold rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(79,70,229,0.4)] hover:shadow-[0_0_80px_rgba(79,70,229,0.6)]"
-              >
-                  <span className="relative z-10 flex items-center justify-center gap-3">
-                  Start Free <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                  </span>
-              </button>
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+                <button onClick={() => setScreen('signup')} className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold shadow-lg hover:scale-[1.02] transition-transform">
+                  Get Started — it's free
+                </button>
+                <button onClick={() => setScreen('login')} className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-black/40 border border-white/10 text-zinc-200 hover:text-white">
+                  Sign in
+                </button>
+              </div>
+
+              <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-center">
+                  <div className="text-sm text-zinc-300">Avg. Saving</div>
+                  <div className="text-xl font-bold text-white">₹2,150</div>
+                </div>
+                <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-center">
+                  <div className="text-sm text-zinc-300">Monthly Tx</div>
+                  <div className="text-xl font-bold text-white">128</div>
+                </div>
+                <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-center">
+                  <div className="text-sm text-zinc-300">Top Category</div>
+                  <div className="text-xl font-bold text-white">Food</div>
+                </div>
+                <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-center">
+                  <div className="text-sm text-zinc-300">Budget Health</div>
+                  <div className="text-xl font-bold text-white">85%</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right - preview card */}
+            <div className="flex items-center justify-center">
+              <div className="w-full max-w-md bg-gradient-to-br from-white/6 to-white/3 border border-white/10 rounded-3xl p-6 backdrop-blur-xl shadow-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <div className="text-xs text-zinc-300">Total Balance</div>
+                    <div className="text-2xl font-bold text-white">₹34,120</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-xs text-zinc-300">This month</div>
+                    <div className="text-sm font-medium text-emerald-300">-3.4%</div>
+                  </div>
+                </div>
+                <div className="h-40 bg-gradient-to-b from-indigo-700 to-purple-700 rounded-xl p-3 text-white flex flex-col justify-between">
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm">Eating Out</div>
+                    <div className="font-bold">₹9,340</div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm">Transport</div>
+                    <div className="font-bold">₹3,120</div>
+                  </div>
+                  <div className="text-xs text-zinc-200">See detailed insights on the dashboard</div>
+                </div>
+              </div>
+            </div>
           </div>
-
-          {/* Feature Pills */}
-          <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 animate-fade-in delay-300">
-             {[
-               { icon: Receipt, label: "SMS Parsing", color: "from-emerald-500/20 to-teal-500/20" },
-               { icon: Sparkles, label: "AI Advisor", color: "from-purple-500/20 to-pink-500/20" },
-               { icon: ShieldCheck, label: "Secure Data", color: "from-blue-500/20 to-cyan-500/20" },
-               { icon: Smartphone, label: "Mobile First", color: "from-indigo-500/20 to-blue-500/20" }
-             ].map((f, i) => (
-               <div key={i} className={`flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-br ${f.color} border border-white/10 backdrop-blur-sm hover:border-white/20 hover:bg-white/5 transition-all cursor-default group`}>
-                 <f.icon size={16} className="text-white group-hover:scale-110 transition-transform" />
-                 <span className="text-xs md:text-sm font-medium text-zinc-200">{f.label}</span>
-               </div>
-             ))}
-          </div>
-
         </div>
       </div>
     );
@@ -647,15 +668,15 @@ const App: React.FC = () => {
         </div>
 
         <div className="max-w-7xl mx-auto pb-10">
-          {view === 'dashboard' && user && (
+          {view === 'dashboard' && (
             <DashboardNew 
               expenses={expenses} 
-              monthlyIncome={user.monthlyIncome} 
-              currency={user.currency || 'INR'}
+              monthlyIncome={user?.monthlyIncome || 0} 
+              currency={user?.currency || 'INR'}
               onAddTx={() => setIsModalOpen(true)}
               onManageExpenses={() => setView('expenses')}
-              userName={user.name}
-              onImportComplete={() => loadExpenses(user)}
+              userName={user?.name}
+              onImportComplete={() => user && loadExpenses(user)}
             />
           )}
           {view === 'expenses' && <ExpenseList expenses={expenses} onDelete={handleDeleteExpense} />}
