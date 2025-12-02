@@ -7,6 +7,7 @@ import QuickAdd from './QuickAdd';
 import QuickAddInline from './QuickAddInline';
 import { connectBankAPI, getBankConnectionsAPI, uploadBankCSVAPI } from '../services/apiService';
 import SmsImportModal from './SmsImportModal';
+import ReceiptUploadModal from './ReceiptUploadModal';
 import BudgetsCard from './BudgetsCard';
 import RecurringCard from './RecurringCard';
 
@@ -35,6 +36,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
   const [isBankConnecting, setIsBankConnecting] = useState(false);
   const [isBankConnected, setIsBankConnected] = useState(false);
   const [showSmsModal, setShowSmsModal] = useState(false);
+  const [showReceiptModal, setShowReceiptModal] = useState(false);
   const [showQuickInline, setShowQuickInline] = useState(false);
   const [isUploadingCsv, setIsUploadingCsv] = useState(false);
   const [csvMessage, setCsvMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -238,6 +240,10 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
                   <MessageSquare size={14} /> Import SMS
                 </button>
 
+                <button onClick={() => setShowReceiptModal(true)} className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-zinc-800 text-zinc-300 border border-zinc-700 hover:bg-zinc-700">
+                  <UploadCloud size={14} /> Receipt
+                </button>
+
                 <button onClick={handleFilePick} disabled={isUploadingCsv} className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-zinc-800 text-zinc-300 border border-zinc-700 hover:bg-zinc-700 disabled:opacity-50">
                   {isUploadingCsv ? <Loader2 size={14} className="animate-spin" /> : <UploadCloud size={14} />} Import CSV
                 </button>
@@ -439,6 +445,18 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
       </div>
 
         <SmsImportModal isOpen={showSmsModal} onClose={() => setShowSmsModal(false)} onImported={onImportComplete} />
+        <SmsImportModal isOpen={showSmsModal} onClose={() => setShowSmsModal(false)} onImported={onImportComplete} />
+        
+        {showReceiptModal && (
+          <ReceiptUploadModal
+            isOpen={true}
+            onClose={() => setShowReceiptModal(false)}
+            onImported={() => {
+              setShowReceiptModal(false);
+              onImportComplete && onImportComplete();
+            }}
+          />
+        )}
 
     </div>
   );

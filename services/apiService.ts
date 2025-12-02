@@ -215,6 +215,14 @@ export const uploadBankCSVAPI = async (connectionId: string, csvContent: string)
   });
 };
 
+// ===== RECEIPT / OCR API =====
+export const uploadReceiptAPI = async (imageBase64?: string, ocrText?: string) => {
+  return makeRequest('/receipts/upload', {
+    method: 'POST',
+    body: JSON.stringify({ imageBase64, ocrText }),
+  });
+};
+
 // ===== SMS API =====
 
 export const parseSMSAPI = async (messageContent: string, senderBank: string) => {
