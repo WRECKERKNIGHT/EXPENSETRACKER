@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Expense, ViewMode, AppScreen, UserProfile, Category } from './types';
 import { getExpenses, saveExpense, saveUserProfile, setSessionActive } from './services/storageService';
 import { loginAPI, registerAPI, setAuthToken, getAuthToken, clearAuthToken, getExpensesAPI, deleteExpenseAPI, bulkCreateExpensesAPI, getCurrentUserAPI } from './services/apiService';
-import Overview from './components/Overview';
+import DashboardNew from './components/DashboardNew';
 import SmsImportModal from './components/SmsImportModal';
 import ExpenseList from './components/ExpenseList';
 import Advisor from './components/Advisor';
@@ -648,7 +648,7 @@ const App: React.FC = () => {
 
         <div className="max-w-7xl mx-auto pb-10">
           {view === 'dashboard' && user && (
-            <Overview 
+            <DashboardNew 
               expenses={expenses} 
               monthlyIncome={user.monthlyIncome} 
               currency={user.currency || 'INR'}
