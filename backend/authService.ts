@@ -163,3 +163,31 @@ export const resetPasswordWithToken = async (token: string, newPassword: string)
   const hashed = await bcryptjs.hash(newPassword, 10);
   await runQuery('UPDATE users SET password = ?, resetToken = NULL, resetExpiry = NULL, updatedAt = ? WHERE id = ?', [hashed, Date.now(), user.id]);
 };
+
+export const loginOrCreateOAuthUser = async (email: string, name?: string): Promise<{ user: UserProfile; token: string }> => {
+  // Try to find existing user
+  let user = await getQuery('SELECT * FROM users WHERE email = ?', [email]);
+  if (!user) {
+    // Create a new user with a random password
+    const randomPass = require('crypto').randomBytes(16).toString('hex');
+    const userId = uuidv4();
+    const now = Date.now();
+    const hashedPassword = await bcryptjs.hash(randomPass, 10);
+    await runQuery('INSERT INTO users (id, name, email, password, monthlyIncome, currency, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [userId, name || 'User', email, hashedPassword, 0, 'INR', now, now]);
+    user = await getQuery('SELECT * FROM users WHERE id = ?', [userId]);
+  }
+
+  const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, { expiresIn: '30d' });
+
+  return {
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      monthlyIncome: user.monthlyIncome,
+      currency: user.currency,
+      createdAt: user.createdAt
+    },
+    token
+  };
+};

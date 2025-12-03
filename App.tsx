@@ -162,29 +162,17 @@ const App: React.FC = () => {
   };
 
   const handleGoogleAuth = async () => {
-    // Open a small popup to perform mock Google OAuth (local dev)
-    const popup = window.open(`${(import.meta as any).env?.VITE_API_BASE || 'http://localhost:5000'}/api/auth/mock-google`, 'google_oauth', 'width=600,height=700');
-
-    const listener = (e: MessageEvent) => {
-      try {
-        const payload = e.data;
-        if (payload && payload.token) {
-          // Store token and set user
-          setAuthToken(payload.token as string);
-          setUser(payload.user as UserProfile);
-          // Load expenses for the user
-          loadExpenses(payload.user as UserProfile);
-          setScreen('app');
-        }
-      } catch (err) {
-        console.error('Failed to process OAuth message', err);
-      } finally {
-        window.removeEventListener('message', listener);
-        if (popup) popup.close();
+    try {
+      const userFromOAuth: any = await googleOAuthPopupAPI();
+      if (userFromOAuth) {
+        setUser(userFromOAuth as UserProfile);
+        await loadExpenses(userFromOAuth as UserProfile);
+        setScreen('app');
       }
-    };
-
-    window.addEventListener('message', listener);
+    } catch (err) {
+      console.error('OAuth failed', err);
+      setAuthError((err as any)?.message || 'OAuth failed');
+    }
   };
 
   const handleSetupComplete = (newExpenses: Omit<Expense, 'id' | 'createdAt'>[]) => {

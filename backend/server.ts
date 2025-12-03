@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { initializeDatabase } from './database';
-import { registerUser, loginUser, verifyToken, getUserById, updateUserProfile, deleteUserAccount, resetUserData, setPasswordResetToken, resetPasswordWithToken } from './authService';
+import { registerUser, loginUser, verifyToken, getUserById, updateUserProfile, deleteUserAccount, resetUserData, setPasswordResetToken, resetPasswordWithToken, loginOrCreateOAuthUser } from './authService';
 import { createExpense, getExpenses, updateExpense, deleteExpense, bulkCreateExpenses } from './expenseService';
 import { connectBank, getBankConnections, saveSMSTransaction, getSMSTransactions, disconnectBank } from './bankService';
 import { createPlaidLinkToken, exchangePlaidPublicToken } from './plaidService';
@@ -48,31 +48,64 @@ app.get('/api/health', (req, res) => {
 
 // ===== AUTH ROUTES =====
 
-// Mock Google OAuth flow for local development
-app.get('/api/auth/mock-google', async (req: Request, res: Response) => {
+// Google OAuth flow (requires GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI)
+app.get('/api/auth/google/start', (req: Request, res: Response) => {
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const redirect = process.env.GOOGLE_REDIRECT_URI || `${process.env.BASE_URL || 'http://localhost:5000'}/api/auth/google/callback`;
+  if (!clientId) return res.status(500).send('Google client ID not configured');
+
+  const params = new URLSearchParams({
+    client_id: clientId,
+    redirect_uri: redirect,
+    response_type: 'code',
+    scope: 'openid email profile',
+    access_type: 'offline',
+    prompt: 'select_account'
+  });
+
+  const url = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+  res.redirect(url);
+});
+
+app.get('/api/auth/google/callback', async (req: Request, res: Response) => {
   try {
-    // Create or login a test Google user
-    const email = process.env.MOCK_GOOGLE_EMAIL || 'google.user@example.com';
-    const name = process.env.MOCK_GOOGLE_NAME || 'Google User';
-    const password = process.env.MOCK_GOOGLE_PASSWORD || 'google-oauth-token';
+    const code = req.query.code as string | undefined;
+    if (!code) return res.status(400).send('Missing code');
 
-    // Try to register (registerUser should throw if exists)
-    try {
-      await registerUser({ name, email, password, monthlyIncome: 30000, currency: 'INR' });
-    } catch (e) {
-      // ignore if exists
-    }
+    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        code,
+        client_id: process.env.GOOGLE_CLIENT_ID || '',
+        client_secret: process.env.GOOGLE_CLIENT_SECRET || '',
+        redirect_uri: process.env.GOOGLE_REDIRECT_URI || `${process.env.BASE_URL || 'http://localhost:5000'}/api/auth/google/callback`,
+        grant_type: 'authorization_code'
+      }) as any
+    });
 
-    // Login and produce token
-    const { user, token } = await loginUser(email, password);
+    const tokenJson = await tokenRes.json();
+    const accessToken = tokenJson.access_token;
+    if (!accessToken) return res.status(400).send('Failed to exchange code for token');
 
-    // Return a tiny HTML page that posts the token to the opener and closes
-    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Mock Google OAuth</title></head><body style="font-family:Arial,Helvetica,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;background:#0f172a;color:#fff"><div style="text-align:center;max-width:380px;padding:20px;border-radius:12px;background:linear-gradient(180deg,#111827,#081226);box-shadow:0 10px 30px rgba(0,0,0,0.6)"><h2 style="margin-bottom:8px">Mock Google Consent</h2><p style="color:#9ca3af;margin-bottom:16px">This simulates Google OAuth for local development. Click authorize to continue.</p><button id="auth" style="padding:10px 18px;border-radius:8px;background:#4f46e5;border:none;color:#fff;font-weight:600;cursor:pointer">Authorize</button></div><script>document.getElementById('auth').addEventListener('click',()=>{const payload = ${JSON.stringify({ token: '${token}', user: user })}; if(window.opener){window.opener.postMessage(payload,'*');} window.close();});</script></body></html>`;
+    const userinfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    const profile = await userinfoRes.json();
+    const email = profile.email;
+    const name = profile.name || profile.email?.split('@')[0] || 'Google User';
+
+    if (!email) return res.status(400).send('No email returned from provider');
+
+    const { user, token } = await loginOrCreateOAuthUser(email, name);
+
+    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Google OAuth</title></head><body style="font-family:Arial,Helvetica,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;background:#0f172a;color:#fff"><div style="text-align:center;max-width:420px;padding:20px;border-radius:12px;background:linear-gradient(180deg,#111827,#081226);box-shadow:0 10px 30px rgba(0,0,0,0.6)"><h2 style="margin-bottom:8px">Authentication Complete</h2><p style="color:#9ca3af;margin-bottom:16px">You can close this window to continue in the application.</p></div><script>const payload = ${JSON.stringify({ token: '${token}', user: user })}; if(window.opener){window.opener.postMessage(payload,'*');} setTimeout(()=>{window.close();},600);</script></body></html>`;
 
     res.setHeader('Content-Type', 'text/html');
     res.send(html);
-  } catch (error: any) {
-    res.status(500).send(`Error: ${error.message}`);
+  } catch (err: any) {
+    console.error('OAuth callback error', err);
+    res.status(500).send('OAuth callback error');
   }
 });
 

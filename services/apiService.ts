@@ -122,7 +122,7 @@ export const deleteAccountAPI = async () => {
 
 export const googleOAuthPopupAPI = async () => {
   return new Promise((resolve, reject) => {
-    const popup = window.open('/api/auth/mock-google', 'GoogleAuth', 'width=500,height=600');
+    const popup = window.open(`${API_URL.replace(/\/api$/,'')}/api/auth/google/start`, 'GoogleAuth', 'width=500,height=700');
     if (!popup) {
       reject(new Error('Popup blocked'));
       return;
