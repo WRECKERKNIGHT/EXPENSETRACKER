@@ -15,6 +15,7 @@ import Features from './components/Features';
 import NotificationCenter from './components/NotificationCenter';
 import ProfileModal from './components/ProfileModal';
 import { LayoutDashboard, Receipt, Sparkles, Plus, Wallet, LogOut, ArrowRight, Lock, User, ShieldCheck, Smartphone, Mail, Key, BarChart2, Bell } from 'lucide-react';
+import ResetPassword from './components/ResetPassword';
 
 // Google Icon Component
 const GoogleIcon = () => (
@@ -31,6 +32,7 @@ const App: React.FC = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showFeatures, setShowFeatures] = useState(false);
+  const [resetToken, setResetToken] = useState<string | undefined>(undefined);
   
   // App State
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -78,6 +80,18 @@ const App: React.FC = () => {
           clearAuthToken();
           setScreen('landing');
         });
+    }
+
+    // If URL contains a reset token (e.g. /?token=...), navigate to reset screen
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const t = params.get('token');
+      if (t) {
+        setResetToken(t);
+        setScreen('reset');
+      }
+    } catch (e) {
+      // ignore
     }
   }, []);
 
@@ -208,17 +222,14 @@ const App: React.FC = () => {
       if (!email) return;
       const res: any = await forgotPasswordAPI(email);
       if (res?.debugToken) {
-        // Dev mode: token returned so offer immediate reset
-        const show = window.confirm('A debug reset token was generated (development mode). Do you want to reset your password now?');
-        if (show) {
-          const token = window.prompt('Enter reset token (pre-filled)') || res.debugToken;
-          const newPass = window.prompt('Enter your new password (min 8 chars)');
-          if (!token || !newPass) return alert('Token and new password required');
-          await resetPasswordAPI(token, newPass);
-          alert('Password updated. You can now sign in with your new password.');
-        } else {
-          alert('Reset token generated. In production this is emailed to the user.');
-        }
+        // Dev mode: token returned. Redirect to reset page with token prefilled for nicer UX.
+        const token = res.debugToken;
+        // update URL and navigate to reset screen
+        const url = new URL(window.location.href);
+        url.searchParams.set('token', token);
+        window.history.replaceState({}, '', url.toString());
+        setResetToken(token);
+        setScreen('reset');
       } else {
         alert('If that email exists, a password reset link has been sent.');
       }
@@ -609,6 +620,10 @@ const App: React.FC = () => {
         </div>
       </div>
     );
+  }
+
+  if (screen === 'reset') {
+    return <ResetPassword token={resetToken} onDone={() => { setScreen('login'); const url = new URL(window.location.href); url.searchParams.delete('token'); window.history.replaceState({}, '', url.toString()); }} />;
   }
 
   // --- Main App Dashboard ---
