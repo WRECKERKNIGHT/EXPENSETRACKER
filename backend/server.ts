@@ -84,16 +84,16 @@ app.get('/api/auth/google/callback', async (req: Request, res: Response) => {
       }) as any
     });
 
-    const tokenJson = await tokenRes.json();
+    const tokenJson: any = await tokenRes.json();
     const accessToken = tokenJson.access_token;
     if (!accessToken) return res.status(400).send('Failed to exchange code for token');
 
     const userinfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
       headers: { Authorization: `Bearer ${accessToken}` }
     });
-    const profile = await userinfoRes.json();
+    const profile: any = await userinfoRes.json();
     const email = profile.email;
-    const name = profile.name || profile.email?.split('@')[0] || 'Google User';
+    const name = profile.name || (profile.email && profile.email.split('@')[0]) || 'Google User';
 
     if (!email) return res.status(400).send('No email returned from provider');
 
@@ -545,6 +545,20 @@ const startServer = async () => {
   try {
     await initializeDatabase();
     console.log('✅ Database initialized');
+
+    // If a frontend `dist` exists at the repository root `dist/`, serve it as static files
+    // This allows a single Railway service to host both API and static frontend
+    const path = await import('path');
+    const fs = await import('fs');
+    const distPath = path.resolve(__dirname, '..', 'dist');
+    if (fs.existsSync(distPath)) {
+      app.use(express.static(distPath));
+      app.get('*', (req: Request, res: Response) => {
+        // serve SPA index
+        res.sendFile(path.join(distPath, 'index.html'));
+      });
+      console.log('📦 Serving frontend from', distPath);
+    }
 
     app.listen(PORT, () => {
       console.log(`🚀 SpendSmart API running on http://localhost:${PORT}`);
