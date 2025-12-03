@@ -48,6 +48,7 @@ const App: React.FC = () => {
   // Login State
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [authError, setAuthError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -78,6 +79,11 @@ const App: React.FC = () => {
           setScreen('landing');
         });
     }
+  }, []);
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('spendsmart_remember_email');
+    if (savedEmail) setLoginEmail(savedEmail);
   }, []);
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -130,6 +136,17 @@ const App: React.FC = () => {
     }
   };
 
+  const passwordStrength = (p: string) => {
+    if (!p) return { score: 0, label: 'Too short' };
+    let score = 0;
+    if (p.length >= 8) score += 1;
+    if (/[A-Z]/.test(p)) score += 1;
+    if (/[0-9]/.test(p)) score += 1;
+    if (/[^A-Za-z0-9]/.test(p)) score += 1;
+    const labels = ['Very Weak', 'Weak', 'Okay', 'Strong', 'Very Strong'];
+    return { score, label: labels[score] || 'Very Weak' };
+  };
+
   const handleGoogleAuth = async () => {
     // Open a small popup to perform mock Google OAuth (local dev)
     const popup = window.open(`${(import.meta as any).env?.VITE_API_BASE || 'http://localhost:5000'}/api/auth/mock-google`, 'google_oauth', 'width=600,height=700');
@@ -177,6 +194,7 @@ const App: React.FC = () => {
       
       setLoginEmail('');
       setLoginPassword('');
+      if (!rememberMe) localStorage.removeItem('spendsmart_remember_email');
     } catch (error: any) {
       setAuthError(error.message || 'Login failed');
     } finally {
@@ -293,49 +311,68 @@ const App: React.FC = () => {
               </div>
 
               <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-center">
+                <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-center transform hover:-translate-y-1 transition-transform">
                   <div className="text-sm text-zinc-300">Avg. Saving</div>
-                  <div className="text-xl font-bold text-white">₹2,150</div>
+                  <div className="text-xl font-bold text-white">Connect bank</div>
                 </div>
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-center">
+                <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-center transform hover:-translate-y-1 transition-transform">
                   <div className="text-sm text-zinc-300">Monthly Tx</div>
-                  <div className="text-xl font-bold text-white">128</div>
+                  <div className="text-xl font-bold text-white">—</div>
                 </div>
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-center">
+                <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-center transform hover:-translate-y-1 transition-transform">
                   <div className="text-sm text-zinc-300">Top Category</div>
-                  <div className="text-xl font-bold text-white">Food</div>
+                  <div className="text-xl font-bold text-white">Connect to see</div>
                 </div>
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-center">
+                <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-center transform hover:-translate-y-1 transition-transform">
                   <div className="text-sm text-zinc-300">Budget Health</div>
-                  <div className="text-xl font-bold text-white">85%</div>
+                  <div className="text-xl font-bold text-white">—</div>
                 </div>
               </div>
             </div>
 
-            {/* Right - preview card */}
+            {/* Right - preview card (demo / animated sparkline) */}
             <div className="flex items-center justify-center">
-              <div className="w-full max-w-md bg-gradient-to-br from-white/6 to-white/3 border border-white/10 rounded-3xl p-6 backdrop-blur-xl shadow-lg">
-                <div className="flex items-center justify-between mb-4">
+              <div className="w-full max-w-md bg-gradient-to-br from-white/6 to-white/3 border border-white/10 rounded-3xl p-6 backdrop-blur-xl shadow-lg hover:scale-[1.01] transition-transform">
+                <div className="flex items-center justify-between mb-3">
                   <div>
-                    <div className="text-xs text-zinc-300">Total Balance</div>
-                    <div className="text-2xl font-bold text-white">₹34,120</div>
+                    <div className="text-xs text-zinc-300">Total Balance (demo)</div>
+                    <div className="text-2xl font-bold text-white">₹—</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-xs text-zinc-300">This month</div>
-                    <div className="text-sm font-medium text-emerald-300">-3.4%</div>
+                    <div className="text-xs text-zinc-300">Status</div>
+                    <div className="text-sm font-medium text-emerald-300">Connect account</div>
                   </div>
                 </div>
-                <div className="h-40 bg-gradient-to-b from-indigo-700 to-purple-700 rounded-xl p-3 text-white flex flex-col justify-between">
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm">Eating Out</div>
-                    <div className="font-bold">₹9,340</div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm">Transport</div>
-                    <div className="font-bold">₹3,120</div>
-                  </div>
-                  <div className="text-xs text-zinc-200">See detailed insights on the dashboard</div>
+
+                {/* Simple inline sparkline preview */}
+                <div className="h-40 rounded-xl p-3 bg-gradient-to-b from-indigo-800 to-purple-800 flex items-center justify-center">
+                  <svg viewBox="0 0 200 60" className="w-full h-full">
+                    <defs>
+                      <linearGradient id="g1" x1="0" x2="1">
+                        <stop offset="0%" stopColor="#60a5fa" />
+                        <stop offset="100%" stopColor="#a78bfa" />
+                      </linearGradient>
+                    </defs>
+                    <polyline fill="none" stroke="url(#g1)" strokeWidth="3" points="0,40 25,35 50,28 75,20 100,24 125,18 150,22 175,17 200,14" strokeLinecap="round" strokeLinejoin="round" className="animate-draw" />
+                    <g fill="#fff">
+                      <circle cx="0" cy="40" r="2.5" opacity="0.95"></circle>
+                      <circle cx="50" cy="28" r="3" opacity="0.95"></circle>
+                      <circle cx="100" cy="24" r="3" opacity="0.95"></circle>
+                      <circle cx="150" cy="22" r="3" opacity="0.95"></circle>
+                      <circle cx="200" cy="14" r="2.5" opacity="0.95"></circle>
+                    </g>
+                  </svg>
                 </div>
+
+                <div className="mt-4 flex gap-3">
+                  <button onClick={() => setShowFeatures(true)} className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-indigo-600 text-white font-semibold shadow hover:scale-[1.02] transition-transform">
+                    Explore Features
+                  </button>
+                  <button onClick={() => setScreen('signup')} className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-black/40 border border-white/10 text-zinc-200 hover:text-white">
+                    Try Demo
+                  </button>
+                </div>
+                <div className="mt-3 text-xs text-zinc-400">Connect a bank or sign up to see your real data.</div>
               </div>
             </div>
           </div>
@@ -405,6 +442,13 @@ const App: React.FC = () => {
                     placeholder="••••••••"
                 />
               </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-2 text-sm text-zinc-400">
+                <input type="checkbox" checked={rememberMe} onChange={(e) => { setRememberMe(e.target.checked); if (e.target.checked) localStorage.setItem('spendsmart_remember_email', loginEmail); else localStorage.removeItem('spendsmart_remember_email'); }} className="accent-indigo-500" />
+                Remember me
+              </label>
+              <button type="button" onClick={() => alert('Password reset flow coming soon.')} className="text-sm text-indigo-300 hover:underline">Forgot?</button>
             </div>
 
             {authError && <p className="text-red-400 text-sm bg-red-500/10 p-3 rounded-xl border border-red-500/20 flex items-center gap-2 animate-fade-in">{authError}</p>}
@@ -489,6 +533,10 @@ const App: React.FC = () => {
                 className="w-full bg-black/40 border border-zinc-700 rounded-2xl px-5 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder:text-zinc-600 shadow-inner"
                 placeholder="••••••••"
               />
+              <div className="mt-2 flex items-center justify-between">
+                <div className="text-xs text-zinc-400">Strength: <span className="font-semibold text-white">{passwordStrength(passwordInput).label}</span></div>
+                <div className="text-xs text-zinc-500">Min 8 chars, mix letter & number</div>
+              </div>
             </div>
             
             {/* Financial Info */}

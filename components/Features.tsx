@@ -57,8 +57,11 @@ const Features: React.FC<FeaturesProps> = ({ expenses = [], onClose, isOpen = tr
               <div>
                 <h3 className="text-xl font-bold text-white mb-4">Savings Goals</h3>
                 <p className="text-zinc-300 mb-4">Set and track multiple savings goals. Monitor progress toward vacation, emergency fund, car, or house purchase.</p>
-                <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded-lg">
+                <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded-lg flex items-center justify-between">
                   <p className="text-sm text-zinc-400">✓ Create custom goals • ✓ Track progress • ✓ Automatic milestone alerts</p>
+                  <svg viewBox="0 0 100 30" className="w-28 h-8">
+                    <polyline fill="none" stroke="#60a5fa" strokeWidth="2" points="0,22 20,18 40,12 60,8 80,10 100,6" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </div>
               </div>
             )}
@@ -67,8 +70,11 @@ const Features: React.FC<FeaturesProps> = ({ expenses = [], onClose, isOpen = tr
               <div>
                 <h3 className="text-xl font-bold text-white mb-4">Bill Splitting</h3>
                 <p className="text-zinc-300 mb-4">Split expenses with friends and roommates. Calculate exact shares and settle debts easily.</p>
-                <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded-lg">
+                <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded-lg flex items-center justify-between">
                   <p className="text-sm text-zinc-400">✓ Create splits • ✓ Automatic calculations • ✓ Settlement tracking</p>
+                  <svg viewBox="0 0 100 30" className="w-28 h-8">
+                    <polyline fill="none" stroke="#a78bfa" strokeWidth="2" points="0,20 20,14 40,18 60,10 80,12 100,8" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </div>
               </div>
             )}
@@ -77,8 +83,11 @@ const Features: React.FC<FeaturesProps> = ({ expenses = [], onClose, isOpen = tr
               <div>
                 <h3 className="text-xl font-bold text-white mb-4">Tax Category Tracking</h3>
                 <p className="text-zinc-300 mb-4">Mark expenses as deductible and generate tax reports. Perfect for freelancers and business owners.</p>
-                <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded-lg">
+                <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded-lg flex items-center justify-between">
                   <p className="text-sm text-zinc-400">✓ Tax-eligible marking • ✓ Annual reports • ✓ Deduction summaries</p>
+                  <svg viewBox="0 0 100 30" className="w-28 h-8">
+                    <polyline fill="none" stroke="#60f0c4" strokeWidth="2" points="0,18 20,16 40,14 60,10 80,12 100,9" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </div>
               </div>
             )}
@@ -87,8 +96,11 @@ const Features: React.FC<FeaturesProps> = ({ expenses = [], onClose, isOpen = tr
               <div>
                 <h3 className="text-xl font-bold text-white mb-4">Export & Reports</h3>
                 <p className="text-zinc-300 mb-4">Export transactions as PDF, CSV, or Excel. Generate annual and monthly financial reports.</p>
-                <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded-lg">
+                <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded-lg flex items-center justify-between">
                   <p className="text-sm text-zinc-400">✓ PDF export • ✓ CSV/Excel • ✓ Custom date ranges</p>
+                  <svg viewBox="0 0 100 30" className="w-28 h-8">
+                    <polyline fill="none" stroke="#fbbf24" strokeWidth="2" points="0,20 20,18 40,12 60,10 80,14 100,9" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </div>
               </div>
             )}
@@ -97,8 +109,11 @@ const Features: React.FC<FeaturesProps> = ({ expenses = [], onClose, isOpen = tr
               <div>
                 <h3 className="text-xl font-bold text-white mb-4">Advanced Analytics</h3>
                 <p className="text-zinc-300 mb-4">Year-over-year comparisons, spending trends, net worth tracking, and predictive insights.</p>
-                <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded-lg">
+                <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded-lg flex items-center justify-between">
                   <p className="text-sm text-zinc-400">✓ YoY analysis • ✓ Trend forecasting • ✓ Net worth tracking</p>
+                  <svg viewBox="0 0 100 30" className="w-28 h-8">
+                    <polyline fill="none" stroke="#60a5fa" strokeWidth="2" points="0,22 20,18 40,12 60,8 80,10 100,6" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </div>
               </div>
             )}
@@ -107,8 +122,11 @@ const Features: React.FC<FeaturesProps> = ({ expenses = [], onClose, isOpen = tr
               <div>
                 <h3 className="text-xl font-bold text-white mb-4">Settings & Preferences</h3>
                 <p className="text-zinc-300 mb-4">Customize themes, notifications, currency, and data privacy settings.</p>
-                <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded-lg">
+                <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded-lg flex items-center justify-between">
                   <p className="text-sm text-zinc-400">✓ Dark/Light themes • ✓ Smart notifications • ✓ Multi-currency • ✓ Privacy controls</p>
+                  <svg viewBox="0 0 100 30" className="w-28 h-8">
+                    <polyline fill="none" stroke="#94a3b8" strokeWidth="2" points="0,20 20,18 40,14 60,12 80,14 100,10" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </div>
               </div>
             )}
