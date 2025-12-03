@@ -118,3 +118,19 @@ export const updateUserProfile = async (userId: string, updates: Partial<UserDat
   const updated = await getUserById(userId);
   return updated || user;
 };
+
+export const deleteUserAccount = async (userId: string): Promise<void> => {
+  const user = await getUserById(userId);
+  if (!user) {
+    throw new Error('User not found');
+  }
+  await runQuery('DELETE FROM users WHERE id = ?', [userId]);
+};
+
+export const resetUserData = async (userId: string): Promise<void> => {
+  const user = await getUserById(userId);
+  if (!user) {
+    throw new Error('User not found');
+  }
+  await runQuery('DELETE FROM expenses WHERE userId = ?', [userId]);
+};

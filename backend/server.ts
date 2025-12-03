@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { initializeDatabase } from './database';
-import { registerUser, loginUser, verifyToken, getUserById, updateUserProfile } from './authService';
+import { registerUser, loginUser, verifyToken, getUserById, updateUserProfile, deleteUserAccount, resetUserData } from './authService';
 import { createExpense, getExpenses, updateExpense, deleteExpense, bulkCreateExpenses } from './expenseService';
 import { connectBank, getBankConnections, saveSMSTransaction, getSMSTransactions, disconnectBank } from './bankService';
 import { createPlaidLinkToken, exchangePlaidPublicToken } from './plaidService';
@@ -47,6 +47,34 @@ app.get('/api/health', (req, res) => {
 });
 
 // ===== AUTH ROUTES =====
+
+// Mock Google OAuth flow for local development
+app.get('/api/auth/mock-google', async (req: Request, res: Response) => {
+  try {
+    // Create or login a test Google user
+    const email = process.env.MOCK_GOOGLE_EMAIL || 'google.user@example.com';
+    const name = process.env.MOCK_GOOGLE_NAME || 'Google User';
+    const password = process.env.MOCK_GOOGLE_PASSWORD || 'google-oauth-token';
+
+    // Try to register (registerUser should throw if exists)
+    try {
+      await registerUser({ name, email, password, monthlyIncome: 30000, currency: 'INR' });
+    } catch (e) {
+      // ignore if exists
+    }
+
+    // Login and produce token
+    const { user, token } = await loginUser(email, password);
+
+    // Return a tiny HTML page that posts the token to the opener and closes
+    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Mock Google OAuth</title></head><body style="font-family:Arial,Helvetica,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;background:#0f172a;color:#fff"><div style="text-align:center;max-width:380px;padding:20px;border-radius:12px;background:linear-gradient(180deg,#111827,#081226);box-shadow:0 10px 30px rgba(0,0,0,0.6)"><h2 style="margin-bottom:8px">Mock Google Consent</h2><p style="color:#9ca3af;margin-bottom:16px">This simulates Google OAuth for local development. Click authorize to continue.</p><button id="auth" style="padding:10px 18px;border-radius:8px;background:#4f46e5;border:none;color:#fff;font-weight:600;cursor:pointer">Authorize</button></div><script>document.getElementById('auth').addEventListener('click',()=>{const payload = ${JSON.stringify({ token: '${token}', user: user })}; if(window.opener){window.opener.postMessage(payload,'*');} window.close();});</script></body></html>`;
+
+    res.setHeader('Content-Type', 'text/html');
+    res.send(html);
+  } catch (error: any) {
+    res.status(500).send(`Error: ${error.message}`);
+  }
+});
 
 app.post('/api/auth/register', async (req: Request, res: Response) => {
   try {
@@ -110,6 +138,24 @@ app.put('/api/auth/profile', authMiddleware, async (req: AuthRequest, res: Respo
     const { name, monthlyIncome } = req.body;
     const user = await updateUserProfile(req.userId!, { name, monthlyIncome });
     res.json(user);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.post('/api/auth/reset-data', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    await resetUserData(req.userId!);
+    res.json({ message: 'Data reset successfully' });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.delete('/api/auth/account', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    await deleteUserAccount(req.userId!);
+    res.json({ message: 'Account deleted' });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }

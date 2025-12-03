@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Expense, ViewMode, AppScreen, UserProfile, Category } from './types';
-import { getExpenses, saveExpense, saveUserProfile, setSessionActive } from './services/storageService';
-import { loginAPI, registerAPI, setAuthToken, getAuthToken, clearAuthToken, getExpensesAPI, deleteExpenseAPI, bulkCreateExpensesAPI, getCurrentUserAPI } from './services/apiService';
+import { getExpenses, saveExpense, saveUserProfile, setSessionActive, deleteUserAccount, clearUserExpenses } from './services/storageService';
+import { loginAPI, registerAPI, setAuthToken, getAuthToken, clearAuthToken, getExpensesAPI, deleteExpenseAPI, bulkCreateExpensesAPI, getCurrentUserAPI, googleOAuthPopupAPI, deleteAccountAPI, resetUserDataAPI } from './services/apiService';
 import DashboardNew from './components/DashboardNew';
 import SmsImportModal from './components/SmsImportModal';
 import ExpenseList from './components/ExpenseList';
@@ -11,7 +11,10 @@ import Reports from './components/Reports';
 import AddExpenseModal from './components/AddExpenseModal';
 import SpaceBackground from './components/SpaceBackground';
 import SetupWizard from './components/SetupWizard';
-import { LayoutDashboard, Receipt, Sparkles, Plus, Wallet, LogOut, ArrowRight, Lock, User, ShieldCheck, Smartphone, Mail, Key, BarChart2 } from 'lucide-react';
+import Features from './components/Features';
+import NotificationCenter from './components/NotificationCenter';
+import ProfileModal from './components/ProfileModal';
+import { LayoutDashboard, Receipt, Sparkles, Plus, Wallet, LogOut, ArrowRight, Lock, User, ShieldCheck, Smartphone, Mail, Key, BarChart2, Bell } from 'lucide-react';
 
 // Google Icon Component
 const GoogleIcon = () => (
@@ -25,6 +28,9 @@ const GoogleIcon = () => (
 const App: React.FC = () => {
   const [screen, setScreen] = useState<AppScreen>('landing');
   const [user, setUser] = useState<UserProfile | null>(null);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showFeatures, setShowFeatures] = useState(false);
   
   // App State
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -124,41 +130,30 @@ const App: React.FC = () => {
     }
   };
 
-  const handleGoogleAuth = () => {
-    // Mock Google Login Logic
-    const googleUser: UserProfile = {
-      name: "Google User",
-      email: "user@gmail.com",
-      password: "google-oauth-token", // Dummy token
-      monthlyIncome: 50000, // Default mock income
-      currency: 'INR'
+  const handleGoogleAuth = async () => {
+    // Open a small popup to perform mock Google OAuth (local dev)
+    const popup = window.open(`${(import.meta as any).env?.VITE_API_BASE || 'http://localhost:5000'}/api/auth/mock-google`, 'google_oauth', 'width=600,height=700');
+
+    const listener = (e: MessageEvent) => {
+      try {
+        const payload = e.data;
+        if (payload && payload.token) {
+          // Store token and set user
+          setAuthToken(payload.token as string);
+          setUser(payload.user as UserProfile);
+          // Load expenses for the user
+          loadExpenses(payload.user as UserProfile);
+          setScreen('app');
+        }
+      } catch (err) {
+        console.error('Failed to process OAuth message', err);
+      } finally {
+        window.removeEventListener('message', listener);
+        if (popup) popup.close();
+      }
     };
-    
-    saveUserProfile(googleUser);
-    setSessionActive(true); // Persist login
-    setUser(googleUser);
-    
-    // Check if we need to run setup
-    const currentExpenses = getExpenses();
-    setExpenses(currentExpenses);
-    
-    if (currentExpenses.length === 0) {
-      // Add default balance if new
-      const initialTx: Expense = {
-            id: Date.now().toString(),
-            amount: 10000,
-            category: Category.SALARY,
-            type: 'income',
-            date: new Date().toISOString().split('T')[0],
-            description: 'Initial Wallet Balance',
-            createdAt: Date.now()
-      };
-      saveExpense(initialTx);
-      setExpenses([initialTx]);
-      setScreen('setup');
-    } else {
-      setScreen('app');
-    }
+
+    window.addEventListener('message', listener);
   };
 
   const handleSetupComplete = (newExpenses: Omit<Expense, 'id' | 'createdAt'>[]) => {
@@ -198,6 +193,30 @@ const App: React.FC = () => {
     setView('dashboard');
     setUser(null);
     setExpenses([]);
+  };
+
+  // Profile modal state and handlers
+  const handleResetData = async () => {
+    if (!user) return;
+    try {
+      await resetUserDataAPI();
+      setExpenses([]);
+    } catch (err) {
+      console.error('Reset failed:', err);
+      setAuthError('Failed to reset data');
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!user) return;
+    try {
+      await deleteAccountAPI();
+      clearAuthToken();
+      handleLogout();
+    } catch (err) {
+      console.error('Delete failed:', err);
+      setAuthError('Failed to delete account');
+    }
   };
 
   const handleAddExpenses = async (newExpenses: Omit<Expense, 'id' | 'createdAt'>[]) => {
@@ -533,6 +552,11 @@ const App: React.FC = () => {
             <span className="text-xl md:text-2xl font-bold tracking-tight block text-white text-glow-sm">SpendSmart</span>
             <span className="text-[10px] md:text-xs text-indigo-400 font-semibold tracking-wider uppercase">AI Expense Tracker</span>
           </div>
+          <div className="ml-auto flex items-center gap-2">
+            <button onClick={() => setShowProfileModal(true)} className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition border border-white/10">
+              <User size={18} className="text-white" />
+            </button>
+          </div>
         </div>
         
         {/* Desktop Navigation */}
@@ -650,6 +674,16 @@ const App: React.FC = () => {
                </p>
            </div>
            <div className="flex items-center gap-4">
+              <button onClick={() => setShowFeatures(true)} className="p-2.5 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 transition-all" title="View Features">
+                <Sparkles size={20} />
+              </button>
+              <button onClick={() => setShowNotifications(true)} className="p-2.5 rounded-lg bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 transition-all relative" title="Notifications">
+                <Bell size={20} />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+              </button>
+              <button onClick={() => setShowProfileModal(true)} className="p-2.5 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 transition-all" title="Profile">
+                <User size={20} />
+              </button>
               <div className="text-right">
                 <p className="text-xs text-zinc-500 font-bold uppercase tracking-wider mb-1">Current Date</p>
                 <p className="font-mono text-indigo-300 text-lg">
@@ -679,6 +713,17 @@ const App: React.FC = () => {
               onImportComplete={() => user && loadExpenses(user)}
             />
           )}
+          {showProfileModal && user && (
+            <ProfileModal
+              isOpen={showProfileModal}
+              onClose={() => setShowProfileModal(false)}
+              user={user}
+              stats={{ totalTx: expenses.length, joinDate: user?.createdAt || new Date().toISOString() }}
+              onLogout={() => { setShowProfileModal(false); handleLogout(); }}
+              onResetData={() => { setShowProfileModal(false); handleResetData(); }}
+              onDeleteAccount={() => { setShowProfileModal(false); handleDeleteAccount(); }}
+            />
+          )}
           {view === 'expenses' && <ExpenseList expenses={expenses} onDelete={handleDeleteExpense} />}
           {view === 'advisor' && <Advisor expenses={expenses} />}
           {view === 'reports' && user && <Reports expenses={expenses} currency={user.currency || 'INR'} />}
@@ -693,6 +738,10 @@ const App: React.FC = () => {
       />
 
       <SmsImportModal isOpen={isSmsModalOpen} onClose={() => setIsSmsModalOpen(false)} onImported={() => loadExpenses(user!)} />
+
+      <NotificationCenter isOpen={showNotifications} onClose={() => setShowNotifications(false)} />
+
+      <Features isOpen={showFeatures} onClose={() => setShowFeatures(false)} expenses={expenses} />
 
     </div>
   );

@@ -91,6 +91,48 @@ export const updateProfileAPI = async (updates: { name?: string; monthlyIncome?:
   });
 };
 
+export const resetUserDataAPI = async () => {
+  return makeRequest('/auth/reset-data', {
+    method: 'POST',
+    body: JSON.stringify({}),
+  });
+};
+
+export const deleteAccountAPI = async () => {
+  return makeRequest('/auth/account', {
+    method: 'DELETE',
+  });
+};
+
+export const googleOAuthPopupAPI = async () => {
+  return new Promise((resolve, reject) => {
+    const popup = window.open('/api/auth/mock-google', 'GoogleAuth', 'width=500,height=600');
+    if (!popup) {
+      reject(new Error('Popup blocked'));
+      return;
+    }
+
+    const handleMessage = (event: MessageEvent) => {
+      if (event.source !== popup) return;
+      window.removeEventListener('message', handleMessage);
+      popup.close();
+      if (event.data?.token) {
+        setAuthToken(event.data.token);
+        resolve(event.data.user);
+      } else {
+        reject(new Error('OAuth failed'));
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    setTimeout(() => {
+      window.removeEventListener('message', handleMessage);
+      if (!popup.closed) popup.close();
+      reject(new Error('OAuth timeout'));
+    }, 60000);
+  });
+};
+
 // ===== BUDGET API =====
 
 export const getBudgetsAPI = async () => {
