@@ -134,3 +134,32 @@ export const resetUserData = async (userId: string): Promise<void> => {
   }
   await runQuery('DELETE FROM expenses WHERE userId = ?', [userId]);
 };
+
+export const setPasswordResetToken = async (email: string, token: string, expiryMs: number): Promise<void> => {
+  const user = await getQuery('SELECT id FROM users WHERE email = ?', [email]);
+  if (!user) throw new Error('User not found');
+
+  // Add columns if they don't exist (safe for sqlite)
+  try {
+    await runQuery('ALTER TABLE users ADD COLUMN resetToken TEXT');
+  } catch (e) {
+    // ignore if column exists
+  }
+  try {
+    await runQuery('ALTER TABLE users ADD COLUMN resetExpiry INTEGER');
+  } catch (e) {
+    // ignore if column exists
+  }
+
+  await runQuery('UPDATE users SET resetToken = ?, resetExpiry = ? WHERE email = ?', [token, Date.now() + expiryMs, email]);
+};
+
+export const resetPasswordWithToken = async (token: string, newPassword: string): Promise<void> => {
+  // Find user by token
+  const user = await getQuery('SELECT id, resetExpiry FROM users WHERE resetToken = ?', [token]);
+  if (!user) throw new Error('Invalid or expired token');
+  if (!user.resetExpiry || Date.now() > user.resetExpiry) throw new Error('Token expired');
+
+  const hashed = await bcryptjs.hash(newPassword, 10);
+  await runQuery('UPDATE users SET password = ?, resetToken = NULL, resetExpiry = NULL, updatedAt = ? WHERE id = ?', [hashed, Date.now(), user.id]);
+};

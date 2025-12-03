@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Expense, ViewMode, AppScreen, UserProfile, Category } from './types';
 import { getExpenses, saveExpense, saveUserProfile, setSessionActive, deleteUserAccount, clearUserExpenses } from './services/storageService';
-import { loginAPI, registerAPI, setAuthToken, getAuthToken, clearAuthToken, getExpensesAPI, deleteExpenseAPI, bulkCreateExpensesAPI, getCurrentUserAPI, googleOAuthPopupAPI, deleteAccountAPI, resetUserDataAPI } from './services/apiService';
+import { loginAPI, registerAPI, setAuthToken, getAuthToken, clearAuthToken, getExpensesAPI, deleteExpenseAPI, bulkCreateExpensesAPI, getCurrentUserAPI, googleOAuthPopupAPI, deleteAccountAPI, resetUserDataAPI, forgotPasswordAPI, resetPasswordAPI } from './services/apiService';
 import DashboardNew from './components/DashboardNew';
 import SmsImportModal from './components/SmsImportModal';
 import ExpenseList from './components/ExpenseList';
@@ -199,6 +199,32 @@ const App: React.FC = () => {
       setAuthError(error.message || 'Login failed');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    try {
+      const email = window.prompt('Enter your account email for password reset');
+      if (!email) return;
+      const res: any = await forgotPasswordAPI(email);
+      if (res?.debugToken) {
+        // Dev mode: token returned so offer immediate reset
+        const show = window.confirm('A debug reset token was generated (development mode). Do you want to reset your password now?');
+        if (show) {
+          const token = window.prompt('Enter reset token (pre-filled)') || res.debugToken;
+          const newPass = window.prompt('Enter your new password (min 8 chars)');
+          if (!token || !newPass) return alert('Token and new password required');
+          await resetPasswordAPI(token, newPass);
+          alert('Password updated. You can now sign in with your new password.');
+        } else {
+          alert('Reset token generated. In production this is emailed to the user.');
+        }
+      } else {
+        alert('If that email exists, a password reset link has been sent.');
+      }
+    } catch (err: any) {
+      console.error('Forgot password failed', err);
+      alert(err?.message || 'Failed to request password reset');
     }
   };
 
@@ -448,7 +474,7 @@ const App: React.FC = () => {
                 <input type="checkbox" checked={rememberMe} onChange={(e) => { setRememberMe(e.target.checked); if (e.target.checked) localStorage.setItem('spendsmart_remember_email', loginEmail); else localStorage.removeItem('spendsmart_remember_email'); }} className="accent-indigo-500" />
                 Remember me
               </label>
-              <button type="button" onClick={() => alert('Password reset flow coming soon.')} className="text-sm text-indigo-300 hover:underline">Forgot?</button>
+              <button type="button" onClick={handleForgotPassword} className="text-sm text-indigo-300 hover:underline">Forgot?</button>
             </div>
 
             {authError && <p className="text-red-400 text-sm bg-red-500/10 p-3 rounded-xl border border-red-500/20 flex items-center gap-2 animate-fade-in">{authError}</p>}

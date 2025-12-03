@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { initializeDatabase } from './database';
-import { registerUser, loginUser, verifyToken, getUserById, updateUserProfile, deleteUserAccount, resetUserData } from './authService';
+import { registerUser, loginUser, verifyToken, getUserById, updateUserProfile, deleteUserAccount, resetUserData, setPasswordResetToken, resetPasswordWithToken } from './authService';
 import { createExpense, getExpenses, updateExpense, deleteExpense, bulkCreateExpenses } from './expenseService';
 import { connectBank, getBankConnections, saveSMSTransaction, getSMSTransactions, disconnectBank } from './bankService';
 import { createPlaidLinkToken, exchangePlaidPublicToken } from './plaidService';
@@ -158,6 +158,34 @@ app.delete('/api/auth/account', authMiddleware, async (req: AuthRequest, res: Re
     res.json({ message: 'Account deleted' });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
+  }
+});
+
+// ===== PASSWORD RESET =====
+app.post('/api/auth/forgot', async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email required' });
+
+    const token = require('crypto').randomBytes(24).toString('hex');
+    const expiryMs = 1000 * 60 * 60; // 1 hour
+    await setPasswordResetToken(email, token, expiryMs);
+
+    const showToken = process.env.SHOW_RESET_TOKEN === 'true';
+    res.json({ success: true, debugToken: showToken ? token : undefined });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.post('/api/auth/reset', async (req: Request, res: Response) => {
+  try {
+    const { token, password } = req.body;
+    if (!token || !password) return res.status(400).json({ error: 'Token and password required' });
+    await resetPasswordWithToken(token, password);
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
   }
 });
 

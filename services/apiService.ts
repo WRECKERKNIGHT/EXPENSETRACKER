@@ -84,6 +84,22 @@ export const getCurrentUserAPI = async () => {
   }
 };
 
+export const forgotPasswordAPI = async (email: string) => {
+  const response: any = await makeRequest('/auth/forgot', {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  });
+  return response;
+};
+
+export const resetPasswordAPI = async (token: string, password: string) => {
+  const response: any = await makeRequest('/auth/reset', {
+    method: 'POST',
+    body: JSON.stringify({ token, password }),
+  });
+  return response;
+};
+
 export const updateProfileAPI = async (updates: { name?: string; monthlyIncome?: number }) => {
   return makeRequest('/auth/profile', {
     method: 'PUT',
