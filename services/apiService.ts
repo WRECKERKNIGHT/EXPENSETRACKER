@@ -1,0 +1,334 @@
+const API_URL = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:5000/api';
+
+interface ApiResponse<T> {
+  data?: T;
+  error?: string;
+}
+
+let authToken: string | null = localStorage.getItem('spendsmart_token');
+
+export const setAuthToken = (token: string) => {
+  authToken = token;
+  localStorage.setItem('spendsmart_token', token);
+};
+
+export const getAuthToken = () => authToken;
+
+export const clearAuthToken = () => {
+  authToken = null;
+  localStorage.removeItem('spendsmart_token');
+};
+
+const makeRequest = async <T = any>(
+  endpoint: string,
+  options: RequestInit = {}
+): Promise<T> => {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+
+  if (authToken) {
+    headers.Authorization = `Bearer ${authToken}`;
+  }
+
+  const response = await fetch(`${API_URL}${endpoint}`, {
+    ...options,
+    headers,
+  });
+
+  if (!response.ok) {
+    const errorData: any = await response.json();
+    throw new Error(errorData?.error || 'API Error');
+  }
+
+  const data: any = await response.json();
+  return data as T;
+};
+
+// ===== AUTH API =====
+
+export const registerAPI = async (userData: {
+  name: string;
+  email: string;
+  password: string;
+  monthlyIncome: number;
+  currency?: string;
+}) => {
+  const response: any = await makeRequest('/auth/register', {
+    method: 'POST',
+    body: JSON.stringify(userData),
+  });
+  if (response.token) {
+    setAuthToken(response.token);
+  }
+  return response.user;
+};
+
+export const loginAPI = async (email: string, password: string) => {
+  const response: any = await makeRequest('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+  });
+  if (response.token) {
+    setAuthToken(response.token);
+  }
+  return response.user;
+};
+
+export const getCurrentUserAPI = async () => {
+  try {
+    return await makeRequest('/auth/me', { method: 'GET' });
+  } catch (error) {
+    clearAuthToken();
+    throw error;
+  }
+};
+
+export const forgotPasswordAPI = async (email: string) => {
+  const response: any = await makeRequest('/auth/forgot', {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  });
+  return response;
+};
+
+export const resetPasswordAPI = async (token: string, password: string) => {
+  const response: any = await makeRequest('/auth/reset', {
+    method: 'POST',
+    body: JSON.stringify({ token, password }),
+  });
+  return response;
+};
+
+export const updateProfileAPI = async (updates: { name?: string; monthlyIncome?: number }) => {
+  return makeRequest('/auth/profile', {
+    method: 'PUT',
+    body: JSON.stringify(updates),
+  });
+};
+
+export const resetUserDataAPI = async () => {
+  return makeRequest('/auth/reset-data', {
+    method: 'POST',
+    body: JSON.stringify({}),
+  });
+};
+
+export const deleteAccountAPI = async () => {
+  return makeRequest('/auth/account', {
+    method: 'DELETE',
+  });
+};
+
+export const googleOAuthPopupAPI = async () => {
+  return new Promise((resolve, reject) => {
+    const popup = window.open(`${API_URL.replace(/\/api$/,'')}/api/auth/google/start`, 'GoogleAuth', 'width=500,height=700');
+    if (!popup) {
+      reject(new Error('Popup blocked'));
+      return;
+    }
+
+    const handleMessage = (event: MessageEvent) => {
+      if (event.source !== popup) return;
+      window.removeEventListener('message', handleMessage);
+      popup.close();
+      if (event.data?.token) {
+        setAuthToken(event.data.token);
+        resolve(event.data.user);
+      } else {
+        reject(new Error('OAuth failed'));
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    setTimeout(() => {
+      window.removeEventListener('message', handleMessage);
+      if (!popup.closed) popup.close();
+      reject(new Error('OAuth timeout'));
+    }, 60000);
+  });
+};
+
+// ===== BUDGET API =====
+
+export const getBudgetsAPI = async () => {
+  return makeRequest('/budgets', { method: 'GET' });
+};
+
+export const createBudgetAPI = async (category: string, monthlyLimit: number) => {
+  return makeRequest('/budgets', {
+    method: 'POST',
+    body: JSON.stringify({ category, monthlyLimit }),
+  });
+};
+
+export const updateBudgetAPI = async (id: string, monthlyLimit: number) => {
+  return makeRequest(`/budgets/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({ monthlyLimit }),
+  });
+};
+
+export const deleteBudgetAPI = async (id: string) => {
+  return makeRequest(`/budgets/${id}`, { method: 'DELETE' });
+};
+
+// ===== RECURRING PAYMENTS API =====
+
+export const getRecurringAPI = async () => {
+  return makeRequest('/recurring', { method: 'GET' });
+};
+
+export const createRecurringAPI = async (data: {
+  name: string;
+  amount: number;
+  category: string;
+  dueDay: number;
+}) => {
+  return makeRequest('/recurring', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+};
+
+export const deleteRecurringAPI = async (id: string) => {
+  return makeRequest(`/recurring/${id}`, { method: 'DELETE' });
+};
+
+// ===== EXPENSE API =====
+
+export const createExpenseAPI = async (expenseData: {
+  amount: number;
+  category: string;
+  type: 'income' | 'expense';
+  date: string;
+  description: string;
+  paymentMethod?: string;
+}) => {
+  return makeRequest('/expenses', {
+    method: 'POST',
+    body: JSON.stringify(expenseData),
+  });
+};
+
+export const getExpensesAPI = async () => {
+  return makeRequest('/expenses', { method: 'GET' });
+};
+
+export const updateExpenseAPI = async (
+  id: string,
+  updates: Partial<{
+    amount: number;
+    category: string;
+    type: 'income' | 'expense';
+    date: string;
+    description: string;
+  }>
+) => {
+  return makeRequest(`/expenses/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(updates),
+  });
+};
+
+export const deleteExpenseAPI = async (id: string) => {
+  return makeRequest(`/expenses/${id}`, { method: 'DELETE' });
+};
+
+export const bulkCreateExpensesAPI = async (
+  expenses: Array<{
+    amount: number;
+    category: string;
+    type: 'income' | 'expense';
+    date: string;
+    description: string;
+    paymentMethod?: string;
+  }>
+) => {
+  return makeRequest('/expenses/bulk', {
+    method: 'POST',
+    body: JSON.stringify({ expenses }),
+  });
+};
+
+// ===== BANK API =====
+
+export const connectBankAPI = async (bankName: string, accountNumber: string) => {
+  return makeRequest('/bank/connect', {
+    method: 'POST',
+    body: JSON.stringify({ bankName, accountNumber }),
+  });
+};
+
+export const getBankConnectionsAPI = async () => {
+  return makeRequest('/bank/connections', { method: 'GET' });
+};
+
+export const disconnectBankAPI = async (connectionId: string) => {
+  return makeRequest(`/bank/connections/${connectionId}`, { method: 'DELETE' });
+};
+
+export const uploadBankCSVAPI = async (connectionId: string, csvContent: string) => {
+  return makeRequest('/bank/upload', {
+    method: 'POST',
+    body: JSON.stringify({ connectionId, csvContent }),
+  });
+};
+
+// ===== PLAID API =====
+
+export const getPlaidLinkTokenAPI = async () => {
+  return makeRequest('/bank/plaid/link_token', { method: 'POST' });
+};
+
+export const exchangePlaidTokenAPI = async (publicToken: string, bankName?: string, accountNumber?: string) => {
+  return makeRequest('/bank/plaid/exchange', {
+    method: 'POST',
+    body: JSON.stringify({ publicToken, bankName, accountNumber }),
+  });
+};
+
+export const syncPlaidTransactionsAPI = async (bankConnectionId: string) => {
+  return makeRequest('/bank/plaid/sync', {
+    method: 'POST',
+    body: JSON.stringify({ bankConnectionId }),
+  });
+};
+
+export const getPlaidPendingAPI = async () => {
+  return makeRequest('/bank/plaid/pending', { method: 'GET' });
+};
+
+export const labelPlaidTransactionAPI = async (transactionId: string, userLabel: string, userCategory: string) => {
+  return makeRequest(`/bank/plaid/label/${transactionId}`, {
+    method: 'PUT',
+    body: JSON.stringify({ userLabel, userCategory }),
+  });
+};
+
+export const importPlaidTransactionAPI = async (transactionId: string) => {
+  return makeRequest(`/bank/plaid/import/${transactionId}`, {
+    method: 'POST',
+  });
+};
+
+// ===== RECEIPT / OCR API =====
+export const uploadReceiptAPI = async (imageBase64?: string, ocrText?: string) => {
+  return makeRequest('/receipts/upload', {
+    method: 'POST',
+    body: JSON.stringify({ imageBase64, ocrText }),
+  });
+};
+
+// ===== SMS API =====
+
+export const parseSMSAPI = async (messageContent: string, senderBank: string) => {
+  return makeRequest('/sms/parse', {
+    method: 'POST',
+    body: JSON.stringify({ messageContent, senderBank }),
+  });
+};
+
+export const getSMSTransactionsAPI = async () => {
+  return makeRequest('/sms/transactions', { method: 'GET' });
+};

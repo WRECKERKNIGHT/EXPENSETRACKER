@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>SpendSmart AI</title>
+    
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Outfit', 'sans-serif'],
+            },
+            colors: {
+              background: '#020617', // Slate 950 (Darker, more Navy)
+              surface: '#0f172a', // Slate 900
+              primary: '#10b981', // Emerald 500 (Brand Green)
+              primaryDark: '#059669', // Emerald 600
+              secondary: '#14b8a6', // Teal 500
+              accent: '#06b6d4', // Cyan 500
+              danger: '#ef4444',
+            },
+            animation: {
+              'bounce-slow': 'bounce 3s infinite',
+              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'fade-in': 'fadeIn 0.5s ease-out',
+              'spin-slow': 'spin 12s linear infinite',
+              'orbit': 'orbit 20s linear infinite',
+              'float': 'float 6s ease-in-out infinite',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              orbit: {
+                '0%': { transform: 'rotate(0deg)' },
+                '100%': { transform: 'rotate(360deg)' },
+              },
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-20px)' },
+              }
+            }
+          }
+        }
+      }
+    </script>    <style>
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-track { background: #020617; }
+      ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+      /* Glowing Text Utilities */
+      .text-glow { text-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
+      .text-glow-sm { text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
+      .text-glow-success { text-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+      .text-glow-danger { text-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
+      .text-glow-accent { text-shadow: 0 0 15px rgba(6, 182, 212, 0.5); }
+      .card-glow { box-shadow: 0 0 40px -10px rgba(16, 185, 129, 0.15); }
+      .card-glow-hover:hover { box-shadow: 0 0 30px -5px rgba(16, 185, 129, 0.25); }
+
+      /* ═══════════════════════════════════════════════════════════
+         NEUMORPHISM + CLAYMORPHISM (Dark Mode)
+         ═══════════════════════════════════════════════════════════ */
+      .neu-card {
+        background: #1a1d23;
+        border-radius: 24px;
+        box-shadow: -8px -8px 20px rgba(40, 44, 52, 0.6),
+                     8px 8px 20px rgba(8, 9, 12, 0.7);
+        border: 1px solid rgba(255,255,255,0.04);
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      .neu-card:hover {
+        box-shadow: -10px -10px 24px rgba(50, 55, 65, 0.7),
+                     10px 10px 24px rgba(5, 6, 8, 0.8);
+        transform: translateY(-2px);
+      }
+      .neu-pressed {
+        background: #12141a;
+        border-radius: 16px;
+        box-shadow: inset 4px 4px 8px rgba(8, 9, 12, 0.8),
+                    inset -4px -4px 8px rgba(40, 44, 52, 0.3);
+        border: 1px solid rgba(255,255,255,0.02);
+      }
+      .neu-btn {
+        background: linear-gradient(145deg, #1e222a, #161921);
+        border-radius: 16px;
+        box-shadow: -6px -6px 14px rgba(40, 44, 52, 0.5),
+                     6px 6px 14px rgba(8, 9, 12, 0.7);
+        border: 1px solid rgba(255,255,255,0.05);
+        transition: all 0.3s ease;
+      }
+      .neu-btn:hover {
+        box-shadow: -4px -4px 10px rgba(50, 55, 65, 0.6),
+                     4px 4px 10px rgba(5, 6, 8, 0.8);
+        transform: translateY(-1px);
+      }
+      .neu-btn:active {
+        box-shadow: inset 3px 3px 7px rgba(8, 9, 12, 0.9),
+                    inset -3px -3px 7px rgba(40, 44, 52, 0.2);
+        transform: translateY(0);
+      }
+
+      /* ═══════════════════════════════════════════════════════════
+         GLASSMORPHISM
+         ═══════════════════════════════════════════════════════════ */
+      .glass {
+        background: rgba(18, 20, 28, 0.55);
+        backdrop-filter: blur(24px) saturate(1.4);
+        -webkit-backdrop-filter: blur(24px) saturate(1.4);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+      }
+      .glass-card {
+        background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+        backdrop-filter: blur(30px) saturate(1.5);
+        -webkit-backdrop-filter: blur(30px) saturate(1.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 28px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                    inset 0 1px 0 rgba(255,255,255,0.05);
+      }
+      .glass-neu {
+        background: rgba(26, 29, 35, 0.7);
+        backdrop-filter: blur(20px) saturate(1.3);
+        -webkit-backdrop-filter: blur(20px) saturate(1.3);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 24px;
+        box-shadow: -6px -6px 16px rgba(40, 44, 52, 0.4),
+                     6px 6px 16px rgba(8, 9, 12, 0.6),
+                     inset 0 1px 0 rgba(255,255,255,0.04);
+      }
+
+      /* ═══════════════════════════════════════════════════════════
+         3D DEPTH & PERSPECTIVE
+         ═══════════════════════════════════════════════════════════ */
+      .perspective-1000 { perspective: 1000px; }
+      .preserve-3d { transform-style: preserve-3d; }
+      .backface-hidden { backface-visibility: hidden; }
+
+      /* 3D Card Tilt on hover */
+      .tilt-card {
+        transition: transform 0.5s cubic-bezier(0.03, 0.98, 0.52, 0.99);
+        transform-style: preserve-3d;
+      }
+      .tilt-card:hover {
+        transform: rotateX(4deg) rotateY(-4deg) scale(1.02);
+      }
+
+      /* Floating animation */
+      @keyframes float-3d {
+        0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
+        25% { transform: translateY(-12px) rotateX(2deg) rotateY(-2deg); }
+        50% { transform: translateY(-8px) rotateX(-1deg) rotateY(1deg); }
+        75% { transform: translateY(-15px) rotateX(1deg) rotateY(-1deg); }
+      }
+      .float-3d { animation: float-3d 8s ease-in-out infinite; }
+
+      /* Shimmer overlay */
+      @keyframes shimmer-flow {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(200%); }
+      }
+      .shimmer-overlay { position: relative; overflow: hidden; }
+      .shimmer-overlay::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 50%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+        animation: shimmer-flow 4s ease-in-out infinite;
+      }
+
+      /* Aurora glow */
+      @keyframes aurora {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+      }
+      .aurora-bg {
+        background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #0f0c29);
+        background-size: 400% 400%;
+        animation: aurora 15s ease infinite;
+      }
+
+      /* Particle float */
+      @keyframes particle-float {
+        0%, 100% { transform: translateY(0) translateX(0) scale(1); opacity: 0.6; }
+        33% { transform: translateY(-30px) translateX(15px) scale(1.1); opacity: 0.9; }
+        66% { transform: translateY(-15px) translateX(-10px) scale(0.95); opacity: 0.7; }
+      }
+
+      /* Money spin 3D */
+      @keyframes money-spin {
+        0% { transform: rotateY(0deg) rotateX(10deg); }
+        100% { transform: rotateY(360deg) rotateX(10deg); }
+      }
+      .money-spin-3d { animation: money-spin 6s linear infinite; transform-style: preserve-3d; }
+
+      /* Glow pulse ring */
+      @keyframes glow-ring-pulse {
+        0%, 100% { box-shadow: 0 0 20px rgba(99,102,241,0.3), 0 0 60px rgba(99,102,241,0.1); }
+        50% { box-shadow: 0 0 30px rgba(99,102,241,0.5), 0 0 80px rgba(99,102,241,0.2); }
+      }
+      .glow-ring-pulse { animation: glow-ring-pulse 3s ease-in-out infinite; }
+
+      /* Stagger reveal */
+      @keyframes stagger-in {
+        from { opacity: 0; transform: translateY(30px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      .stagger-in { animation: stagger-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+
+      /* Morphing blob */
+      @keyframes morph-blob {
+        0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+        50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+      }
+      .morph-blob { animation: morph-blob 8s ease-in-out infinite; }
+
+      /* Gradient border trick */
+      .gradient-border {
+        position: relative;
+      }
+      .gradient-border::before {
+        content: '';
+        position: absolute;
+        inset: -1px;
+        border-radius: inherit;
+        background: linear-gradient(135deg, rgba(99,102,241,0.5), rgba(168,85,247,0.5), rgba(6,182,212,0.5));
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+      .gradient-border:hover::before { opacity: 1; }
+
+      /* Ink stamp / badge */
+      .neu-badge {
+        background: #1a1d23;
+        border-radius: 12px;
+        box-shadow: 2px 2px 6px rgba(8,9,12,0.6), -2px -2px 6px rgba(40,44,52,0.3);
+        border: 1px solid rgba(255,255,255,0.04);
+      }
+
+      /* Responsive 3D depth adjustments */
+      @media (max-width: 768px) {
+        .tilt-card:hover { transform: none; }
+        .float-3d { animation-duration: 10s; }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "recharts": "https://aistudiocdn.com/recharts@^3.5.0",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1",
+    "vite": "https://aistudiocdn.com/vite@^7.2.4"
+  }
+}
+</script>
+</head>
+  <body class="bg-background text-zinc-100 font-sans antialiased min-h-screen selection:bg-primary/30 overflow-x-hidden">
+    <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+{
+  "name": "SpendSmart AI",
+  "description": "An intelligent expense tracker powered by Google Gemini 2.5 Flash. Features natural language expense entry, interactive financial analysis, and dynamic visualization.",
+  "requestFramePermissions": []
+}

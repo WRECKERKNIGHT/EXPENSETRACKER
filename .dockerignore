@@ -1,0 +1,15 @@
+node_modules
+dist
+backend/node_modules
+*.log
+.env
+/.git
+/.github
+tmp
+**/*.tsbuildinfo
+coverage
+/.idea
+/.vscode
+npm-debug.log
+yarn-error.log
+dist-ssr

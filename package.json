@@ -1,0 +1,31 @@
+{
+  "name": "spendsmart-ai",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "backend": "cd backend && npm run dev",
+    "start:all": "npm run backend & npm run dev",
+    "build": "vite build && cd backend && npm install --no-audit --no-fund && npm run build",
+    "start": "cd backend && npm install --no-audit --no-fund && npm run build && npm start",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "lucide-react": "^0.555.0",
+    "react": "^19.2.0",
+    "tesseract.js": "^4.1.1",
+    "@google/genai": "^1.30.0",
+    "react-dom": "^19.2.0",
+    "recharts": "^3.5.0",
+    "@vitejs/plugin-react": "^5.1.1",
+    "vite": "^7.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}
+
