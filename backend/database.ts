@@ -4,8 +4,9 @@ import { promisify } from 'util';
 let db: sqlite3.Database;
 
 export const initializeDatabase = async (): Promise<void> => {
+  const dbPath = process.env.DATABASE_URL || './spendsmart.db';
   return new Promise((resolve, reject) => {
-    db = new sqlite3.Database('./spendsmart.db', (err) => {
+    db = new sqlite3.Database(dbPath, (err) => {
       if (err) reject(err);
       else {
         createTables().then(resolve).catch(reject);

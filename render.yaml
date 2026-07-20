@@ -1,6 +1,26 @@
-#!/usr/bin/env bash
-# Render build script for backend deployment
-
-cd backend
-npm install
-npm run build
+services:
+  - type: web
+    name: spendsmart
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: |
+      npm install
+      npm run build
+      cd backend
+      npm install
+      npm run build
+    startCommand: cd backend && node dist/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        value: /data/spendsmart.db
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
