@@ -238,45 +238,46 @@ const App: React.FC = () => {
         {/* Hero Content */}
         <div className="relative z-10 flex flex-col items-center justify-center flex-1 text-center px-4 -mt-20">
           
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-extrabold tracking-tighter mb-6 text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-zinc-500 drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] animate-fade-in leading-[0.9]">
-            Spend<br className="md:hidden" />Smart
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-zinc-500 drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] animate-fade-in leading-[1]">
+            Spend<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Smart</span>
           </h1>
           
-          <p className="text-lg md:text-2xl text-zinc-400 max-w-xl md:max-w-3xl mb-12 leading-relaxed font-light animate-fade-in delay-100">
-            The intelligent financial assistant that <span className="text-indigo-400 font-semibold text-glow-sm">actually understands</span> your spending habits.
+          <p className="text-lg md:text-xl text-zinc-300 max-w-2xl md:max-w-3xl mb-8 leading-relaxed font-light animate-fade-in delay-100">
+            The intelligent financial companion that transforms expense tracking into insights. 
+            <span className="text-indigo-300 font-medium text-glow-accent"> AI-powered analytics</span> meet real-time tracking.
           </p>
           
           <div className="flex flex-col md:flex-row items-center gap-5 w-full max-w-md md:max-w-none justify-center animate-fade-in delay-200">
               {/* Login Button */}
               <button 
                   onClick={() => setScreen('login')}
-                  className="w-full md:w-auto px-10 py-5 bg-zinc-900/50 backdrop-blur-md border border-zinc-700 text-zinc-300 hover:text-white text-lg font-bold rounded-full transition-all hover:bg-zinc-800 hover:border-zinc-500 flex items-center justify-center gap-2"
+                  className="w-full md:w-auto px-10 py-5 bg-zinc-900/50 backdrop-blur-md border border-zinc-700 text-zinc-300 hover:text-white text-lg font-bold rounded-full transition-all hover:bg-zinc-800 hover:border-zinc-500 flex items-center justify-center gap-2 group"
               >
-                  <User size={20} /> Login
+                  <User size={20} /> Sign In
               </button>
 
               {/* Get Started Button */}
               <button 
                   onClick={() => setScreen('signup')}
-                  className="group relative w-full md:w-auto px-12 py-5 bg-indigo-600 text-white text-lg font-bold rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(79,70,229,0.4)] hover:shadow-[0_0_60px_rgba(79,70,229,0.6)] hover:bg-indigo-500"
+                  className="group relative w-full md:w-auto px-12 py-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-lg font-bold rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(79,70,229,0.4)] hover:shadow-[0_0_80px_rgba(79,70,229,0.6)]"
               >
                   <span className="relative z-10 flex items-center justify-center gap-3">
-                  Get Started <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  Start Free <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                   </span>
               </button>
           </div>
 
           {/* Feature Pills */}
-          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 opacity-80 animate-fade-in delay-300">
+          <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 animate-fade-in delay-300">
              {[
-               { icon: Receipt, label: "SMS Parsing" },
-               { icon: Sparkles, label: "AI Advisor" },
-               { icon: ShieldCheck, label: "Secure Data" },
-               { icon: Smartphone, label: "Mobile First" }
+               { icon: Receipt, label: "SMS Parsing", color: "from-emerald-500/20 to-teal-500/20" },
+               { icon: Sparkles, label: "AI Advisor", color: "from-purple-500/20 to-pink-500/20" },
+               { icon: ShieldCheck, label: "Secure Data", color: "from-blue-500/20 to-cyan-500/20" },
+               { icon: Smartphone, label: "Mobile First", color: "from-indigo-500/20 to-blue-500/20" }
              ].map((f, i) => (
-               <div key={i} className="flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors cursor-default">
-                 <f.icon size={16} className="text-indigo-400" />
-                 <span className="text-xs md:text-sm font-medium text-zinc-300">{f.label}</span>
+               <div key={i} className={`flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-br ${f.color} border border-white/10 backdrop-blur-sm hover:border-white/20 hover:bg-white/5 transition-all cursor-default group`}>
+                 <f.icon size={16} className="text-white group-hover:scale-110 transition-transform" />
+                 <span className="text-xs md:text-sm font-medium text-zinc-200">{f.label}</span>
                </div>
              ))}
           </div>
