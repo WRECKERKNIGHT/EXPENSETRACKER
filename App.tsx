@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Expense, ViewMode, AppScreen, UserProfile, Category } from './types';
-import { getExpenses, saveExpense, deleteExpense, getUserProfile, saveUserProfile, clearData } from './services/storageService';
+import { getExpenses, saveExpense, deleteExpense, getUserProfile, saveUserProfile, isSessionActive, setSessionActive } from './services/storageService';
 import Overview from './components/Overview';
 import ExpenseList from './components/ExpenseList';
 import Advisor from './components/Advisor';
@@ -42,15 +42,25 @@ const App: React.FC = () => {
   const [authError, setAuthError] = useState('');
 
   useEffect(() => {
-    // Check for existing user
+    // Check for existing user on mount
     const existingUser = getUserProfile();
     if (existingUser) {
       setUser(existingUser);
-      // We don't auto-redirect to app, we let them login
-      // But we preload expenses
       setExpenses(getExpenses());
+      
+      // Auto-Login: Check if session is active
+      if (isSessionActive()) {
+        setScreen('app');
+      }
     }
   }, []);
+
+  // Auto-fill email in login form if user exists
+  useEffect(() => {
+    if (screen === 'login' && user?.email) {
+      setLoginEmail(user.email);
+    }
+  }, [screen, user]);
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,6 +75,7 @@ const App: React.FC = () => {
     };
 
     saveUserProfile(newUser);
+    setSessionActive(true); // Persist login
     setUser(newUser);
     
     // Create the initial balance transaction
@@ -102,6 +113,7 @@ const App: React.FC = () => {
     };
     
     saveUserProfile(googleUser);
+    setSessionActive(true); // Persist login
     setUser(googleUser);
     
     // Check if we need to run setup
@@ -135,13 +147,12 @@ const App: React.FC = () => {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // In a real app, you'd check against a database. 
-    // Here we check against the single stored user in localStorage.
     const storedUser = getUserProfile();
 
     if (storedUser && storedUser.email === loginEmail && storedUser.password === loginPassword) {
       setUser(storedUser);
       setExpenses(getExpenses());
+      setSessionActive(true); // Persist login
       setScreen('app');
       setAuthError('');
       setLoginEmail('');
@@ -152,12 +163,13 @@ const App: React.FC = () => {
   };
 
   const handleLogout = () => {
+    setSessionActive(false); // clear session
     setScreen('landing');
     setLoginEmail('');
     setLoginPassword('');
     setAuthError('');
     setView('dashboard');
-    setUser(getUserProfile()); // Refresh user state
+    setUser(getUserProfile()); // Refresh user state from storage
   };
 
   const handleAddExpenses = (newExpenses: Omit<Expense, 'id' | 'createdAt'>[]) => {

@@ -3,6 +3,7 @@ import { Expense, Category, UserProfile } from '../types';
 
 const STORAGE_KEY = 'spendsmart_expenses_v2';
 const USER_KEY = 'spendsmart_user_v2';
+const SESSION_KEY = 'spendsmart_session_active';
 
 export const getExpenses = (): Expense[] => {
   try {
@@ -45,7 +46,18 @@ export const saveUserProfile = (profile: UserProfile): void => {
   localStorage.setItem(USER_KEY, JSON.stringify(profile));
 };
 
+// Session Management (Remember Me)
+export const setSessionActive = (active: boolean) => {
+  if (active) localStorage.setItem(SESSION_KEY, 'true');
+  else localStorage.removeItem(SESSION_KEY);
+};
+
+export const isSessionActive = (): boolean => {
+  return localStorage.getItem(SESSION_KEY) === 'true';
+};
+
 export const clearData = () => {
   localStorage.removeItem(STORAGE_KEY);
   localStorage.removeItem(USER_KEY);
+  localStorage.removeItem(SESSION_KEY);
 };
