@@ -2,13 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { Expense, ViewMode, AppScreen, UserProfile, Category, UserPreferences } from './types';
 import { getExpenses, saveExpense, saveUserProfile, setSessionActive, getUserPreferences, saveUserPreferences, isQuizDismissed, dismissQuizPrompt } from './services/storageService';
-import { loginAPI, registerAPI, setAuthToken, getAuthToken, clearAuthToken, getExpensesAPI, deleteExpenseAPI, bulkCreateExpensesAPI, getCurrentUserAPI } from './services/apiService';
+import { loginAPI, registerAPI, setAuthToken, getAuthToken, clearAuthToken, getExpensesAPI, deleteExpenseAPI, bulkCreateExpensesAPI, getCurrentUserAPI, updateExpenseAPI } from './services/apiService';
 import Overview from './components/Overview';
 import SmsImportModal from './components/SmsImportModal';
 import ExpenseList from './components/ExpenseList';
 import Advisor from './components/Advisor';
 import Reports from './components/Reports';
 import AddExpenseModal from './components/AddExpenseModal';
+import EditExpenseModal from './components/EditExpenseModal';
 import MoneyBackground from './components/MoneyBackground';
 import SetupWizard from './components/SetupWizard';
 import LandingPage from './components/LandingPage';
@@ -37,6 +38,7 @@ const App: React.FC = () => {
   const [view, setView] = useState<ViewMode>('dashboard');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSmsModalOpen, setIsSmsModalOpen] = useState(false);
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
 
   // Auth Forms State
   const [nameInput, setNameInput] = useState('');
@@ -292,6 +294,20 @@ const App: React.FC = () => {
     } catch (error) {
       console.error('Failed to delete expense:', error);
       setAuthError('Failed to delete expense');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEditExpense = async (id: string, updates: Partial<Expense>) => {
+    try {
+      setIsLoading(true);
+      await updateExpenseAPI(id, updates);
+      setExpenses(expenses.map(e => e.id === id ? { ...e, ...updates } : e));
+      setEditingExpense(null);
+    } catch (error) {
+      console.error('Failed to update expense:', error);
+      setAuthError('Failed to update expense');
     } finally {
       setIsLoading(false);
     }
@@ -688,7 +704,7 @@ const App: React.FC = () => {
               onDismissCustomize={handleDismissCustomizePrompt}
             />
           )}
-          {view === 'expenses' && <ExpenseList expenses={expenses} onDelete={handleDeleteExpense} />}
+          {view === 'expenses' && <ExpenseList expenses={expenses} onDelete={handleDeleteExpense} onEdit={setEditingExpense} />}
           {view === 'advisor' && <Advisor expenses={expenses} />}
           {view === 'reports' && user && <Reports expenses={expenses} currency={user.currency || 'INR'} />}
         </div>
@@ -702,6 +718,13 @@ const App: React.FC = () => {
       />
 
       <SmsImportModal isOpen={isSmsModalOpen} onClose={() => setIsSmsModalOpen(false)} onImported={() => loadExpenses(user!)} />
+
+      <EditExpenseModal
+        isOpen={!!editingExpense}
+        onClose={() => setEditingExpense(null)}
+        onSave={handleEditExpense}
+        expense={editingExpense}
+      />
 
     </div>
   );

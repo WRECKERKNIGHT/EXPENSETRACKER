@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { Expense, Category } from '../types';
 import { 
-  Trash2, Search, ArrowUpRight, ArrowDownRight, 
+  Trash2, Search, ArrowUpRight, ArrowDownRight, Edit3,
   Utensils, ShoppingBasket, Bus, Fuel, Home, Zap, 
   Landmark, Film, Stethoscope, ShoppingBag, Plane, 
   GraduationCap, TrendingUp, Banknote, Briefcase, MoreHorizontal,
@@ -11,6 +11,7 @@ import {
 interface ExpenseListProps {
   expenses: Expense[];
   onDelete: (id: string) => void;
+  onEdit?: (expense: Expense) => void;
 }
 
 const getCategoryIcon = (category: Category) => {
@@ -42,7 +43,7 @@ const getCategoryIcon = (category: Category) => {
   }
 };
 
-const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete }) => {
+const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit }) => {
   const [filter, setFilter] = React.useState('');
 
   const filteredExpenses = expenses
@@ -156,13 +157,24 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete }) => {
                          </span>
                       </td>
                       <td className="px-6 py-5 text-center">
-                        <button 
-                          onClick={() => onDelete(expense.id)}
-                          className="text-faint hover:text-red-400 hover:bg-red-500/10 p-2.5 rounded-xl transition-all opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0"
-                          title="Delete Transaction"
-                        >
-                          <Trash2 size={18} />
-                        </button>
+                        <div className="flex items-center justify-center gap-1">
+                          {onEdit && (
+                            <button 
+                              onClick={() => onEdit(expense)}
+                              className="text-faint hover:text-gold hover:bg-gold/10 p-2.5 rounded-xl transition-all opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0"
+                              title="Edit Transaction"
+                            >
+                              <Edit3 size={16} />
+                            </button>
+                          )}
+                          <button 
+                            onClick={() => onDelete(expense.id)}
+                            className="text-faint hover:text-red-400 hover:bg-red-500/10 p-2.5 rounded-xl transition-all opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0"
+                            title="Delete Transaction"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -190,12 +202,22 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete }) => {
                           </div>
                         </div>
                       </div>
-                      <button 
-                          onClick={() => onDelete(expense.id)}
-                          className="text-faint p-2"
-                        >
-                          <Trash2 size={18} />
-                      </button>
+                      <div className="flex items-center gap-1">
+                        {onEdit && (
+                          <button 
+                            onClick={() => onEdit(expense)}
+                            className="text-faint p-2"
+                          >
+                            <Edit3 size={18} />
+                          </button>
+                        )}
+                        <button 
+                            onClick={() => onDelete(expense.id)}
+                            className="text-faint p-2"
+                          >
+                            <Trash2 size={18} />
+                        </button>
+                      </div>
                    </div>
                    
                    <div className="flex items-end justify-between border-t border-app/50 pt-3">
