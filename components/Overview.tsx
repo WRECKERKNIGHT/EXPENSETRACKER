@@ -3,6 +3,7 @@ import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { Expense } from '../types';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, AreaChart, Area, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
 import { TrendingUp, TrendingDown, Wallet, Plus, PieChart as PieChartIcon, Activity, ListChecks, Link as LinkIcon, CheckCircle2, Loader2, Sparkles, UploadCloud, MessageSquare } from 'lucide-react';
+import QuickAdd from './QuickAdd';
 import { connectBankAPI, getBankConnectionsAPI, uploadBankCSVAPI } from '../services/apiService';
 import SmsImportModal from './SmsImportModal';
 
@@ -188,6 +189,9 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
               </div>
             </div>
         </div>
+
+        {/* Mobile Quick Add floating button */}
+        <QuickAdd onQuickAdd={onAddTx} />
 
         {/* Balance Card */}
         <div className="col-span-1 md:col-span-2 lg:col-span-2 relative overflow-hidden bg-[#121215]/60 backdrop-blur-xl p-6 rounded-[2rem] shadow-2xl border border-white/5 group card-glow-hover flex flex-col justify-between min-h-[160px]">
