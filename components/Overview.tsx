@@ -2,7 +2,7 @@
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { Expense, UserPreferences, WidgetKey } from '../types';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, AreaChart, Area, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
-import { TrendingUp, TrendingDown, Wallet, Plus, PieChart as PieChartIcon, Activity, ListChecks, Link as LinkIcon, CheckCircle2, Loader2, Sparkles, UploadCloud, MessageSquare, SlidersHorizontal, X } from 'lucide-react';
+import { TrendingUp, TrendingDown, Wallet, Plus, PieChart as PieChartIcon, Activity, ListChecks, Link as LinkIcon, CheckCircle2, Loader2, Sparkles, UploadCloud, MessageSquare, SlidersHorizontal, X, Gauge } from 'lucide-react';
 import QuickAdd from './QuickAdd';
 import QuickAddInline from './QuickAddInline';
 import { connectBankAPI, getBankConnectionsAPI, uploadBankCSVAPI } from '../services/apiService';
@@ -143,6 +143,27 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
       { name: 'Total Spent', value: calculations.totalExpense }
     ];
   }, [calculations]);
+
+  const spendingVelocity = useMemo(() => {
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const dayOfMonth = now.getDate();
+    const totalDaysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+
+    const monthExpenses = expenses
+      .filter(e => e.type === 'expense' && new Date(e.date) >= monthStart && new Date(e.date) <= now)
+      .reduce((acc, e) => acc + e.amount, 0);
+
+    const dailyBurn = dayOfMonth > 0 ? monthExpenses / dayOfMonth : 0;
+    const projectedMonthEnd = dailyBurn * totalDaysInMonth;
+    const burnPct = monthlyIncome > 0 ? (projectedMonthEnd / monthlyIncome) * 100 : 0;
+
+    const remainingDays = totalDaysInMonth - dayOfMonth;
+    const remainingBudget = monthlyIncome - monthExpenses;
+    const dailyAllowance = remainingDays > 0 ? remainingBudget / remainingDays : 0;
+
+    return { dailyBurn, projectedMonthEnd, burnPct, remainingBudget, dailyAllowance };
+  }, [expenses, monthlyIncome]);
 
   const categoryData = useMemo(() => {
     const map = new Map<string, number>();
@@ -380,6 +401,44 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
           {csvMessage.text}
         </div>
       )}
+
+      {/* Spending Velocity */}
+      <div className="bg-surface border border-app rounded-[2rem] p-6 shadow-card-soft">
+        <div className="flex items-center gap-2 mb-4">
+          <Gauge size={18} className="text-gold" />
+          <h3 className="text-sm font-bold text-app tracking-wide">Spending Velocity</h3>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-surface-2 border border-app rounded-2xl p-4 space-y-1">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-faint">Daily Burn Rate</span>
+            <p className="text-xl font-bold font-mono text-gold">{formatCurrency(spendingVelocity.dailyBurn, currency)}</p>
+            <p className="text-[10px] text-faint">per day average</p>
+          </div>
+          <div className="bg-surface-2 border border-app rounded-2xl p-4 space-y-1">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-faint">Projected Month-End</span>
+            <p className={`text-xl font-bold font-mono ${spendingVelocity.burnPct > 100 ? 'text-danger' : spendingVelocity.burnPct > 80 ? 'text-gold' : 'text-brand-ink'}`}>
+              {formatCurrency(spendingVelocity.projectedMonthEnd, currency)}
+            </p>
+            <div className="w-full bg-app-soft rounded-full h-1.5 overflow-hidden mt-2">
+              <div
+                className="h-full rounded-full transition-all duration-500"
+                style={{
+                  width: `${Math.min(spendingVelocity.burnPct, 100)}%`,
+                  backgroundColor: spendingVelocity.burnPct > 100 ? 'var(--danger)' : spendingVelocity.burnPct > 80 ? 'var(--gold)' : 'var(--brand)',
+                }}
+              />
+            </div>
+            <p className="text-[10px] text-faint">{spendingVelocity.burnPct.toFixed(0)}% of {formatCurrency(monthlyIncome, currency)}</p>
+          </div>
+          <div className="bg-surface-2 border border-app rounded-2xl p-4 space-y-1">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-faint">Remaining Daily Budget</span>
+            <p className={`text-xl font-bold font-mono ${spendingVelocity.dailyAllowance > 0 ? 'text-brand-ink' : 'text-danger'}`}>
+              {formatCurrency(Math.max(0, spendingVelocity.dailyAllowance), currency)}
+            </p>
+            <p className="text-[10px] text-faint">for rest of month</p>
+          </div>
+        </div>
+      </div>
 
       {/* Row 2: Pie Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
