@@ -8,6 +8,7 @@ import QuickAddInline from './QuickAddInline';
 import { connectBankAPI, getBankConnectionsAPI, uploadBankCSVAPI } from '../services/apiService';
 import SmsImportModal from './SmsImportModal';
 import BudgetsCard from './BudgetsCard';
+import RecurringCard from './RecurringCard';
 
 interface OverviewProps {
   expenses: Expense[];
@@ -392,12 +393,13 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
         </div>
       </div>
 
-      {/* Row 3: Budgets + Cash Flow */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <div className="xl:col-span-1">
+      {/* Row 3: Budgets + Recurring + Cash Flow */}
+      <div className="grid grid-cols-1 2xl:grid-cols-3 gap-6">
+        <div className="space-y-4 2xl:col-span-1">
           <BudgetsCard expenses={expenses} currency={currency} />
+          <RecurringCard expenses={expenses} currency={currency} />
         </div>
-        <div className="xl:col-span-2 bg-[#121215]/60 backdrop-blur-xl border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-2xl">
+        <div className="2xl:col-span-2 bg-[#121215]/60 backdrop-blur-xl border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-2xl">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
             <h3 className="text-xl font-bold text-zinc-100 flex items-center gap-3 text-glow-sm">
               <TrendingUp size={20} className="text-indigo-500" /> Cash Flow Trends

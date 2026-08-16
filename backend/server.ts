@@ -7,6 +7,7 @@ import { createExpense, getExpenses, updateExpense, deleteExpense, bulkCreateExp
 import { connectBank, getBankConnections, saveSMSTransaction, getSMSTransactions, disconnectBank } from './bankService';
 import { createPlaidLinkToken, exchangePlaidPublicToken } from './plaidService';
 import { getBudgets, createBudget, updateBudget, deleteBudget } from './budgetService';
+import { getRecurringPayments, createRecurringPayment, deleteRecurringPayment } from './recurringService';
 
 dotenv.config();
 
@@ -188,6 +189,44 @@ app.delete('/api/budgets/:id', authMiddleware, async (req: AuthRequest, res: Res
   try {
     await deleteBudget(req.userId!, req.params.id);
     res.json({ message: 'Budget deleted' });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===== RECURRING PAYMENTS ROUTES =====
+
+app.get('/api/recurring', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    const items = await getRecurringPayments(req.userId!);
+    res.json(items);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/recurring', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    const { name, amount, category, dueDay } = req.body;
+    if (!name || !amount || !category || !dueDay) {
+      return res.status(400).json({ error: 'name, amount, category and dueDay are required' });
+    }
+    const created = await createRecurringPayment(req.userId!, {
+      name,
+      amount: Number(amount),
+      category,
+      dueDay: Number(dueDay),
+    });
+    res.status(201).json(created);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.delete('/api/recurring/:id', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    await deleteRecurringPayment(req.userId!, req.params.id);
+    res.json({ message: 'Recurring payment deleted' });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
