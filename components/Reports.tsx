@@ -179,16 +179,33 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
         {byCategory.length === 0 ? (
           <p className="text-xs text-faint">No expenses in this period.</p>
         ) : (
-          <div className="space-y-2">
-            {byCategory.map(c => (
-              <div
-                key={c.name}
-                className="flex items-center justify-between bg-surface-2 border border-app rounded-2xl px-4 py-2.5"
-              >
-                <span className="text-xs text-app">{c.name}</span>
-                <span className="text-xs font-semibold text-soft">{fmt(c.value)}</span>
-              </div>
-            ))}
+          <div className="space-y-3">
+            {byCategory.map((c, idx) => {
+              const maxVal = byCategory[0]?.value || 1;
+              const pct = (c.value / maxVal) * 100;
+              const colors = ['#3fae6e', '#d4af37', '#3f7d9e', '#b3492f', '#6f8f5e', '#8a6f4d', '#2f8f9e', '#7a5ea8', '#64748b'];
+              const color = colors[idx % colors.length];
+              return (
+                <div
+                  key={c.name}
+                  className="bg-surface-2 border border-app rounded-2xl px-4 py-3 space-y-2"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
+                      <span className="text-xs font-bold text-app">{c.name}</span>
+                    </div>
+                    <span className="text-xs font-bold text-soft font-mono">{fmt(c.value)}</span>
+                  </div>
+                  <div className="w-full bg-app-soft rounded-full h-1.5 overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-all duration-500"
+                      style={{ width: `${pct}%`, backgroundColor: color }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
