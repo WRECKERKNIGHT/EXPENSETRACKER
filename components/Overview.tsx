@@ -30,6 +30,8 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
   const [isBankConnecting, setIsBankConnecting] = useState(false);
   const [isBankConnected, setIsBankConnected] = useState(false);
   const [showSmsModal, setShowSmsModal] = useState(false);
+  const [isUploadingCsv, setIsUploadingCsv] = useState(false);
+  const [csvMessage, setCsvMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -69,15 +71,26 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (!f) return;
-    const text = await f.text();
+    
+    setIsUploadingCsv(true);
+    setCsvMessage(null);
+    
     try {
-      await uploadBankCSVAPI('', text);
-      onImportComplete && onImportComplete();
-    } catch (err) {
-      console.error('Failed to upload CSV:', err);
+      const text = await f.text();
+      const result: any = await uploadBankCSVAPI('', text);
+      
+      if (result.imported && result.imported > 0) {
+        setCsvMessage({ type: 'success', text: `✓ Imported ${result.imported} transaction(s)` });
+        onImportComplete && onImportComplete();
+      } else {
+        setCsvMessage({ type: 'error', text: 'No transactions found in CSV' });
+      }
+    } catch (err: any) {
+      setCsvMessage({ type: 'error', text: err.message || 'Failed to upload CSV' });
     } finally {
-      // clear file input
+      setIsUploadingCsv(false);
       if (fileRef.current) fileRef.current.value = '';
+      setTimeout(() => setCsvMessage(null), 3000);
     }
   };
 
@@ -204,8 +217,8 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
                   <MessageSquare size={14} /> Import SMS
                 </button>
 
-                <button onClick={handleFilePick} className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-zinc-800 text-zinc-300 border border-zinc-700 hover:bg-zinc-700">
-                  <UploadCloud size={14} /> Import CSV
+                <button onClick={handleFilePick} disabled={isUploadingCsv} className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-zinc-800 text-zinc-300 border border-zinc-700 hover:bg-zinc-700 disabled:opacity-50">
+                  {isUploadingCsv ? <Loader2 size={14} className="animate-spin" /> : <UploadCloud size={14} />} Import CSV
                 </button>
                 <input ref={fileRef} type="file" accept=".csv" className="hidden" onChange={handleFileChange} />
 
@@ -247,6 +260,17 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
            </div>
         </div>
       </div>
+
+      {/* CSV Import Feedback */}
+      {csvMessage && (
+        <div className={`p-4 rounded-2xl text-sm font-bold border mb-6 animate-fade-in ${
+          csvMessage.type === 'success' 
+            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' 
+            : 'bg-red-500/10 text-red-400 border-red-500/30'
+        }`}>
+          {csvMessage.text}
+        </div>
+      )}
 
       {/* Row 2: Pie Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

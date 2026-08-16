@@ -61,7 +61,14 @@ app.post('/api/auth/register', async (req: Request, res: Response) => {
       currency: currency || 'INR'
     });
 
-    res.status(201).json({ user });
+    // Auto-login after registration: generate token
+    try {
+      const loginResult = await loginUser(email, password);
+      res.status(201).json({ user: loginResult.user, token: loginResult.token });
+    } catch (err) {
+      // If login failed for some reason, still return user without token
+      res.status(201).json({ user });
+    }
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
@@ -210,6 +217,44 @@ app.delete('/api/bank/connections/:id', authMiddleware, async (req: AuthRequest,
     }
 
     res.json({ message: 'Bank disconnected' });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Upload bank CSV and import transactions
+app.post('/api/bank/upload', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    const { connectionId, csvContent } = req.body;
+    if (!connectionId || !csvContent) return res.status(400).json({ error: 'connectionId and csvContent required' });
+
+    // Simple CSV parser: expect header with date,description,amount,type (type optional)
+    const lines = csvContent.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    const header = lines.shift();
+    if (!header) return res.status(400).json({ error: 'Empty CSV' });
+
+    const cols = header.split(',').map(c => c.trim().toLowerCase());
+    const idxDate = cols.indexOf('date');
+    const idxDesc = cols.indexOf('description');
+    const idxAmount = cols.indexOf('amount');
+    const idxType = cols.indexOf('type');
+
+    if (idxDate === -1 || idxDesc === -1 || idxAmount === -1) return res.status(400).json({ error: 'CSV must contain date,description,amount columns' });
+
+    const expensesToCreate: any[] = [];
+    for (const line of lines) {
+      const parts = line.split(',').map(p => p.trim());
+      const date = parts[idxDate];
+      const description = parts[idxDesc];
+      const amountRaw = parts[idxAmount].replace(/[^0-9.-]/g, '');
+      const amount = parseFloat(amountRaw) || 0;
+      const type = (idxType !== -1 && parts[idxType]) ? (parts[idxType].toLowerCase().includes('credit') ? 'income' : 'expense') : (amount >= 0 ? 'income' : 'expense');
+
+      expensesToCreate.push({ amount: Math.abs(amount), category: 'Other', type, date, description });
+    }
+
+    const created = await bulkCreateExpenses(req.userId!, expensesToCreate);
+    res.json({ imported: created.length, items: created });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

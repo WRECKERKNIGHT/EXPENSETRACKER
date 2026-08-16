@@ -56,6 +56,9 @@ export const registerAPI = async (userData: {
     method: 'POST',
     body: JSON.stringify(userData),
   });
+  if (response.token) {
+    setAuthToken(response.token);
+  }
   return response.user;
 };
 
@@ -64,12 +67,19 @@ export const loginAPI = async (email: string, password: string) => {
     method: 'POST',
     body: JSON.stringify({ email, password }),
   });
-  setAuthToken(response.token);
+  if (response.token) {
+    setAuthToken(response.token);
+  }
   return response.user;
 };
 
 export const getCurrentUserAPI = async () => {
-  return makeRequest('/auth/me', { method: 'GET' });
+  try {
+    return await makeRequest('/auth/me', { method: 'GET' });
+  } catch (error) {
+    clearAuthToken();
+    throw error;
+  }
 };
 
 export const updateProfileAPI = async (updates: { name?: string; monthlyIncome?: number }) => {
@@ -148,6 +158,13 @@ export const getBankConnectionsAPI = async () => {
 
 export const disconnectBankAPI = async (connectionId: string) => {
   return makeRequest(`/bank/connections/${connectionId}`, { method: 'DELETE' });
+};
+
+export const uploadBankCSVAPI = async (connectionId: string, csvContent: string) => {
+  return makeRequest('/bank/upload', {
+    method: 'POST',
+    body: JSON.stringify({ connectionId, csvContent }),
+  });
 };
 
 // ===== SMS API =====
