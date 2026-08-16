@@ -60,12 +60,12 @@ const App: React.FC = () => {
     if (token) {
       // Try to load user profile from backend to verify token is still valid
       getCurrentUserAPI()
-        .then((user) => {
-          setUser(user);
-          loadExpenses(user);
+        .then((user: any) => {
+          setUser(user as UserProfile);
+          loadExpenses(user as UserProfile);
           setScreen('app');
         })
-        .catch((error) => {
+        .catch((error: any) => {
           console.error('Failed to load user profile:', error);
           clearAuthToken();
           setScreen('landing');
@@ -186,7 +186,7 @@ const App: React.FC = () => {
   const handleAddExpenses = async (newExpenses: Omit<Expense, 'id' | 'createdAt'>[]) => {
     try {
       setIsLoading(true);
-      const created = await bulkCreateExpensesAPI(
+      const created: any = await bulkCreateExpensesAPI(
         newExpenses.map(e => ({
           amount: e.amount,
           category: e.category,
@@ -195,7 +195,7 @@ const App: React.FC = () => {
           description: e.description
         }))
       );
-      setExpenses(prev => [...created, ...prev]);
+      setExpenses(prev => [...(created as Expense[]), ...prev]);
     } catch (error) {
       console.error('Failed to add expenses:', error);
       setAuthError('Failed to save expenses');
