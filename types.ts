@@ -32,8 +32,10 @@ export interface Expense {
 
 export interface UserProfile {
   name: string;
+  email: string;
   monthlyIncome: number;
   currency: string;
+  password: string; // Replaced PIN with Password
 }
 
 export interface ChartDataPoint {
@@ -43,7 +45,7 @@ export interface ChartDataPoint {
 }
 
 export type ViewMode = 'dashboard' | 'expenses' | 'advisor';
-export type AppScreen = 'landing' | 'login' | 'app';
+export type AppScreen = 'landing' | 'signup' | 'setup' | 'login' | 'app';
 
 export interface ChatMessage {
   id: string;

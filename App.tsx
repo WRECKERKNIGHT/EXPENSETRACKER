@@ -6,7 +6,9 @@ import Overview from './components/Overview';
 import ExpenseList from './components/ExpenseList';
 import Advisor from './components/Advisor';
 import AddExpenseModal from './components/AddExpenseModal';
-import { LayoutDashboard, Receipt, Sparkles, Plus, Wallet, LogOut, ArrowRight, IndianRupee } from 'lucide-react';
+import SpaceBackground from './components/SpaceBackground';
+import SetupWizard from './components/SetupWizard';
+import { LayoutDashboard, Receipt, Sparkles, Plus, Wallet, LogOut, ArrowRight, Lock, User, ShieldCheck, Smartphone, Mail, Key } from 'lucide-react';
 
 const App: React.FC = () => {
   const [screen, setScreen] = useState<AppScreen>('landing');
@@ -17,27 +19,37 @@ const App: React.FC = () => {
   const [view, setView] = useState<ViewMode>('dashboard');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Setup Form State
+  // Auth Forms State
   const [nameInput, setNameInput] = useState('');
+  const [emailInput, setEmailInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState('');
   const [incomeInput, setIncomeInput] = useState('');
   const [balanceInput, setBalanceInput] = useState('');
+  
+  // Login State
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [authError, setAuthError] = useState('');
 
   useEffect(() => {
     // Check for existing user
     const existingUser = getUserProfile();
     if (existingUser) {
       setUser(existingUser);
-      setScreen('app');
+      // We don't auto-redirect to app, we let them login
+      // But we preload expenses
       setExpenses(getExpenses());
     }
   }, []);
 
-  const handleSetupAccount = (e: React.FormEvent) => {
+  const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!nameInput || !incomeInput || !balanceInput) return;
+    if (!nameInput || !emailInput || !passwordInput || !incomeInput || !balanceInput) return;
 
     const newUser: UserProfile = {
       name: nameInput,
+      email: emailInput,
+      password: passwordInput,
       monthlyIncome: parseFloat(incomeInput),
       currency: 'INR'
     };
@@ -47,43 +59,71 @@ const App: React.FC = () => {
     
     // Create the initial balance transaction
     const initialBalance = parseFloat(balanceInput);
+    let initialExpenses: Expense[] = [];
+    
     if (initialBalance > 0) {
         const initialTx: Expense = {
             id: Date.now().toString(),
             amount: initialBalance,
-            category: Category.SALARY, // Using Salary/Income as category for initial balance
+            category: Category.SALARY,
             type: 'income',
             date: new Date().toISOString().split('T')[0],
             description: 'Initial Wallet Balance',
             createdAt: Date.now()
         };
-        const updated = saveExpense(initialTx);
-        setExpenses(updated);
+        saveExpense(initialTx);
+        initialExpenses = [initialTx];
     } else {
         setExpenses([]);
     }
+    
+    setExpenses(initialExpenses);
+    setScreen('setup'); // Go to Setup Wizard
+  };
 
-    setScreen('app');
+  const handleSetupComplete = (newExpenses: Omit<Expense, 'id' | 'createdAt'>[]) => {
+      handleAddExpenses(newExpenses);
+      setScreen('app');
+  };
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // In a real app, you'd check against a database. 
+    // Here we check against the single stored user in localStorage.
+    const storedUser = getUserProfile();
+
+    if (storedUser && storedUser.email === loginEmail && storedUser.password === loginPassword) {
+      setUser(storedUser);
+      setExpenses(getExpenses());
+      setScreen('app');
+      setAuthError('');
+      setLoginEmail('');
+      setLoginPassword('');
+    } else {
+      setAuthError('Invalid email or password.');
+    }
   };
 
   const handleLogout = () => {
-    clearData();
-    setUser(null);
     setScreen('landing');
-    setExpenses([]);
-    setNameInput('');
-    setIncomeInput('');
-    setBalanceInput('');
+    setLoginEmail('');
+    setLoginPassword('');
+    setAuthError('');
     setView('dashboard');
+    setUser(getUserProfile()); // Refresh user state
   };
 
-  const handleAddExpense = (newExpense: Omit<Expense, 'id' | 'createdAt'>) => {
-    const expense: Expense = {
-      ...newExpense,
-      id: Date.now().toString(),
-      createdAt: Date.now(),
-    };
-    const updated = saveExpense(expense);
+  const handleAddExpenses = (newExpenses: Omit<Expense, 'id' | 'createdAt'>[]) => {
+    let updated = expenses;
+    newExpenses.forEach(item => {
+        const expense: Expense = {
+            ...item,
+            id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+            createdAt: Date.now(),
+        };
+        updated = saveExpense(expense);
+    });
     setExpenses(updated);
   };
 
@@ -96,94 +136,224 @@ const App: React.FC = () => {
 
   if (screen === 'landing') {
     return (
-      <div className="min-h-screen bg-[#09090b] text-white flex flex-col relative overflow-hidden font-sans">
-        {/* Background Gradients */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-          <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/20 rounded-full blur-[150px] animate-pulse-slow"></div>
-          <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-purple-600/20 rounded-full blur-[150px] animate-pulse-slow"></div>
-        </div>
+      <div className="min-h-screen bg-[#09090b] text-white flex flex-col relative overflow-hidden font-sans selection:bg-indigo-500/30">
+        
+        <SpaceBackground />
 
-        {/* Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-6 text-center">
-          <div className="mb-8 p-5 bg-white/5 rounded-3xl border border-white/10 backdrop-blur-xl shadow-[0_0_40px_rgba(99,102,241,0.3)] animate-bounce-slow">
-            <IndianRupee className="w-20 h-20 text-indigo-400 drop-shadow-[0_0_15px_rgba(129,140,248,0.8)]" />
-          </div>
-          <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-6 text-transparent bg-clip-text bg-gradient-to-br from-white via-indigo-200 to-indigo-400 drop-shadow-[0_0_30px_rgba(99,102,241,0.4)]">
-            SpendSmart AI
+        {/* Top Navigation */}
+        <nav className="relative z-20 w-full p-6 md:p-8 flex justify-between items-center animate-fade-in">
+             <div className="flex items-center gap-3">
+                <div className="bg-white/10 p-2.5 rounded-2xl backdrop-blur-md border border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                    <Wallet className="w-5 h-5 md:w-6 md:h-6 text-indigo-400" />
+                </div>
+                <span className="text-xl md:text-2xl font-bold tracking-tight text-white">SpendSmart</span>
+             </div>
+        </nav>
+
+        {/* Hero Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center flex-1 text-center px-4 -mt-20">
+          
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-extrabold tracking-tighter mb-6 text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-zinc-500 drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] animate-fade-in leading-[0.9]">
+            Spend<br className="md:hidden" />Smart
           </h1>
-          <p className="text-xl md:text-2xl text-zinc-300 max-w-2xl mb-12 leading-relaxed font-light tracking-wide">
-            Master your money with India's most <span className="text-indigo-300 font-semibold text-glow-sm">intelligent</span> expense tracker. 
-            Powered by Gemini AI.
+          
+          <p className="text-lg md:text-2xl text-zinc-400 max-w-xl md:max-w-3xl mb-12 leading-relaxed font-light animate-fade-in delay-100">
+            The intelligent financial assistant that <span className="text-indigo-400 font-semibold text-glow-sm">actually understands</span> your spending habits.
           </p>
-          <button 
-            onClick={() => setScreen('login')}
-            className="group relative px-10 py-5 bg-white text-black text-lg font-bold rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:shadow-[0_0_50px_rgba(255,255,255,0.5)]"
-          >
-            <span className="relative z-10 flex items-center gap-3">
-              Get Started <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
-            </span>
+          
+          <div className="flex flex-col md:flex-row items-center gap-5 w-full max-w-md md:max-w-none justify-center animate-fade-in delay-200">
+              {/* Login Button */}
+              <button 
+                  onClick={() => setScreen('login')}
+                  className="w-full md:w-auto px-10 py-5 bg-zinc-900/50 backdrop-blur-md border border-zinc-700 text-zinc-300 hover:text-white text-lg font-bold rounded-full transition-all hover:bg-zinc-800 hover:border-zinc-500 flex items-center justify-center gap-2"
+              >
+                  <User size={20} /> Login
+              </button>
+
+              {/* Get Started Button */}
+              <button 
+                  onClick={() => setScreen('signup')}
+                  className="group relative w-full md:w-auto px-12 py-5 bg-indigo-600 text-white text-lg font-bold rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(79,70,229,0.4)] hover:shadow-[0_0_60px_rgba(79,70,229,0.6)] hover:bg-indigo-500"
+              >
+                  <span className="relative z-10 flex items-center justify-center gap-3">
+                  Get Started <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  </span>
+              </button>
+          </div>
+
+          {/* Feature Pills */}
+          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 opacity-80 animate-fade-in delay-300">
+             {[
+               { icon: Receipt, label: "SMS Parsing" },
+               { icon: Sparkles, label: "AI Advisor" },
+               { icon: ShieldCheck, label: "Secure Data" },
+               { icon: Smartphone, label: "Mobile First" }
+             ].map((f, i) => (
+               <div key={i} className="flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors cursor-default">
+                 <f.icon size={16} className="text-indigo-400" />
+                 <span className="text-xs md:text-sm font-medium text-zinc-300">{f.label}</span>
+               </div>
+             ))}
+          </div>
+
+        </div>
+      </div>
+    );
+  }
+
+  if (screen === 'setup') {
+      return <SetupWizard onComplete={handleSetupComplete} />;
+  }
+
+  if (screen === 'login') {
+    return (
+      <div className="min-h-screen bg-[#09090b] text-white flex items-center justify-center p-6 relative font-sans">
+        <SpaceBackground />
+
+        <div className="relative z-10 w-full max-w-md bg-[#121215]/80 backdrop-blur-xl border border-white/10 p-8 rounded-[2rem] shadow-2xl card-glow animate-fade-in">
+          <div className="text-center mb-10">
+            <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-[0_0_20px_rgba(99,102,241,0.5)] transform rotate-3">
+               <User size={28} className="text-white" />
+            </div>
+            <h2 className="text-3xl font-bold mb-2 tracking-tight text-white">Welcome Back</h2>
+            <p className="text-zinc-400">Sign in to your account</p>
+          </div>
+          
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div>
+              <label className="block text-xs font-bold text-zinc-500 mb-2 ml-1 tracking-widest uppercase">Email Address</label>
+              <div className="relative">
+                <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
+                <input
+                    type="email"
+                    required
+                    value={loginEmail}
+                    onChange={(e) => setLoginEmail(e.target.value)}
+                    className="w-full bg-black/40 border border-zinc-700 rounded-2xl pl-12 pr-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder:text-zinc-600 shadow-inner"
+                    placeholder="you@example.com"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-zinc-500 mb-2 ml-1 tracking-widest uppercase">Password</label>
+              <div className="relative">
+                <Key className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
+                <input
+                    type="password"
+                    required
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                    className="w-full bg-black/40 border border-zinc-700 rounded-2xl pl-12 pr-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder:text-zinc-600 shadow-inner"
+                    placeholder="••••••••"
+                />
+              </div>
+            </div>
+
+            {authError && <p className="text-red-400 text-sm bg-red-500/10 p-3 rounded-xl border border-red-500/20 flex items-center gap-2 animate-fade-in">{authError}</p>}
+            
+            <button 
+              type="submit"
+              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl transition-all shadow-[0_0_20px_rgba(79,70,229,0.4)] hover:shadow-[0_0_30px_rgba(79,70,229,0.6)] mt-2 text-lg tracking-wide"
+            >
+              Sign In
+            </button>
+          </form>
+
+          <button onClick={() => setScreen('landing')} className="w-full mt-6 text-zinc-500 text-sm hover:text-white transition-colors">
+            Cancel
           </button>
         </div>
       </div>
     );
   }
 
-  if (screen === 'login') {
+  if (screen === 'signup') {
     return (
       <div className="min-h-screen bg-[#09090b] text-white flex items-center justify-center p-6 relative font-sans">
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-indigo-900/15 rounded-full blur-[100px]"></div>
-        </div>
+        <SpaceBackground />
 
-        <div className="relative z-10 w-full max-w-md bg-[#121215]/80 backdrop-blur-xl border border-white/10 p-8 rounded-[2rem] shadow-2xl card-glow">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-400">Account Setup</h2>
-            <p className="text-zinc-400 font-light">Tell us a bit about your finances.</p>
+        <div className="relative z-10 w-full max-w-lg bg-[#121215]/80 backdrop-blur-xl border border-white/10 p-8 rounded-[2rem] shadow-2xl card-glow animate-fade-in max-h-[90vh] overflow-y-auto custom-scrollbar">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold mb-3 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-400">Create Account</h2>
+            <p className="text-zinc-400 font-light">Join SpendSmart and take control.</p>
           </div>
           
-          <form onSubmit={handleSetupAccount} className="space-y-6">
+          <form onSubmit={handleSignup} className="space-y-4">
+            
+            {/* Personal Info */}
             <div>
-              <label className="block text-xs font-bold text-zinc-500 mb-2 ml-1 tracking-widest uppercase">Your Name</label>
+              <label className="block text-xs font-bold text-zinc-500 mb-2 ml-1 tracking-widest uppercase">Full Name</label>
               <input
                 type="text"
                 required
                 value={nameInput}
                 onChange={(e) => setNameInput(e.target.value)}
-                className="w-full bg-black/40 border border-zinc-700 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all placeholder:text-zinc-600 shadow-inner"
-                placeholder="e.g. Rahul Sharma"
+                className="w-full bg-black/40 border border-zinc-700 rounded-2xl px-5 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder:text-zinc-600 shadow-inner"
+                placeholder="Rahul Sharma"
               />
-            </div>
-            
-            <div>
-              <label className="block text-xs font-bold text-zinc-500 mb-2 ml-1 tracking-widest uppercase">Current Wallet/Bank Balance (₹)</label>
-              <input
-                type="number"
-                required
-                value={balanceInput}
-                onChange={(e) => setBalanceInput(e.target.value)}
-                className="w-full bg-black/40 border border-zinc-700 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all placeholder:text-zinc-600 shadow-inner font-mono text-lg"
-                placeholder="e.g. 15000"
-              />
-              <p className="text-xs text-zinc-500 mt-2 ml-1">This will be your starting balance.</p>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-zinc-500 mb-2 ml-1 tracking-widest uppercase">Monthly Salary/Income (₹)</label>
+              <label className="block text-xs font-bold text-zinc-500 mb-2 ml-1 tracking-widest uppercase">Email Address</label>
               <input
-                type="number"
+                type="email"
                 required
-                value={incomeInput}
-                onChange={(e) => setIncomeInput(e.target.value)}
-                className="w-full bg-black/40 border border-zinc-700 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all placeholder:text-zinc-600 shadow-inner font-mono text-lg"
-                placeholder="e.g. 85000"
+                value={emailInput}
+                onChange={(e) => setEmailInput(e.target.value)}
+                className="w-full bg-black/40 border border-zinc-700 rounded-2xl px-5 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder:text-zinc-600 shadow-inner"
+                placeholder="rahul@example.com"
               />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-zinc-500 mb-2 ml-1 tracking-widest uppercase">Password</label>
+              <input
+                type="password"
+                required
+                minLength={6}
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                className="w-full bg-black/40 border border-zinc-700 rounded-2xl px-5 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder:text-zinc-600 shadow-inner"
+                placeholder="••••••••"
+              />
+            </div>
+            
+            {/* Financial Info */}
+            <div className="pt-4 border-t border-zinc-800">
+                <p className="text-sm font-semibold text-indigo-400 mb-4 uppercase tracking-wider">Financial Setup</p>
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
+                    <label className="block text-xs font-bold text-zinc-500 mb-2 ml-1 tracking-widest uppercase">Current Balance (₹)</label>
+                    <input
+                        type="number"
+                        required
+                        value={balanceInput}
+                        onChange={(e) => setBalanceInput(e.target.value)}
+                        className="w-full bg-black/40 border border-zinc-700 rounded-2xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder:text-zinc-600 shadow-inner font-mono"
+                        placeholder="0"
+                    />
+                    </div>
+
+                    <div>
+                    <label className="block text-xs font-bold text-zinc-500 mb-2 ml-1 tracking-widest uppercase">Monthly Salary (₹)</label>
+                    <input
+                        type="number"
+                        required
+                        value={incomeInput}
+                        onChange={(e) => setIncomeInput(e.target.value)}
+                        className="w-full bg-black/40 border border-zinc-700 rounded-2xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder:text-zinc-600 shadow-inner font-mono"
+                        placeholder="0"
+                    />
+                    </div>
+                </div>
             </div>
 
             <button 
               type="submit"
-              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl transition-all shadow-[0_0_20px_rgba(79,70,229,0.4)] hover:shadow-[0_0_30px_rgba(79,70,229,0.6)] mt-6 text-lg tracking-wide"
+              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl transition-all shadow-[0_0_20px_rgba(79,70,229,0.4)] hover:shadow-[0_0_30px_rgba(79,70,229,0.6)] mt-4 text-lg tracking-wide"
             >
-              Complete Setup
+              Continue Setup
             </button>
           </form>
           <button onClick={() => setScreen('landing')} className="w-full mt-6 text-zinc-500 text-sm hover:text-white transition-colors">
@@ -200,25 +370,19 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-[#09090b] text-zinc-100 flex flex-col md:flex-row overflow-hidden font-sans selection:bg-indigo-500/30">
       
       {/* Sidebar Navigation */}
-      <aside className="w-full md:w-80 bg-[#121215]/80 backdrop-blur-md border-r border-white/5 flex-shrink-0 flex flex-col h-auto md:h-screen sticky top-0 z-20 shadow-[5px_0_30px_rgba(0,0,0,0.5)]">
-        <div className="p-8 flex items-center gap-4">
+      <aside className="w-full md:w-80 bg-[#121215]/80 backdrop-blur-xl border-r border-white/5 flex-shrink-0 flex flex-col h-auto md:h-screen sticky top-0 z-20 shadow-[5px_0_30px_rgba(0,0,0,0.5)]">
+        <div className="p-6 md:p-8 flex items-center gap-4">
           <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-3 rounded-2xl shadow-[0_0_15px_rgba(99,102,241,0.5)]">
             <Wallet className="w-6 h-6 text-white" />
           </div>
           <div>
-            <span className="text-2xl font-bold tracking-tight block text-white text-glow-sm">SpendSmart</span>
-            <span className="text-xs text-indigo-400 font-semibold tracking-wider uppercase">AI Expense Tracker</span>
+            <span className="text-xl md:text-2xl font-bold tracking-tight block text-white text-glow-sm">SpendSmart</span>
+            <span className="text-[10px] md:text-xs text-indigo-400 font-semibold tracking-wider uppercase">AI Expense Tracker</span>
           </div>
         </div>
         
-        <div className="px-6 mb-6">
-          <div className="p-5 bg-gradient-to-r from-zinc-900 to-black rounded-3xl border border-zinc-800/50 shadow-inner">
-            <p className="text-xs text-zinc-500 mb-1 font-medium uppercase tracking-wider">Welcome back</p>
-            <p className="text-lg font-bold text-zinc-100 text-glow-sm truncate">{user?.name}</p>
-          </div>
-        </div>
-
-        <nav className="flex-1 px-4 space-y-3 py-2 overflow-y-auto">
+        {/* Desktop Navigation */}
+        <nav className="flex-1 px-4 space-y-3 py-6 overflow-y-auto hidden md:block">
           <button 
             onClick={() => setView('dashboard')}
             className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-medium ${
@@ -254,45 +418,77 @@ const App: React.FC = () => {
           </button>
         </nav>
 
-        <div className="p-6 border-t border-zinc-800 space-y-4">
+        {/* Mobile Navigation Bar (Bottom) */}
+        <div className="md:hidden fixed bottom-0 left-0 w-full bg-[#121215]/90 backdrop-blur-xl border-t border-zinc-800 p-2 grid grid-cols-4 gap-1 z-50">
+           <button onClick={() => setView('dashboard')} className={`flex flex-col items-center justify-center p-2 rounded-xl ${view === 'dashboard' ? 'text-indigo-400 bg-indigo-500/10' : 'text-zinc-500'}`}>
+              <LayoutDashboard size={20} />
+              <span className="text-[10px] font-medium mt-1">Home</span>
+           </button>
+           <button onClick={() => setView('expenses')} className={`flex flex-col items-center justify-center p-2 rounded-xl ${view === 'expenses' ? 'text-indigo-400 bg-indigo-500/10' : 'text-zinc-500'}`}>
+              <Receipt size={20} />
+              <span className="text-[10px] font-medium mt-1">Expenses</span>
+           </button>
+           <button onClick={() => setView('advisor')} className={`flex flex-col items-center justify-center p-2 rounded-xl ${view === 'advisor' ? 'text-purple-400 bg-purple-500/10' : 'text-zinc-500'}`}>
+              <Sparkles size={20} />
+              <span className="text-[10px] font-medium mt-1">AI</span>
+           </button>
+           <button onClick={() => setIsModalOpen(true)} className="flex flex-col items-center justify-center p-2 rounded-xl text-white bg-indigo-600 shadow-lg">
+              <Plus size={20} />
+              <span className="text-[10px] font-medium mt-1">Add</span>
+           </button>
+        </div>
+
+        <div className="p-6 border-t border-zinc-800 space-y-4 hidden md:block bg-black/20">
            <button 
              onClick={() => setIsModalOpen(true)}
              className="w-full bg-white hover:bg-indigo-50 text-black font-bold py-4 rounded-2xl shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all flex items-center justify-center gap-2 transform hover:-translate-y-1"
            >
              <Plus size={20} />
-             New Transaction
+             Add Transaction
            </button>
            <button 
             onClick={handleLogout}
             className="w-full flex items-center justify-center gap-2 text-zinc-500 hover:text-red-400 py-2 text-sm transition-colors font-medium tracking-wide"
            >
-             <LogOut size={16} /> SIGN OUT
+             <LogOut size={16} /> LOGOUT
            </button>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 h-screen overflow-y-auto bg-[#09090b] p-4 md:p-12 relative custom-scrollbar">
-        <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 animate-fade-in">
-          <div>
-            <h1 className="text-4xl font-bold text-white mb-3 tracking-tight text-glow-sm">
-              {view === 'dashboard' && 'Dashboard Overview'}
-              {view === 'expenses' && 'Manage Expenses'}
-              {view === 'advisor' && 'Financial Assistant'}
-            </h1>
-            <p className="text-zinc-400 text-lg font-light">
-              {view === 'dashboard' && `Here is what's happening with your money.`}
-              {view === 'expenses' && 'Review and manage all your transactions.'}
-              {view === 'advisor' && 'Ask Gemini anything about your finances.'}
-            </p>
-          </div>
-          <div className="text-right hidden md:block">
-            <p className="text-sm text-zinc-500 font-semibold uppercase tracking-wider mb-1">Current Date</p>
-            <p className="font-mono text-indigo-300 text-lg">
-              {new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-            </p>
-          </div>
-        </header>
+      <main className="flex-1 h-[calc(100vh-80px)] md:h-screen overflow-y-auto bg-[#09090b] p-4 md:p-8 lg:p-12 relative custom-scrollbar pb-20 md:pb-10">
+        
+        {/* Header - Only Show on Desktop (Mobile uses internal headers) */}
+        <div className="hidden md:flex justify-between items-end mb-10 animate-fade-in">
+           <div>
+               <h1 className="text-4xl font-bold text-white mb-2 tracking-tight text-glow-sm">
+                 {view === 'dashboard' && 'Dashboard Overview'}
+                 {view === 'expenses' && 'Manage Expenses'}
+                 {view === 'advisor' && 'Financial Assistant'}
+               </h1>
+               <p className="text-zinc-400 text-lg font-light">
+                 {view === 'dashboard' && `Welcome back, ${user?.name}`}
+                 {view === 'expenses' && 'Detailed breakdown of your transactions.'}
+                 {view === 'advisor' && 'AI-powered financial insights.'}
+               </p>
+           </div>
+           <div className="flex items-center gap-4">
+              <div className="text-right">
+                <p className="text-xs text-zinc-500 font-bold uppercase tracking-wider mb-1">Current Date</p>
+                <p className="font-mono text-indigo-300 text-lg">
+                  {new Date().toLocaleDateString('en-IN', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
+                </p>
+              </div>
+           </div>
+        </div>
+
+        {/* Mobile Header for Logout */}
+        <div className="md:hidden flex justify-between items-center mb-6">
+           <span className="text-lg font-bold text-white">SpendSmart</span>
+           <button onClick={handleLogout} className="p-2 bg-zinc-800 rounded-full text-zinc-400">
+               <LogOut size={16} />
+           </button>
+        </div>
 
         <div className="max-w-7xl mx-auto pb-10">
           {view === 'dashboard' && (
@@ -301,6 +497,7 @@ const App: React.FC = () => {
               monthlyIncome={user?.monthlyIncome || 0} 
               onAddTx={() => setIsModalOpen(true)}
               onManageExpenses={() => setView('expenses')}
+              userName={user?.name}
             />
           )}
           {view === 'expenses' && <ExpenseList expenses={expenses} onDelete={handleDeleteExpense} />}
@@ -312,7 +509,7 @@ const App: React.FC = () => {
       <AddExpenseModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
-        onAdd={handleAddExpense} 
+        onAdd={handleAddExpenses} 
       />
 
     </div>

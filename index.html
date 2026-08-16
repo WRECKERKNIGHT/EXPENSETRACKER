@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>SpendSmart AI</title>
     
     <!-- Google Fonts: Outfit -->
@@ -32,11 +32,17 @@
               'bounce-slow': 'bounce 3s infinite',
               'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
               'fade-in': 'fadeIn 0.5s ease-out',
+              'spin-slow': 'spin 12s linear infinite',
+              'orbit': 'orbit 20s linear infinite',
             },
             keyframes: {
               fadeIn: {
                 '0%': { opacity: '0', transform: 'translateY(10px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              orbit: {
+                '0%': { transform: 'rotate(0deg)' },
+                '100%': { transform: 'rotate(360deg)' },
               }
             }
           }
@@ -95,7 +101,7 @@
 }
 </script>
 </head>
-  <body class="bg-background text-zinc-100 font-sans antialiased min-h-screen selection:bg-primary/30">
+  <body class="bg-background text-zinc-100 font-sans antialiased min-h-screen selection:bg-primary/30 overflow-x-hidden">
     <div id="root"></div>
     <script type="module" src="./index.tsx"></script>
   </body>

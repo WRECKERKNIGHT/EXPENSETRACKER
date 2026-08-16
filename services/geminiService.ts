@@ -10,47 +10,71 @@ const getAI = () => {
 };
 
 /**
- * Parses a natural language string into structured expense/income data using Gemini.
+ * Parses natural language text or Bank SMS dumps into structured expense/income data.
+ * Can handle multiple transactions in a single block of text.
  */
-export const parseExpenseNaturalLanguage = async (input: string): Promise<Partial<Expense> | null> => {
+export const parseTransactionsFromText = async (input: string): Promise<Partial<Expense>[] | null> => {
   try {
     const ai = getAI();
+    const today = new Date().toISOString().split('T')[0];
+    
+    const prompt = `
+      You are an advanced financial transaction parser optimized for Indian Bank SMS and Statement formats.
+      Today is ${today}. Default currency is INR (₹).
+      
+      Task: Analyze the input text and extract ALL financial transactions.
+      
+      Input Text:
+      "${input}"
+      
+      Rules:
+      1. Detect multiple transactions if present.
+      2. 'Debited', 'Spent', 'Sent', 'Paid' = type: 'expense'.
+      3. 'Credited', 'Received', 'Deposit', 'Salary' = type: 'income'.
+      4. Infer the Category based on the merchant name or description (e.g., 'Zomato' -> Food, 'Shell' -> Fuel, 'Netflix' -> Entertainment).
+      5. If date is missing, use ${today}.
+      6. If description is vague, use the merchant name (e.g., "Paid to UPI-12345" -> Description: "UPI Payment").
+      
+      Output JSON Schema: Array of objects.
+    `;
+
     const response = await ai.models.generateContent({
       model: modelName,
-      contents: `Parse the following financial transaction description into structured data. 
-      Today is ${new Date().toISOString().split('T')[0]}. 
-      Default currency is INR (₹). If the user mentions "Salary" or "Received", it is likely Income.
-      Input: "${input}"`,
+      contents: prompt,
       config: {
         responseMimeType: "application/json",
         responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            amount: { type: Type.NUMBER, description: "The numeric value of the transaction." },
-            category: { 
-              type: Type.STRING, 
-              enum: Object.values(Category),
-              description: "The category that best fits."
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              amount: { type: Type.NUMBER, description: "Transaction amount" },
+              category: { 
+                type: Type.STRING, 
+                enum: Object.values(Category),
+                description: "Inferred category"
+              },
+              type: {
+                type: Type.STRING,
+                enum: ['income', 'expense'],
+                description: "Transaction type"
+              },
+              date: { type: Type.STRING, description: "YYYY-MM-DD" },
+              description: { type: Type.STRING, description: "Merchant or Description" }
             },
-            type: {
-              type: Type.STRING,
-              enum: ['income', 'expense'],
-              description: "Whether this is money coming in (income) or going out (expense)."
-            },
-            date: { type: Type.STRING, description: "ISO 8601 date string (YYYY-MM-DD)." },
-            description: { type: Type.STRING, description: "A brief, clean description." }
-          },
-          required: ["amount", "category", "description", "date", "type"]
+            required: ["amount", "category", "description", "date", "type"]
+          }
         }
       }
     });
 
     if (response.text) {
-      return JSON.parse(response.text) as Partial<Expense>;
+      const parsed = JSON.parse(response.text);
+      return Array.isArray(parsed) ? parsed : [parsed];
     }
     return null;
   } catch (error) {
-    console.error("Error parsing expense with Gemini:", error);
+    console.error("Error parsing transactions with Gemini:", error);
     throw error;
   }
 };
