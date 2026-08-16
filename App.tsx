@@ -35,6 +35,12 @@ const App: React.FC = () => {
   
   // App State
   const [expenses, setExpenses] = useState<Expense[]>([]);
+
+  const monthlyExpenseCount = React.useMemo(() => {
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    return expenses.filter(e => e.type === 'expense' && new Date(e.date) >= monthStart).length;
+  }, [expenses]);
   const [view, setView] = useState<ViewMode>('dashboard');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSmsModalOpen, setIsSmsModalOpen] = useState(false);
@@ -569,6 +575,11 @@ const App: React.FC = () => {
           >
             <Receipt size={20} className={view === 'expenses' ? 'text-brand' : ''} />
             Manage Expenses
+            {monthlyExpenseCount > 0 && (
+              <span className="ml-auto text-[10px] font-bold bg-brand/15 text-brand px-2 py-0.5 rounded-full">
+                {monthlyExpenseCount}
+              </span>
+            )}
           </button>
           <button 
             onClick={() => setView('advisor')}
@@ -607,9 +618,14 @@ const App: React.FC = () => {
               <LayoutDashboard size={20} />
               <span className="text-[10px] font-medium mt-1">Home</span>
            </button>
-           <button onClick={() => setView('expenses')} className={`flex flex-col items-center justify-center p-2 rounded-xl ${view === 'expenses' ? 'text-brand bg-surface-2' : 'text-faint'}`}>
+           <button onClick={() => setView('expenses')} className={`relative flex flex-col items-center justify-center p-2 rounded-xl ${view === 'expenses' ? 'text-brand bg-surface-2' : 'text-faint'}`}>
               <Receipt size={20} />
               <span className="text-[10px] font-medium mt-1">Expenses</span>
+              {monthlyExpenseCount > 0 && (
+                <span className="absolute -top-1 -right-1 text-[8px] font-bold bg-brand text-white w-4 h-4 rounded-full flex items-center justify-center">
+                  {monthlyExpenseCount > 99 ? '99+' : monthlyExpenseCount}
+                </span>
+              )}
            </button>
            <button onClick={() => setView('advisor')} className={`flex flex-col items-center justify-center p-2 rounded-xl ${view === 'advisor' ? 'text-gold bg-surface-2' : 'text-faint'}`}>
               <Sparkles size={20} />
