@@ -1,6 +1,7 @@
 ﻿import React, { useMemo, useState } from 'react';
 import { Expense } from '../types';
-import { Download, CalendarRange, BarChart2 } from 'lucide-react';
+import { Download, CalendarRange, BarChart2, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Cell } from 'recharts';
 
 interface ReportsProps {
   expenses: Expense[];
@@ -42,6 +43,55 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
 
     return { totalIncome: income, totalExpense: expense, byCategory: cat };
   }, [expenses, range, now, startOfDay, startOfWeek, startOfMonth]);
+
+  const monthlyComparison = useMemo(() => {
+    const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+
+    let thisMonthExpense = 0;
+    let lastMonthExpense = 0;
+
+    expenses.forEach(e => {
+      const d = new Date(e.date);
+      if (e.type !== 'expense') return;
+      if (d >= thisMonthStart && d <= now) thisMonthExpense += e.amount;
+      if (d >= lastMonthStart && d <= lastMonthEnd) lastMonthExpense += e.amount;
+    });
+
+    const change = lastMonthExpense > 0
+      ? ((thisMonthExpense - lastMonthExpense) / lastMonthExpense) * 100
+      : 0;
+
+    return { thisMonthExpense, lastMonthExpense, change };
+  }, [expenses, now]);
+
+  const comparisonBarData = useMemo(() => {
+    const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+
+    const getMonthlyTotal = (start: Date, end: Date) => {
+      let total = 0;
+      expenses.forEach(e => {
+        const d = new Date(e.date);
+        if (e.type === 'expense' && d >= start && d <= end) total += e.amount;
+      });
+      return total;
+    };
+
+    return [
+      {
+        name: lastMonth.toLocaleDateString('en-IN', { month: 'short' }),
+        amount: getMonthlyTotal(lastMonth, thisMonth),
+        fill: '#d4af37',
+      },
+      {
+        name: thisMonth.toLocaleDateString('en-IN', { month: 'short' }),
+        amount: getMonthlyTotal(thisMonth, now),
+        fill: '#3fae6e',
+      },
+    ];
+  }, [expenses, now]);
 
   const fmt = (amount: number) =>
     new Intl.NumberFormat(undefined, { style: 'currency', currency, maximumFractionDigits: 0 }).format(amount);
@@ -141,6 +191,58 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
             ))}
           </div>
         )}
+      </div>
+
+      {/* Monthly Comparison */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        <div className="md:col-span-2 bg-surface border border-app rounded-[2rem] p-6 md:p-8 shadow-2xl">
+          <h3 className="text-sm font-semibold text-soft mb-6 flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-brand" />
+            Month-over-Month Comparison
+          </h3>
+          {monthlyComparison.thisMonthExpense === 0 && monthlyComparison.lastMonthExpense === 0 ? (
+            <p className="text-xs text-faint text-center py-10">No expense data for comparison.</p>
+          ) : (
+            <div className="h-56">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={comparisonBarData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border-soft)" vertical={false} opacity={0.6} />
+                  <XAxis dataKey="name" stroke="var(--text-faint)" fontSize={12} tickLine={false} axisLine={false} fontFamily="Outfit" />
+                  <YAxis stroke="var(--text-faint)" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(val) => `₹${val/1000}k`} fontFamily="Outfit" />
+                  <RechartsTooltip
+                    cursor={{ fill: 'var(--surface-2)', radius: 8 }}
+                    contentStyle={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)', borderRadius: '12px', color: 'var(--text)', fontFamily: 'Outfit' }}
+                    formatter={(value: number) => [fmt(value), 'Spent']}
+                  />
+                  <Bar dataKey="amount" radius={[8, 8, 0, 0]} barSize={56}>
+                    {comparisonBarData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+        </div>
+
+        <div className="bg-surface border border-app rounded-[2rem] p-6 shadow-2xl flex flex-col justify-center items-center text-center">
+          <h3 className="text-sm font-semibold text-soft mb-4">vs Last Month</h3>
+          {monthlyComparison.change === 0 ? (
+            <Minus size={36} className="text-faint mb-3" />
+          ) : monthlyComparison.change > 0 ? (
+            <TrendingUp size={36} className="text-red-400 mb-3" />
+          ) : (
+            <TrendingDown size={36} className="text-brand mb-3" />
+          )}
+          <p className={`text-4xl font-bold font-mono ${
+            monthlyComparison.change > 0 ? 'text-red-400' : monthlyComparison.change < 0 ? 'text-brand-ink' : 'text-faint'
+          }`}>
+            {monthlyComparison.change > 0 ? '+' : ''}{monthlyComparison.change.toFixed(1)}%
+          </p>
+          <p className="text-xs text-faint mt-2">
+            {monthlyComparison.change > 0 ? 'Spending increased' : monthlyComparison.change < 0 ? 'Spending decreased' : 'No change yet'}
+          </p>
+        </div>
       </div>
     </div>
   );
