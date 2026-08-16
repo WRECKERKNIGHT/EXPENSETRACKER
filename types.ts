@@ -51,7 +51,7 @@ export interface ChartDataPoint {
   fill?: string;
 }
 
-export type ViewMode = 'dashboard' | 'expenses' | 'advisor';
+export type ViewMode = 'dashboard' | 'expenses' | 'advisor' | 'reports';
 export type AppScreen = 'landing' | 'signup' | 'setup' | 'login' | 'app';
 
 export interface ChatMessage {

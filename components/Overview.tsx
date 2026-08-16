@@ -7,10 +7,12 @@ import QuickAdd from './QuickAdd';
 import QuickAddInline from './QuickAddInline';
 import { connectBankAPI, getBankConnectionsAPI, uploadBankCSVAPI } from '../services/apiService';
 import SmsImportModal from './SmsImportModal';
+import BudgetsCard from './BudgetsCard';
 
 interface OverviewProps {
   expenses: Expense[];
   monthlyIncome: number;
+  currency: string;
   onAddTx: () => void;
   onManageExpenses: () => void;
   userName?: string;
@@ -20,15 +22,15 @@ interface OverviewProps {
 const COLORS_CATEGORY = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#14b8a6', '#64748b'];
 const COLORS_HEALTH = ['#10b981', '#ef4444']; // Green for Saved, Red for Spent
 
-const formatCurrency = (amount: number) => {
-  return new Intl.NumberFormat('en-IN', {
+const formatCurrency = (amount: number, currency: string) => {
+  return new Intl.NumberFormat(undefined, {
     style: 'currency',
-    currency: 'INR',
-    maximumFractionDigits: 0
+    currency,
+    maximumFractionDigits: 0,
   }).format(amount);
 };
 
-const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, onManageExpenses, userName, onImportComplete }) => {
+const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, onAddTx, onManageExpenses, userName, onImportComplete }) => {
   const [isBankConnecting, setIsBankConnecting] = useState(false);
   const [isBankConnected, setIsBankConnected] = useState(false);
   const [showSmsModal, setShowSmsModal] = useState(false);
@@ -243,7 +245,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
               </div>
            </div>
            <div className="relative z-10">
-               <p className="text-3xl font-bold text-white mb-1 text-glow-success">{formatCurrency(calculations.balance)}</p>
+               <p className="text-3xl font-bold text-white mb-1 text-glow-success">{formatCurrency(calculations.balance, currency)}</p>
                <p className="text-xs text-zinc-500">Available Funds on Hand</p>
            </div>
         </div>
@@ -258,7 +260,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
               <span className="text-zinc-400 font-semibold text-sm uppercase tracking-wider">Spent</span>
            </div>
            <div className="relative z-10">
-               <p className="text-2xl font-bold text-white mb-1 text-glow-danger">{formatCurrency(calculations.totalExpense)}</p>
+               <p className="text-2xl font-bold text-white mb-1 text-glow-danger">{formatCurrency(calculations.totalExpense, currency)}</p>
                <p className="text-xs text-zinc-500">Total Outflow</p>
            </div>
         </div>
@@ -273,7 +275,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
               <span className="text-zinc-400 font-semibold text-sm uppercase tracking-wider">Salary</span>
            </div>
            <div className="relative z-10">
-               <p className="text-2xl font-bold text-white mb-1 text-glow">{formatCurrency(monthlyIncome)}</p>
+               <p className="text-2xl font-bold text-white mb-1 text-glow">{formatCurrency(monthlyIncome, currency)}</p>
                <p className="text-xs text-zinc-500">Registered Income</p>
            </div>
         </div>
@@ -320,7 +322,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
                   <RechartsTooltip 
                     contentStyle={{ backgroundColor: '#09090b', borderColor: '#27272a', borderRadius: '12px', color: '#fff', fontFamily: 'Outfit' }}
                     itemStyle={{ color: '#fff', fontWeight: 600 }}
-                    formatter={(value: number) => [formatCurrency(value), 'Amount']}
+                    formatter={(value: number) => [formatCurrency(value as number, currency), 'Amount']}
                   />
                   <Legend 
                     verticalAlign="bottom" 
@@ -367,7 +369,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
                     <RechartsTooltip 
                       contentStyle={{ backgroundColor: '#09090b', borderColor: '#27272a', borderRadius: '12px', color: '#fff', fontFamily: 'Outfit' }}
                       itemStyle={{ color: '#fff', fontWeight: 600 }}
-                      formatter={(value: number) => [formatCurrency(value), 'Amount']}
+                      formatter={(value: number) => [formatCurrency(value as number, currency), 'Amount']}
                     />
                   </PieChart>
                 </ResponsiveContainer>
@@ -381,7 +383,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
                        <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: COLORS_CATEGORY[index % COLORS_CATEGORY.length], boxShadow: `0 0 8px ${COLORS_CATEGORY[index % COLORS_CATEGORY.length]}` }}></span>
                        <span className="text-xs font-medium text-zinc-300 group-hover:text-white">{entry.name}</span>
                      </div>
-                     <span className="text-xs font-bold text-zinc-400 group-hover:text-white">{formatCurrency(entry.value)}</span>
+                     <span className="text-xs font-bold text-zinc-400 group-hover:text-white">{formatCurrency(entry.value, currency)}</span>
                    </div>
                  ))}
                </div>
@@ -390,8 +392,12 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
         </div>
       </div>
 
-      {/* Row 3: Cash Flow Area Chart */}
-      <div className="bg-[#121215]/60 backdrop-blur-xl border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-2xl">
+      {/* Row 3: Budgets + Cash Flow */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="xl:col-span-1">
+          <BudgetsCard expenses={expenses} currency={currency} />
+        </div>
+        <div className="xl:col-span-2 bg-[#121215]/60 backdrop-blur-xl border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-2xl">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
             <h3 className="text-xl font-bold text-zinc-100 flex items-center gap-3 text-glow-sm">
               <TrendingUp size={20} className="text-indigo-500" /> Cash Flow Trends
@@ -428,6 +434,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
             </ResponsiveContainer>
           </div>
         </div>
+      </div>
 
         <SmsImportModal isOpen={showSmsModal} onClose={() => setShowSmsModal(false)} onImported={onImportComplete} />
 

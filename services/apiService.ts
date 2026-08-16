@@ -52,6 +52,7 @@ export const registerAPI = async (userData: {
   email: string;
   password: string;
   monthlyIncome: number;
+  currency?: string;
 }) => {
   const response: any = await makeRequest('/auth/register', {
     method: 'POST',
@@ -88,6 +89,30 @@ export const updateProfileAPI = async (updates: { name?: string; monthlyIncome?:
     method: 'PUT',
     body: JSON.stringify(updates),
   });
+};
+
+// ===== BUDGET API =====
+
+export const getBudgetsAPI = async () => {
+  return makeRequest('/budgets', { method: 'GET' });
+};
+
+export const createBudgetAPI = async (category: string, monthlyLimit: number) => {
+  return makeRequest('/budgets', {
+    method: 'POST',
+    body: JSON.stringify({ category, monthlyLimit }),
+  });
+};
+
+export const updateBudgetAPI = async (id: string, monthlyLimit: number) => {
+  return makeRequest(`/budgets/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({ monthlyLimit }),
+  });
+};
+
+export const deleteBudgetAPI = async (id: string) => {
+  return makeRequest(`/budgets/${id}`, { method: 'DELETE' });
 };
 
 // ===== EXPENSE API =====
