@@ -1,0 +1,372 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    SPENDSMART - COMPLETE ARCHITECTURE                      ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         FRONTEND LAYER                                      │
+│                      React + TypeScript                                     │
+│                    (Running on port 5173)                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌──────────────┐     │
+│  │  Landing    │  │   Signup    │  │   Login     │  │  Dashboard   │     │
+│  │   Page      │  │   Form      │  │   Form      │  │   UI         │     │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └──────────────┘     │
+│                          │                  │              │                │
+│  ┌────────────────────────┴──────────────────┴──────────────┴────────────┐ │
+│  │              setupService / apiService.ts                            │ │
+│  │                                                                       │ │
+│  │  - registerAPI()         │ - loginAPI()      │ - getExpensesAPI()   │ │
+│  │  - createExpenseAPI()    │ - deleteExpenseAPI()                     │ │
+│  │  - connectBankAPI()      │ - parseSMSAPI()                          │ │
+│  └───────────────────┬──────────────────────────────────────────────────┘ │
+│                      │                                                     │
+│  ┌──────────────────────────────────────────────────────────────────────┐ │
+│  │                      localStorage                                    │ │
+│  │  ├─ spendsmart_token (JWT token)                                    │ │
+│  │  └─ spendsmart_user (user profile)                                  │ │
+│  └──────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                  │
+                           HTTP/REST Calls
+                                  │
+                    Authorization: Bearer {JWT_TOKEN}
+                                  │
+                                  ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         BACKEND LAYER                                       │
+│                    Node.js + Express.js                                     │
+│                    (Running on port 5000)                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌──────────────────────────────────────────────────────────────────────┐  │
+│  │                    server.ts (Main API Router)                       │  │
+│  │  ├─ /api/auth/*          (Authentication endpoints)                 │  │
+│  │  ├─ /api/expenses/*      (Expense CRUD endpoints)                   │  │
+│  │  ├─ /api/bank/*          (Bank integration endpoints)               │  │
+│  │  └─ /api/sms/*           (SMS parsing endpoints)                    │  │
+│  └──────────────┬───────────────────────────────────────────────────────┘  │
+│                 │                                                           │
+│  ┌──────────────┴────────────────────────────────────────────────────────┐  │
+│  │                  Middleware & Services                                │  │
+│  │                                                                       │  │
+│  │  ┌─────────────────┐  ┌──────────────────┐  ┌─────────────────────┐ │  │
+│  │  │ authService.ts  │  │ expenseService   │  │  bankService.ts     │ │  │
+│  │  │                 │  │                  │  │                     │ │  │
+│  │  │ - register()    │  │ - createExp()    │  │ - parseSMS()        │ │  │
+│  │  │ - login()       │  │ - getExp()       │  │ - connectBank()     │ │  │
+│  │  │ - verifyToken() │  │ - updateExp()    │  │ - getBankConn()     │ │  │
+│  │  │ - getUser()     │  │ - deleteExp()    │  │ - disconnectBank()  │ │  │
+│  │  │                 │  │ - bulkCreate()   │  │                     │ │  │
+│  │  └────────┬────────┘  └────────┬─────────┘  └────────┬────────────┘ │  │
+│  │           │                    │                     │              │  │
+│  │           └────────────────────┼─────────────────────┘              │  │
+│  │                                │                                    │  │
+│  │  ┌──────────────────────────────▼──────────────────────────────────┐ │  │
+│  │  │            database.ts (SQLite3 Interface)                      │ │  │
+│  │  │  - initializeDatabase()                                        │ │  │
+│  │  │  - runQuery() / getQuery() / allQuery()                        │ │  │
+│  │  └──────────────────────────────────────────────────────────────────┘ │  │
+│  └──────────────────────┬───────────────────────────────────────────────┘  │
+└─────────────────────────┼──────────────────────────────────────────────────┘
+                          │
+                   Database Queries (SQL)
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      DATABASE LAYER                                         │
+│                    SQLite3 (spendsmart.db)                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │ USERS TABLE                                                         │   │
+│  │ ├─ id (UUID)                                                        │   │
+│  │ ├─ name (string)                                                    │   │
+│  │ ├─ email (string, unique)                                           │   │
+│  │ ├─ password (bcrypt hash)                                           │   │
+│  │ ├─ monthlyIncome (number)                                           │   │
+│  │ ├─ currency (string)                                                │   │
+│  │ ├─ createdAt (timestamp)                                            │   │
+│  │ └─ updatedAt (timestamp)                                            │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │ EXPENSES TABLE                                                      │   │
+│  │ ├─ id (UUID)                                                        │   │
+│  │ ├─ userId (FK → users.id)                                           │   │
+│  │ ├─ amount (number)                                                  │   │
+│  │ ├─ category (string enum)                                           │   │
+│  │ ├─ type ('income' | 'expense')                                      │   │
+│  │ ├─ date (YYYY-MM-DD)                                                │   │
+│  │ ├─ description (string)                                             │   │
+│  │ └─ createdAt (timestamp)                                            │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │ BANK CONNECTIONS TABLE                                              │   │
+│  │ ├─ id (UUID)                                                        │   │
+│  │ ├─ userId (FK → users.id)                                           │   │
+│  │ ├─ bankName (string)                                                │   │
+│  │ ├─ accountNumber (string)                                           │   │
+│  │ ├─ isConnected (boolean)                                            │   │
+│  │ ├─ lastSyncedAt (timestamp)                                         │   │
+│  │ └─ createdAt (timestamp)                                            │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │ SMS TRANSACTIONS TABLE                                              │   │
+│  │ ├─ id (UUID)                                                        │   │
+│  │ ├─ userId (FK → users.id)                                           │   │
+│  │ ├─ amount (number)                                                  │   │
+│  │ ├─ senderBank (string)                                              │   │
+│  │ ├─ messageContent (string)                                          │   │
+│  │ ├─ parsedCategory (string)                                          │   │
+│  │ └─ createdAt (timestamp)                                            │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                          DATA FLOW DIAGRAM                                 ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+1. USER SIGNUP
+   ┌─────────────────────────┐
+   │  User fills signup form  │
+   └────────────┬────────────┘
+                │
+                ▼
+   ┌──────────────────────────────────────┐
+   │  Frontend: registerAPI()             │
+   │  POST /api/auth/register             │
+   │  {name, email, password, income}     │
+   └────────────┬─────────────────────────┘
+                │
+                ▼
+   ┌──────────────────────────────────────┐
+   │  Backend: authService.registerUser() │
+   │  - Validate email not duplicate      │
+   │  - Hash password with bcryptjs       │
+   │  - Create user in database           │
+   │  - Generate JWT token                │
+   └────────────┬─────────────────────────┘
+                │
+                ▼
+   ┌──────────────────────────────────────┐
+   │  Frontend: Token stored in           │
+   │  localStorage & API headers          │
+   │  → Setup Wizard shown                │
+   └──────────────────────────────────────┘
+
+2. ADD EXPENSES DURING SETUP
+   ┌─────────────────────────────────────────────┐
+   │  User adds expenses in Setup Wizard         │
+   │  - Rent: 15000                              │
+   │  - Utilities: 2000                          │
+   │  - Car Loan EMI: 5000                       │
+   └────────────┬────────────────────────────────┘
+                │
+                ▼
+   ┌──────────────────────────────────────────────┐
+   │  Frontend: bulkCreateExpensesAPI()           │
+   │  POST /api/expenses/bulk                     │
+   │  {expenses: [{...}, {...}, {...}]}           │
+   │  Authorization: Bearer {JWT_TOKEN}           │
+   └────────────┬─────────────────────────────────┘
+                │
+                ▼
+   ┌──────────────────────────────────────────────┐
+   │  Backend: expenseService.bulkCreateExpenses()│
+   │  - Verify user is logged in (JWT check)      │
+   │  - Create each expense in database           │
+   │  - Associate with userId                     │
+   │  - Return created expenses                   │
+   └────────────┬─────────────────────────────────┘
+                │
+                ▼
+   ┌──────────────────────────────────────────────┐
+   │  Database: Expenses saved to DB              │
+   │  expenses table has:                         │
+   │  - userId: same for all                      │
+   │  - Different categories and amounts          │
+   │  - Date set to today                         │
+   │  - createdAt: current timestamp              │
+   └──────────────────────────────────────────────┘
+
+3. LOGIN (RETURNING USER)
+   ┌────────────────────────────────────┐
+   │  User enters email + password      │
+   └────────────┬───────────────────────┘
+                │
+                ▼
+   ┌────────────────────────────────────────────┐
+   │  Frontend: loginAPI()                      │
+   │  POST /api/auth/login                      │
+   │  {email, password}                         │
+   └────────────┬───────────────────────────────┘
+                │
+                ▼
+   ┌────────────────────────────────────────────┐
+   │  Backend: authService.loginUser()          │
+   │  - Query user by email                     │
+   │  - Compare password with hash              │
+   │  - Generate JWT token                      │
+   │  - Return user + token                     │
+   └────────────┬───────────────────────────────┘
+                │
+                ▼
+   ┌────────────────────────────────────────────┐
+   │  Frontend: getExpensesAPI()                │
+   │  GET /api/expenses                         │
+   │  Authorization: Bearer {JWT_TOKEN}         │
+   └────────────┬───────────────────────────────┘
+                │
+                ▼
+   ┌────────────────────────────────────────────┐
+   │  Backend: Query expenses WHERE userId=...  │
+   │  Return all expenses for this user         │
+   └────────────┬───────────────────────────────┘
+                │
+                ▼
+   ┌────────────────────────────────────────────┐
+   │  Frontend: Dashboard shows real data       │
+   │  from database (not localStorage)          │
+   └────────────────────────────────────────────┘
+
+4. ADD EXPENSE MANUALLY
+   ┌──────────────────────────────────┐
+   │  User clicks "Add Transaction"   │
+   └────────────┬─────────────────────┘
+                │
+                ▼
+   ┌──────────────────────────────────────────┐
+   │  User fills expense form:                │
+   │  - Amount: 500                           │
+   │  - Category: Food & Dining               │
+   │  - Date: 2025-11-30                      │
+   │  - Description: Lunch                    │
+   └────────────┬─────────────────────────────┘
+                │
+                ▼
+   ┌──────────────────────────────────────────┐
+   │  Frontend: createExpenseAPI()             │
+   │  POST /api/expenses                       │
+   │  Authorization: Bearer {JWT_TOKEN}        │
+   └────────────┬─────────────────────────────┘
+                │
+                ▼
+   ┌──────────────────────────────────────────┐
+   │  Backend: Save to DB                     │
+   │  - Verify JWT token (security)           │
+   │  - Extract userId from token             │
+   │  - Create expense with userId            │
+   │  - Return created expense                │
+   └────────────┬─────────────────────────────┘
+                │
+                ▼
+   ┌──────────────────────────────────────────┐
+   │  Frontend: Update UI                     │
+   │  - Add to expenses array                 │
+   │  - Refresh dashboard charts              │
+   │  - Update balance calculation            │
+   └──────────────────────────────────────────┘
+
+5. SMS PARSING
+   ┌─────────────────────────────────┐
+   │  Bank sends SMS:                │
+   │  "HDFC: Spent Rs 1000 at Amazon"│
+   └────────────┬────────────────────┘
+                │
+                ▼
+   ┌─────────────────────────────────────────────┐
+   │  Frontend: parseSMSAPI()                    │
+   │  POST /api/sms/parse                        │
+   │  {messageContent, senderBank}               │
+   │  Authorization: Bearer {JWT_TOKEN}          │
+   └────────────┬────────────────────────────────┘
+                │
+                ▼
+   ┌─────────────────────────────────────────────┐
+   │  Backend: bankService.parseSMSTransaction() │
+   │  - Extract amount: 1000                     │
+   │  - Find keywords: "Amazon" = Shopping       │
+   │  - Set category: Shopping                   │
+   │  - Save to smsTransactions table            │
+   │  - Return parsed data                       │
+   └────────────┬────────────────────────────────┘
+                │
+                ▼
+   ┌─────────────────────────────────────────────┐
+   │  Frontend: Can create expense from parsed   │
+   │  SMS data automatically                     │
+   │  Amount: 1000, Category: Shopping           │
+   └─────────────────────────────────────────────┘
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                      SECURITY LAYERS                                       ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+Layer 1: Password Security
+  ├─ User enters password
+  ├─ Frontend sends to backend (HTTPS in prod)
+  ├─ Backend: bcryptjs.hash() with 10 salt rounds
+  ├─ Only hash stored in database (password never stored)
+  └─ On login: bcryptjs.compare(input, hash)
+
+Layer 2: Authentication
+  ├─ User logs in successfully
+  ├─ Backend creates JWT token
+  ├─ JWT contains: {userId, email, expiresIn: 30d}
+  ├─ Token sent to frontend
+  ├─ Frontend stores in localStorage
+  └─ Token sent with every API request
+
+Layer 3: Authorization
+  ├─ Every protected API call requires JWT
+  ├─ Backend verifies token signature
+  ├─ Extracts userId from token
+  ├─ Verifies token not expired
+  ├─ Only returns data for that userId
+  └─ No cross-user data access possible
+
+Layer 4: Data Isolation
+  ├─ Every query filtered by userId
+  ├─ User A cannot see User B's expenses
+  ├─ User A cannot modify User B's data
+  ├─ Database enforces FOREIGN KEY constraints
+  └─ API enforces authorization checks
+
+Layer 5: CORS Protection
+  ├─ Backend only accepts requests from localhost:5173
+  ├─ Prevents cross-origin attacks
+  ├─ In production: configure allowed origins
+  └─ Credentials sent with proper headers
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                        DEPLOYMENT MAP                                      ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+Development (Current)
+  Frontend: localhost:5173
+  Backend: localhost:5000
+  Database: backend/spendsmart.db
+
+Production (Future)
+  Frontend: Vercel / Netlify (static)
+  Backend: Heroku / Railway / Render
+  Database: PostgreSQL / MySQL / MongoDB
+
+Environment Setup
+  Development:
+    VITE_API_URL=http://localhost:5000/api
+    PORT=5000
+    NODE_ENV=development
+    JWT_SECRET=dev-secret-key
+
+  Production:
+    VITE_API_URL=https://api.expensetracker.com
+    PORT=5000
+    NODE_ENV=production
+    JWT_SECRET=very-long-production-secret-key
+    DATABASE_URL=postgresql://...
+

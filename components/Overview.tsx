@@ -1,21 +1,19 @@
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Expense } from '../types';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, AreaChart, Area, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
-import { TrendingUp, TrendingDown, Wallet, Plus, PieChart as PieChartIcon, Activity, Link as LinkIcon, CheckCircle2, Loader2, Smartphone, FileText } from 'lucide-react';
-import AddExpenseModal from './AddExpenseModal';
+import { TrendingUp, TrendingDown, Wallet, Plus, PieChart as PieChartIcon, Activity, ListChecks, Link as LinkIcon, CheckCircle2, Loader2, Sparkles } from 'lucide-react';
+import { connectBankAPI, getBankConnectionsAPI } from '../services/apiService';
 
 interface OverviewProps {
   expenses: Expense[];
   monthlyIncome: number;
   onAddTx: () => void;
   onManageExpenses: () => void;
-  onScanClipboard?: () => void;
   userName?: string;
 }
 
-// Updated Colors: Emeralds, Teals, Cyans, and some warm accents
-const COLORS_CATEGORY = ['#10b981', '#14b8a6', '#06b6d4', '#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444', '#64748b'];
+const COLORS_CATEGORY = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#14b8a6', '#64748b'];
 const COLORS_HEALTH = ['#10b981', '#ef4444']; // Green for Saved, Red for Spent
 
 const formatCurrency = (amount: number) => {
@@ -26,14 +24,39 @@ const formatCurrency = (amount: number) => {
   }).format(amount);
 };
 
-const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, onManageExpenses, onScanClipboard, userName }) => {
-  // We don't control the modal here, App.tsx does. But we can trigger it.
-  // For the Import button, we want to open the modal in 'import' mode.
-  // We'll assume onAddTx handles generic open, but for now, we can only pass generic 'add'.
-  // In a real app we'd pass `onImport` prop.
-  // Hack: We will invoke onAddTx which opens modal, and let user switch tab,
-  // OR update the prop signature. For now, let's just make sure the button works.
-  
+const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, onManageExpenses, userName }) => {
+  const [isBankConnecting, setIsBankConnecting] = useState(false);
+  const [isBankConnected, setIsBankConnected] = useState(false);
+
+  useEffect(() => {
+    checkBankConnection();
+  }, []);
+
+  const checkBankConnection = async () => {
+    try {
+      const connections = await getBankConnectionsAPI();
+      setIsBankConnected(connections && connections.length > 0);
+    } catch (error) {
+      console.error('Failed to check bank connections:', error);
+    }
+  };
+
+  const handleConnectBank = async () => {
+    if (isBankConnected) return;
+    setIsBankConnecting(true);
+    try {
+      // Simulate bank connection dialog (in real app, this would open an OAuth flow)
+      const bankName = 'HDFC Bank';
+      const accountNumber = '****1234';
+      await connectBankAPI(bankName, accountNumber);
+      setIsBankConnected(true);
+    } catch (error) {
+      console.error('Failed to connect bank:', error);
+    } finally {
+      setIsBankConnecting(false);
+    }
+  };
+
   const calculations = useMemo(() => {
     const totalIncomeTx = expenses.filter(e => e.type === 'income').reduce((acc, curr) => acc + curr.amount, 0);
     const totalExpense = expenses.filter(e => e.type === 'expense').reduce((acc, curr) => acc + curr.amount, 0);
@@ -82,12 +105,12 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
     <div className="space-y-6 animate-fade-in font-sans">
       
       {/* Mobile Welcome Header */}
-      <div className="md:hidden mb-6 bg-gradient-to-r from-emerald-900/40 to-teal-900/40 border border-white/5 rounded-3xl p-6 relative overflow-hidden">
+      <div className="md:hidden mb-6 bg-gradient-to-r from-indigo-900/40 to-purple-900/40 border border-white/5 rounded-3xl p-6 relative overflow-hidden">
          <div className="relative z-10">
             <h2 className="text-2xl font-bold text-white mb-1">Hi, {userName || 'User'} 👋</h2>
-            <p className="text-emerald-200 text-sm">Your finances are looking sharp today.</p>
+            <p className="text-indigo-200 text-sm">Your finances are looking sharp today.</p>
          </div>
-         <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/20 rounded-full blur-3xl -mr-10 -mt-10"></div>
+         <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/20 rounded-full blur-3xl -mr-10 -mt-10"></div>
       </div>
 
       {/* Top Row: Quick Actions & KPIs */}
@@ -98,38 +121,38 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
              {/* Quick Add Button Card */}
             <div 
               onClick={onAddTx}
-              className="flex-1 bg-gradient-to-br from-emerald-600 to-teal-700 p-[1px] rounded-2xl md:rounded-[1.5rem] shadow-xl cursor-pointer group hover:scale-[1.02] transition-transform duration-300"
+              className="flex-1 bg-gradient-to-br from-indigo-600 to-indigo-800 p-[1px] rounded-2xl md:rounded-[1.5rem] shadow-xl cursor-pointer group hover:scale-[1.02] transition-transform duration-300"
             >
-              <div className="bg-[#0f172a]/40 backdrop-blur-md h-full w-full rounded-[0.8rem] md:rounded-[1.3rem] flex flex-col md:flex-row items-center md:items-center justify-center md:justify-start p-3 md:p-4 border border-white/10 group-hover:bg-white/5 transition-colors gap-2 md:gap-3">
-                <div className="bg-white text-emerald-600 p-2 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+              <div className="bg-[#18181b]/40 backdrop-blur-md h-full w-full rounded-[0.8rem] md:rounded-[1.3rem] flex flex-col md:flex-row items-center md:items-center justify-center md:justify-start p-3 md:p-4 border border-white/10 group-hover:bg-white/5 transition-colors gap-2 md:gap-3">
+                <div className="bg-white text-indigo-600 p-2 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.3)]">
                   <Plus size={18} strokeWidth={3} />
                 </div>
                 <div className="text-center md:text-left">
                     <h3 className="text-white font-bold text-xs md:text-sm leading-tight">Quick Add</h3>
-                    <p className="hidden md:block text-emerald-100 text-[10px] uppercase tracking-wide">Transaction</p>
+                    <p className="hidden md:block text-indigo-200 text-[10px] uppercase tracking-wide">Transaction</p>
                 </div>
               </div>
             </div>
 
-            {/* Scan SMS / Clipboard */}
+            {/* Manage Expenses Button Card */}
             <div 
-              onClick={onScanClipboard}
-              className="flex-1 bg-gradient-to-br from-teal-500/50 to-cyan-600/50 p-[1px] rounded-2xl md:rounded-[1.5rem] shadow-xl cursor-pointer group hover:scale-[1.02] transition-transform duration-300"
+              onClick={onManageExpenses}
+              className="flex-1 bg-gradient-to-br from-zinc-700 to-zinc-800 p-[1px] rounded-2xl md:rounded-[1.5rem] shadow-xl cursor-pointer group hover:scale-[1.02] transition-transform duration-300"
             >
-              <div className="bg-[#0f172a]/40 backdrop-blur-md h-full w-full rounded-[0.8rem] md:rounded-[1.3rem] flex flex-col md:flex-row items-center md:items-center justify-center md:justify-start p-3 md:p-4 border border-white/10 group-hover:bg-white/5 transition-colors gap-2 md:gap-3">
-                <div className="bg-cyan-600/20 text-cyan-300 p-2 rounded-full border border-cyan-500/30">
-                  <Smartphone size={18} strokeWidth={2} />
+              <div className="bg-[#18181b]/40 backdrop-blur-md h-full w-full rounded-[0.8rem] md:rounded-[1.3rem] flex flex-col md:flex-row items-center md:items-center justify-center md:justify-start p-3 md:p-4 border border-white/10 group-hover:bg-white/5 transition-colors gap-2 md:gap-3">
+                <div className="bg-zinc-800 text-zinc-300 p-2 rounded-full shadow-[0_0_15px_rgba(0,0,0,0.3)] border border-zinc-600">
+                  <ListChecks size={18} strokeWidth={2} />
                 </div>
                 <div className="text-center md:text-left">
-                    <h3 className="text-zinc-200 font-bold text-xs md:text-sm leading-tight">Scan SMS</h3>
-                    <p className="hidden md:block text-zinc-400 text-[10px] uppercase tracking-wide">From Clipboard</p>
+                    <h3 className="text-zinc-200 font-bold text-xs md:text-sm leading-tight">Manage</h3>
+                    <p className="hidden md:block text-zinc-500 text-[10px] uppercase tracking-wide">Expenses</p>
                 </div>
               </div>
             </div>
         </div>
 
         {/* Balance Card */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-2 relative overflow-hidden bg-[#0f172a]/60 backdrop-blur-xl p-6 rounded-[2rem] shadow-2xl border border-white/5 group card-glow-hover flex flex-col justify-between min-h-[160px]">
+        <div className="col-span-1 md:col-span-2 lg:col-span-2 relative overflow-hidden bg-[#121215]/60 backdrop-blur-xl p-6 rounded-[2rem] shadow-2xl border border-white/5 group card-glow-hover flex flex-col justify-between min-h-[160px]">
            <div className="absolute top-0 right-0 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
            <div className="flex items-center justify-between mb-4 relative z-10">
               <div className="flex items-center gap-3">
@@ -140,11 +163,16 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
               </div>
               
               <button 
-                onClick={onAddTx}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all border bg-zinc-800 text-zinc-400 border-zinc-700 hover:bg-zinc-700"
+                onClick={handleConnectBank}
+                disabled={isBankConnecting || isBankConnected}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${
+                    isBankConnected 
+                    ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' 
+                    : 'bg-zinc-800 text-zinc-400 border-zinc-700 hover:bg-zinc-700'
+                }`}
               >
-                  <FileText size={12} />
-                  Import Statement
+                  {isBankConnecting ? <Loader2 size={12} className="animate-spin" /> : isBankConnected ? <CheckCircle2 size={12} /> : <LinkIcon size={12} />}
+                  {isBankConnecting ? 'Syncing...' : isBankConnected ? 'Bank Connected' : 'Connect Bank'}
               </button>
            </div>
            <div className="relative z-10">
@@ -154,7 +182,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
         </div>
 
         {/* Expense Card */}
-        <div className="col-span-1 md:col-span-1 lg:col-span-1 relative overflow-hidden bg-[#0f172a]/60 backdrop-blur-xl p-6 rounded-[2rem] shadow-2xl border border-white/5 group card-glow-hover flex flex-col justify-between">
+        <div className="col-span-1 md:col-span-1 lg:col-span-1 relative overflow-hidden bg-[#121215]/60 backdrop-blur-xl p-6 rounded-[2rem] shadow-2xl border border-white/5 group card-glow-hover flex flex-col justify-between">
            <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
            <div className="flex items-center gap-3 mb-4 relative z-10">
               <div className="p-2.5 bg-red-500/10 rounded-xl text-red-400 border border-red-500/10">
@@ -169,10 +197,10 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
         </div>
 
         {/* Income (Salary) Card */}
-        <div className="col-span-1 md:col-span-1 lg:col-span-1 relative overflow-hidden bg-[#0f172a]/60 backdrop-blur-xl p-6 rounded-[2rem] shadow-2xl border border-white/5 group card-glow-hover flex flex-col justify-between">
-           <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
+        <div className="col-span-1 md:col-span-1 lg:col-span-1 relative overflow-hidden bg-[#121215]/60 backdrop-blur-xl p-6 rounded-[2rem] shadow-2xl border border-white/5 group card-glow-hover flex flex-col justify-between">
+           <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
            <div className="flex items-center gap-3 mb-4 relative z-10">
-              <div className="p-2.5 bg-emerald-500/10 rounded-xl text-emerald-400 border border-emerald-500/10">
+              <div className="p-2.5 bg-indigo-500/10 rounded-xl text-indigo-400 border border-indigo-500/10">
                 <TrendingUp size={20} />
               </div>
               <span className="text-zinc-400 font-semibold text-sm uppercase tracking-wider">Salary</span>
@@ -188,7 +216,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         {/* Chart 1: Saved vs Spent */}
-        <div className="bg-[#0f172a]/60 backdrop-blur-xl border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-2xl relative overflow-hidden min-h-[350px]">
+        <div className="bg-[#121215]/60 backdrop-blur-xl border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-2xl relative overflow-hidden min-h-[350px]">
            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-red-500 opacity-50"></div>
            <h3 className="text-xl font-bold text-zinc-100 mb-6 flex items-center gap-2 text-glow-sm">
              <Activity size={20} className="text-emerald-400" /> Financial Health
@@ -212,7 +240,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
                     ))}
                   </Pie>
                   <RechartsTooltip 
-                    contentStyle={{ backgroundColor: '#020617', borderColor: '#1e293b', borderRadius: '12px', color: '#fff', fontFamily: 'Outfit' }}
+                    contentStyle={{ backgroundColor: '#09090b', borderColor: '#27272a', borderRadius: '12px', color: '#fff', fontFamily: 'Outfit' }}
                     itemStyle={{ color: '#fff', fontWeight: 600 }}
                     formatter={(value: number) => [formatCurrency(value), 'Amount']}
                   />
@@ -234,10 +262,10 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
         </div>
 
         {/* Chart 2: Category Breakdown */}
-        <div className="bg-[#0f172a]/60 backdrop-blur-xl border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-2xl relative overflow-hidden min-h-[350px]">
-           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-teal-500 to-cyan-500 opacity-50"></div>
+        <div className="bg-[#121215]/60 backdrop-blur-xl border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-2xl relative overflow-hidden min-h-[350px]">
+           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-purple-500 opacity-50"></div>
            <h3 className="text-xl font-bold text-zinc-100 mb-6 flex items-center gap-2 text-glow-sm">
-             <PieChartIcon size={20} className="text-teal-400" /> Spending Categories
+             <PieChartIcon size={20} className="text-indigo-400" /> Spending Categories
            </h3>
            <div className="flex flex-col md:flex-row items-center h-64">
              <div className="h-full w-full md:w-1/2">
@@ -259,7 +287,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
                       ))}
                     </Pie>
                     <RechartsTooltip 
-                      contentStyle={{ backgroundColor: '#020617', borderColor: '#1e293b', borderRadius: '12px', color: '#fff', fontFamily: 'Outfit' }}
+                      contentStyle={{ backgroundColor: '#09090b', borderColor: '#27272a', borderRadius: '12px', color: '#fff', fontFamily: 'Outfit' }}
                       itemStyle={{ color: '#fff', fontWeight: 600 }}
                       formatter={(value: number) => [formatCurrency(value), 'Amount']}
                     />
@@ -285,10 +313,10 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
       </div>
 
       {/* Row 3: Cash Flow Area Chart */}
-      <div className="bg-[#0f172a]/60 backdrop-blur-xl border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-2xl">
+      <div className="bg-[#121215]/60 backdrop-blur-xl border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-2xl">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
             <h3 className="text-xl font-bold text-zinc-100 flex items-center gap-3 text-glow-sm">
-              <TrendingUp size={20} className="text-emerald-500" /> Cash Flow Trends
+              <TrendingUp size={20} className="text-indigo-500" /> Cash Flow Trends
             </h3>
             <div className="flex gap-4 text-xs font-medium">
                <div className="flex items-center gap-2 text-emerald-400"><span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></span> Income</div>
@@ -308,12 +336,12 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
                     <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} opacity={0.5} />
-                <XAxis dataKey="name" stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} dy={10} fontFamily="Outfit" />
-                <YAxis stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(val) => `₹${val/1000}k`} fontFamily="Outfit" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} opacity={0.5} />
+                <XAxis dataKey="name" stroke="#71717a" fontSize={11} tickLine={false} axisLine={false} dy={10} fontFamily="Outfit" />
+                <YAxis stroke="#71717a" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(val) => `₹${val/1000}k`} fontFamily="Outfit" />
                 <RechartsTooltip
-                  cursor={{ stroke: '#334155', strokeWidth: 1 }}
-                  contentStyle={{ backgroundColor: '#020617', borderColor: '#1e293b', borderRadius: '16px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)', color: '#fff', fontFamily: 'Outfit' }}
+                  cursor={{ stroke: '#3f3f46', strokeWidth: 1 }}
+                  contentStyle={{ backgroundColor: '#09090b', borderColor: '#27272a', borderRadius: '16px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)', color: '#fff', fontFamily: 'Outfit' }}
                   itemStyle={{ fontSize: '13px', fontWeight: 600 }}
                 />
                 <Area type="monotone" dataKey="Income" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorIncome)" activeDot={{ r: 6, strokeWidth: 0, fill: '#fff' }} />
