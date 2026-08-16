@@ -69,6 +69,22 @@ const App: React.FC = () => {
 
   useEffect(() => {
     initTheme();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        if (e.key === 'n' || e.key === 'N') {
+          e.preventDefault();
+          if (screen === 'app') setIsModalOpen(true);
+        }
+      }
+      if (e.key === 'Escape') {
+        setIsModalOpen(false);
+        setIsSmsModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    const cleanupKeys = () => window.removeEventListener('keydown', handleKeyDown);
+
     // Check for existing token and user session on app load
     const token = getAuthToken();
     if (token) {
@@ -86,7 +102,8 @@ const App: React.FC = () => {
           setScreen('landing');
         });
     }
-  }, []);
+    return cleanupKeys;
+  }, [screen]);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
