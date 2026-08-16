@@ -66,7 +66,7 @@ The frontend will start on `http://localhost:5173`
 │   ├── Advisor.tsx             # AI advisor
 │   ├── AddExpenseModal.tsx     # Add expense form
 │   ├── SetupWizard.tsx        # Initial setup
-│   └── SpaceBackground.tsx    # Background effect
+│   └── MoneyScape.tsx        # Animated landing background
 ├── services/                    # API and storage services
 │   ├── apiService.ts          # Backend API calls
 │   ├── geminiService.ts       # Google Gemini AI

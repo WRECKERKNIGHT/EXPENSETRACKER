@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+﻿import React, { useEffect, useMemo, useState } from 'react';
 import { Expense, Category } from '../types';
 import { getBudgetsAPI, createBudgetAPI, updateBudgetAPI, deleteBudgetAPI } from '../services/apiService';
 import { Wallet, AlertTriangle, Plus, Edit3, Trash2, Loader2 } from 'lucide-react';
@@ -111,25 +111,25 @@ const BudgetsCard: React.FC<BudgetsCardProps> = ({ expenses, currency }) => {
   };
 
   return (
-    <div className="bg-[#121215]/60 backdrop-blur-xl border border-white/5 p-6 md:p-7 rounded-[2rem] shadow-2xl relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-sky-500 to-violet-500 opacity-60" />
+    <div className="bg-surface backdrop-blur-xl border border-app p-6 md:p-7 rounded-[2rem] shadow-2xl relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-deep via-brand to-gold opacity-60" />
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-emerald-500/15 rounded-xl text-emerald-400 border border-emerald-500/30 shadow-[0_0_18px_rgba(16,185,129,0.35)]">
+          <div className="p-2.5 bg-brand/15 rounded-xl text-brand-ink border border-brand/30 shadow-[0_0_18px_rgba(16,185,129,0.35)]">
             <Wallet size={20} />
           </div>
           <div>
-            <h3 className="text-zinc-100 font-semibold text-sm md:text-base">Monthly Budgets</h3>
-            <p className="text-[11px] text-zinc-500 uppercase tracking-[0.18em] font-semibold">
+            <h3 className="text-app font-semibold text-sm md:text-base">Monthly Budgets</h3>
+            <p className="text-[11px] text-faint uppercase tracking-[0.18em] font-semibold">
               Stay ahead of overspending
             </p>
           </div>
         </div>
-        {isLoading && <Loader2 className="w-4 h-4 text-zinc-400 animate-spin" />}
+        {isLoading && <Loader2 className="w-4 h-4 text-soft animate-spin" />}
       </div>
 
       {budgets.length === 0 && (
-        <p className="text-xs text-zinc-500 mb-4">
+        <p className="text-xs text-faint mb-4">
           Set limits for categories you want to watch. We’ll highlight when you’re near or over.
         </p>
       )}
@@ -145,14 +145,14 @@ const BudgetsCard: React.FC<BudgetsCardProps> = ({ expenses, currency }) => {
           return (
             <div
               key={b.id}
-              className="group bg-zinc-900/70 border border-zinc-800/80 rounded-2xl px-4 py-3 hover:border-emerald-500/40 transition-all duration-200"
+              className="group bg-surface-2 border border-app/80 rounded-2xl px-4 py-3 hover:border-gold-soft transition-all duration-200"
             >
               <div className="flex items-center justify-between mb-1.5">
                 <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-6 rounded-full bg-gradient-to-b from-emerald-400 to-sky-500 shadow-[0_0_10px_rgba(56,189,248,0.6)]" />
+                  <span className="w-1.5 h-6 rounded-full bg-gradient-to-b from-brand to-gold shadow-[0_0_10px_rgba(56,189,248,0.6)]" />
                   <div>
-                    <p className="text-xs font-semibold text-zinc-100">{b.category}</p>
-                    <p className="text-[11px] text-zinc-500">
+                    <p className="text-xs font-semibold text-app">{b.category}</p>
+                    <p className="text-[11px] text-faint">
                       {formatCurrency(spent)} / {formatCurrency(b.monthlyLimit)}
                     </p>
                   </div>
@@ -160,28 +160,28 @@ const BudgetsCard: React.FC<BudgetsCardProps> = ({ expenses, currency }) => {
                 <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     onClick={() => handleEdit(b)}
-                    className="p-1.5 rounded-full bg-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-700"
+                    className="p-1.5 rounded-full bg-surface-3 text-soft hover:text-app hover:bg-surface-2"
                   >
                     <Edit3 size={14} />
                   </button>
                   <button
                     onClick={() => handleDelete(b.id)}
-                    className="p-1.5 rounded-full bg-zinc-900 text-zinc-400 hover:text-red-400 hover:bg-zinc-800"
+                    className="p-1.5 rounded-full bg-surface-2 text-soft hover:text-red-400 hover:bg-surface-3"
                   >
                     <Trash2 size={14} />
                   </button>
                 </div>
               </div>
-              <div className="relative h-2 rounded-full bg-zinc-800 overflow-hidden">
+              <div className="relative h-2 rounded-full bg-surface-3 overflow-hidden">
                 <div
                   className={`absolute inset-y-0 left-0 rounded-full transition-all duration-300 ${
-                    isOver ? 'bg-gradient-to-r from-red-500 to-orange-500' : isNear ? 'bg-amber-400' : 'bg-emerald-500'
+                    isOver ? 'bg-gradient-to-r from-red-500 to-orange-500' : isNear ? 'bg-amber-400' : 'bg-brand'
                   }`}
                   style={{ width: `${Math.min(100, pct)}%` }}
                 />
               </div>
               <div className="flex items-center justify-between mt-1.5">
-                <p className="text-[11px] text-zinc-500">
+                <p className="text-[11px] text-faint">
                   {isOver ? 'Over budget' : isNear ? 'Almost there' : 'On track'}
                 </p>
                 {(isOver || isNear) && (
@@ -200,7 +200,7 @@ const BudgetsCard: React.FC<BudgetsCardProps> = ({ expenses, currency }) => {
           <select
             value={formCategory}
             onChange={e => setFormCategory(e.target.value)}
-            className="bg-black/30 border border-zinc-700 rounded-2xl px-3 py-2.5 text-[13px] text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 transition-all"
+            className="bg-app-soft border border-app rounded-2xl px-3 py-2.5 text-[13px] text-app focus:outline-none focus:ring-2 focus:ring-brand/40 transition-all"
           >
             {categoryOptions.map(c => (
               <option key={c} value={c}>
@@ -214,14 +214,14 @@ const BudgetsCard: React.FC<BudgetsCardProps> = ({ expenses, currency }) => {
             value={formLimit}
             onChange={e => setFormLimit(e.target.value)}
             placeholder="Limit / month"
-            className="bg-black/30 border border-zinc-700 rounded-2xl px-3 py-2.5 text-[13px] text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 transition-all"
+            className="bg-app-soft border border-app rounded-2xl px-3 py-2.5 text-[13px] text-app focus:outline-none focus:ring-2 focus:ring-brand/40 transition-all"
           />
         </div>
         {error && <p className="text-[11px] text-red-400">{error}</p>}
         <button
           type="submit"
           disabled={isLoading || !formLimit}
-          className="w-full mt-1 flex items-center justify-center gap-2 text-[12px] font-semibold rounded-2xl py-2.5 bg-gradient-to-r from-emerald-500 to-sky-500 text-white shadow-[0_0_18px_rgba(34,197,94,0.5)] hover:shadow-[0_0_26px_rgba(34,197,94,0.7)] disabled:opacity-60 transition-all"
+          className="w-full mt-1 flex items-center justify-center gap-2 text-[12px] font-semibold rounded-2xl py-2.5 bg-gradient-to-r from-brand-deep to-brand text-white shadow-card-soft hover:shadow-card disabled:opacity-60 transition-all"
         >
           {editingId ? <Edit3 size={14} /> : <Plus size={14} />}
           {editingId ? 'Update Budget' : 'Add Budget'}

@@ -1,12 +1,16 @@
 
-import { Expense, UserProfile } from '../types';
+import { Expense, UserPreferences, UserProfile } from '../types';
 
 const USERS_KEY = 'spendsmart_users_db';
 const SESSION_KEY = 'spendsmart_active_session_email';
 const EXPENSE_PREFIX = 'spendsmart_expenses_';
+const PREFS_PREFIX = 'spendsmart_prefs_';
+const QUIZ_DISMISSED_PREFIX = 'spendsmart_quiz_dismissed_';
 
 // --- Helper: Get Key for specific user ---
 const getUserExpenseKey = (email: string) => `${EXPENSE_PREFIX}${email}`;
+const getPrefsKey = (email: string) => `${PREFS_PREFIX}${email}`;
+const getQuizDismissedKey = (email: string) => `${QUIZ_DISMISSED_PREFIX}${email}`;
 
 // --- User Management ---
 
@@ -161,5 +165,46 @@ export const setSessionActive = (active: boolean): void => {
     if (last) loginUserSession(last.email);
   } else {
     logoutUser();
+  }
+};
+
+// --- Personalization Preferences ---
+
+export const getUserPreferences = (email?: string): UserPreferences | null => {
+  const keyEmail = email || getCurrentUserEmail();
+  if (!keyEmail) return null;
+  try {
+    const stored = localStorage.getItem(getPrefsKey(keyEmail));
+    return stored ? (JSON.parse(stored) as UserPreferences) : null;
+  } catch (e) {
+    console.error('Failed to load preferences', e);
+    return null;
+  }
+};
+
+export const saveUserPreferences = (email: string, prefs: Omit<UserPreferences, 'updatedAt'>): UserPreferences => {
+  const withTimestamp: UserPreferences = { ...prefs, updatedAt: Date.now() };
+  try {
+    localStorage.setItem(getPrefsKey(email), JSON.stringify(withTimestamp));
+    localStorage.removeItem(getQuizDismissedKey(email));
+  } catch (e) {
+    console.error('Failed to save preferences', e);
+  }
+  return withTimestamp;
+};
+
+export const hasUserPreferences = (email?: string): boolean => !!getUserPreferences(email);
+
+export const isQuizDismissed = (email?: string): boolean => {
+  const keyEmail = email || getCurrentUserEmail();
+  if (!keyEmail) return false;
+  return localStorage.getItem(getQuizDismissedKey(keyEmail)) === '1';
+};
+
+export const dismissQuizPrompt = (email: string): void => {
+  try {
+    localStorage.setItem(getQuizDismissedKey(email), '1');
+  } catch (e) {
+    console.error('Failed to dismiss quiz prompt', e);
   }
 };

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>SpendSmart AI</title>
     
-    <!-- Google Fonts: Outfit -->
+    <!-- Google Fonts: Outfit (UI) + Fraunces (Display serif for the money story) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,600&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -19,36 +19,60 @@
           extend: {
             fontFamily: {
               sans: ['Outfit', 'sans-serif'],
+              display: ['Fraunces', 'serif'],
             },
             colors: {
-              background: '#020617', // Slate 950 (Darker, more Navy)
-              surface: '#0f172a', // Slate 900
-              primary: '#10b981', // Emerald 500 (Brand Green)
-              primaryDark: '#059669', // Emerald 600
-              secondary: '#14b8a6', // Teal 500
-              accent: '#06b6d4', // Cyan 500
-              danger: '#ef4444',
+              app: 'rgb(var(--rgb-bg) / <alpha-value>)',
+              'app-soft': 'rgb(var(--rgb-bg-soft) / <alpha-value>)',
+              surface: 'rgb(var(--rgb-surface) / <alpha-value>)',
+              'surface-2': 'rgb(var(--rgb-surface-2) / <alpha-value>)',
+              'surface-3': 'rgb(var(--rgb-surface-3) / <alpha-value>)',
+              soft: 'rgb(var(--rgb-text-soft) / <alpha-value>)',
+              faint: 'rgb(var(--rgb-text-faint) / <alpha-value>)',
+              brand: 'rgb(var(--rgb-brand) / <alpha-value>)',
+              'brand-deep': 'rgb(var(--rgb-brand-deep) / <alpha-value>)',
+              'brand-ink': 'rgb(var(--rgb-brand-ink) / <alpha-value>)',
+              gold: 'rgb(var(--rgb-gold) / <alpha-value>)',
+              'gold-soft': 'rgb(var(--rgb-gold-soft) / <alpha-value>)',
+              'gold-ink': 'rgb(var(--rgb-gold-ink) / <alpha-value>)',
+              danger: 'rgb(var(--rgb-danger) / <alpha-value>)',
+              success: 'rgb(var(--rgb-success) / <alpha-value>)',
             },
             animation: {
-              'bounce-slow': 'bounce 3s infinite',
-              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
               'fade-in': 'fadeIn 0.5s ease-out',
-              'spin-slow': 'spin 12s linear infinite',
-              'orbit': 'orbit 20s linear infinite',
+              'bounce-slow': 'bounce 3s infinite',
               'float': 'float 6s ease-in-out infinite',
+              'float-slow': 'float 9s ease-in-out infinite',
+              'spin-slow': 'spin 14s linear infinite',
+              'coin-spin': 'coinSpin 6s ease-in-out infinite',
+              'bill-shimmer': 'billShimmer 3.5s linear infinite',
+              'ticker': 'ticker 28s linear infinite',
+              'marquee-up': 'marqueeUp 22s linear infinite',
             },
             keyframes: {
               fadeIn: {
                 '0%': { opacity: '0', transform: 'translateY(10px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
               },
-              orbit: {
-                '0%': { transform: 'rotate(0deg)' },
-                '100%': { transform: 'rotate(360deg)' },
-              },
               float: {
-                '0%, 100%': { transform: 'translateY(0)' },
-                '50%': { transform: 'translateY(-20px)' },
+                '0%, 100%': { transform: 'translateY(0) rotate(var(--rot,0deg))' },
+                '50%': { transform: 'translateY(-18px) rotate(var(--rot,0deg))' },
+              },
+              coinSpin: {
+                '0%, 100%': { transform: 'rotateY(0deg)' },
+                '50%': { transform: 'rotateY(180deg)' },
+              },
+              billShimmer: {
+                '0%': { transform: 'translateX(-120%) skewX(-20deg)' },
+                '100%': { transform: 'translateX(240%) skewX(-20deg)' },
+              },
+              ticker: {
+                '0%': { transform: 'translateX(0)' },
+                '100%': { transform: 'translateX(-50%)' },
+              },
+              marqueeUp: {
+                '0%': { transform: 'translateY(0)' },
+                '100%': { transform: 'translateY(-50%)' },
               }
             }
           }
@@ -56,46 +80,201 @@
       }
     </script>
     <style>
-      /* Custom Scrollbar */
-      ::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #020617; 
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #1e293b; 
-        border-radius: 3px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #334155; 
+      /* ============================================================
+         SPENDSMART — "MONEY THEME" DESIGN SYSTEM
+         Deep forest greens + aged gold + warm cream. No neon.
+         ============================================================ */
+
+      :root,
+      html[data-theme="dark"] {
+        --bg:            #0b1d14;  /* deep pine */
+        --bg-soft:       #0f261a;  /* pine + 1 */
+        --surface:       #132a1e;  /* card */
+        --surface-2:     #182f22;  /* card raised / hover */
+        --surface-3:     #1e3829;  /* nested card */
+        --text:          #f4f0e3;  /* warm cream */
+        --text-soft:     #a3b5a7;  /* muted sage */
+        --text-faint:    #667a6c;
+        --border:        #24402f;
+        --border-soft:   #1b3024;
+        --brand:         #3fae6e;  /* fresh money green */
+        --brand-deep:    #2d8a58;
+        --brand-ink:     #9fe0b8;
+        --gold:          #d4af37;  /* aged gold */
+        --gold-soft:     #b8952a;
+        --gold-ink:      #f2d37a;
+        --danger:        #e07a5f;
+        --success:       #57c785;
+        --shadow:        0 22px 50px -24px rgba(0,0,0,0.55);
+        --shadow-soft:   0 12px 34px -20px rgba(0,0,0,0.45);
+        --tick-bg:       #0e2418;
+        --rgb-bg: 11 29 20;
+        --rgb-bg-soft: 15 38 26;
+        --rgb-surface: 19 42 30;
+        --rgb-surface-2: 24 47 34;
+        --rgb-surface-3: 30 56 41;
+        --rgb-text: 244 240 227;
+        --rgb-text-soft: 163 181 167;
+        --rgb-text-faint: 102 122 108;
+        --rgb-border: 36 64 47;
+        --rgb-brand: 63 174 110;
+        --rgb-brand-deep: 45 138 88;
+        --rgb-brand-ink: 159 224 184;
+        --rgb-gold: 212 175 55;
+        --rgb-gold-soft: 184 149 42;
+        --rgb-gold-ink: 242 211 122;
+        --rgb-danger: 224 122 95;
+        --rgb-success: 87 199 133;
+        color-scheme: dark;
       }
 
-      /* Glowing Text Utilities */
-      .text-glow {
-        text-shadow: 0 0 20px rgba(16, 185, 129, 0.5); /* Emerald Glow */
-      }
-      .text-glow-sm {
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-      }
-      .text-glow-success {
-        text-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
-      }
-      .text-glow-danger {
-        text-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
-      }
-      .text-glow-accent {
-         text-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+      html[data-theme="light"] {
+        --bg:            #f6f1e5;  /* warm ivory */
+        --bg-soft:       #efe8d6;
+        --surface:       #fffdf6;  /* card */
+        --surface-2:     #f4edda;
+        --surface-3:     #eae2cc;
+        --text:          #16331f;  /* deep forest ink */
+        --text-soft:     #5d6f5e;  /* muted moss */
+        --text-faint:    #8b998a;
+        --border:        #ddd3b6;
+        --border-soft:   #e8e0c8;
+        --brand:         #1e7b4f;  /* money green */
+        --brand-deep:    #145c3c;
+        --brand-ink:     #0f4a30;
+        --gold:          #a97e11;
+        --gold-soft:     #c19b2e;
+        --gold-ink:      #8a6510;
+        --danger:        #b3492f;
+        --success:       #2f9e5f;
+        --shadow:        0 22px 50px -28px rgba(50,60,40,0.45);
+        --shadow-soft:   0 12px 30px -20px rgba(50,60,40,0.35);
+        --tick-bg:       #efe7d2;
+        --rgb-bg: 246 241 229;
+        --rgb-bg-soft: 239 232 214;
+        --rgb-surface: 255 253 246;
+        --rgb-surface-2: 244 237 218;
+        --rgb-surface-3: 234 226 204;
+        --rgb-text: 22 51 31;
+        --rgb-text-soft: 93 111 94;
+        --rgb-text-faint: 139 153 138;
+        --rgb-border: 221 211 182;
+        --rgb-brand: 30 123 79;
+        --rgb-brand-deep: 20 92 60;
+        --rgb-brand-ink: 15 74 48;
+        --rgb-gold: 169 126 17;
+        --rgb-gold-soft: 193 155 46;
+        --rgb-gold-ink: 138 101 16;
+        --rgb-danger: 179 73 47;
+        --rgb-success: 47 158 95;
+        color-scheme: light;
       }
 
-      /* Card Glow Utilities */
-      .card-glow {
-        box-shadow: 0 0 40px -10px rgba(16, 185, 129, 0.15);
+      * { scroll-behavior: smooth; }
+
+      ::-webkit-scrollbar { width: 9px; height: 9px; }
+      ::-webkit-scrollbar-track { background: var(--bg); }
+      ::-webkit-scrollbar-thumb { background: var(--gold-soft); border-radius: 5px; border: 2px solid var(--bg); }
+      ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Outfit', sans-serif;
+        transition: background-color 0.4s ease, color 0.4s ease;
       }
-      .card-glow-hover:hover {
-        box-shadow: 0 0 30px -5px rgba(16, 185, 129, 0.25);
+
+      /* ---------- Semantic theme utilities ---------- */
+      .bg-app      { background: var(--bg); }
+      .bg-app-soft { background: var(--bg-soft); }
+      .bg-surface  { background: var(--surface); }
+      .bg-surface-2{ background: var(--surface-2); }
+      .bg-surface-3{ background: var(--surface-3); }
+      .text-app    { color: var(--text); }
+      .text-soft   { color: var(--text-soft); }
+      .text-faint  { color: var(--text-faint); }
+      .border-app  { border-color: var(--border); }
+      .border-app-soft { border-color: var(--border-soft); }
+      .text-brand  { color: var(--brand); }
+      .text-brand-ink { color: var(--brand-ink); }
+      .text-gold   { color: var(--gold); }
+      .text-gold-ink{ color: var(--gold-ink); }
+      .bg-brand    { background: var(--brand); }
+      .bg-gold     { background: var(--gold); }
+      .bg-gold-soft{ background: var(--gold-soft); }
+      .bg-brand-deep { background: var(--brand-deep); }
+      .shadow-card { box-shadow: var(--shadow); }
+      .shadow-card-soft { box-shadow: var(--shadow-soft); }
+
+      .card-2d {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 1.4rem;
+        box-shadow: var(--shadow-soft);
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
       }
+      .card-2d:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow);
+        border-color: var(--gold-soft);
+      }
+
+      /* ---------- Typography helpers ---------- */
+      .font-display { font-family: 'Fraunces', serif; }
+      .heading-serif { font-family: 'Fraunces', serif; font-weight: 700; letter-spacing: -0.02em; }
+
+      .grain::after {
+        content: "";
+        position: absolute; inset: 0;
+        pointer-events: none;
+        opacity: 0.05;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+      }
+
+      /* ---------- Scroll reveal ---------- */
+      .reveal {
+        opacity: 0;
+        transform: translateY(46px);
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: opacity, transform;
+      }
+      .reveal-left { transform: translateX(-60px); }
+      .reveal-right { transform: translateX(60px); }
+      .reveal-scale { transform: scale(0.9); }
+      .reveal.in {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+      }
+      .reveal-d1 { transition-delay: 0.08s; }
+      .reveal-d2 { transition-delay: 0.16s; }
+      .reveal-d3 { transition-delay: 0.24s; }
+      .reveal-d4 { transition-delay: 0.32s; }
+
+      /* ---------- 3D helpers for dollar & coin ---------- */
+      .preserve-3d { transform-style: preserve-3d; }
+      .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+      .perspective-1200 { perspective: 1200px; }
+      .perspective-2000 { perspective: 2000px; }
+
+      /* ---------- Old glow classes kept but toned to gold ---------- */
+      .text-glow { text-shadow: 0 0 22px rgba(212, 175, 55, 0.25); }
+      .text-glow-sm { text-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+      .text-glow-success { text-shadow: 0 0 18px rgba(63, 174, 110, 0.2); }
+      .text-glow-danger { text-shadow: 0 0 18px rgba(224, 122, 95, 0.2); }
+      .text-glow-accent { text-shadow: 0 0 18px rgba(212, 175, 55, 0.3); }
+      .card-glow { box-shadow: var(--shadow); }
+      .card-glow-hover:hover { box-shadow: var(--shadow); border-color: var(--gold-soft); }
+
+      /* ---------- Number ticker strip ---------- */
+      .ticker-strip {
+        background: var(--tick-bg);
+        border-top: 1px solid var(--border-soft);
+        border-bottom: 1px solid var(--border-soft);
+      }
+
+      /* Hide scrollbar for pill rows */
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
   <script type="importmap">
 {
@@ -112,7 +291,7 @@
 }
 </script>
 </head>
-  <body class="bg-background text-zinc-100 font-sans antialiased min-h-screen selection:bg-primary/30 overflow-x-hidden">
+  <body class="bg-app text-app font-sans antialiased min-h-screen overflow-x-hidden">
     <div id="root"></div>
     <script type="module" src="./index.tsx"></script>
   </body>

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+﻿import React, { useMemo, useState } from 'react';
 import { Expense } from '../types';
 import { Download, CalendarRange, BarChart2 } from 'lucide-react';
 
@@ -64,14 +64,14 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="bg-[#121215]/70 border border-white/5 rounded-[2rem] p-6 md:p-8 shadow-2xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="bg-surface border border-app rounded-[2rem] p-6 md:p-8 shadow-2xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-indigo-500 via-sky-500 to-emerald-500 shadow-[0_0_35px_rgba(59,130,246,0.7)]">
-            <BarChart2 className="w-6 h-6 text-white" />
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-gold-soft to-gold shadow-card-soft">
+            <BarChart2 className="w-6 h-6 text-app" />
           </div>
           <div>
-            <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">Spending Reports</h2>
-            <p className="text-xs text-zinc-400 uppercase tracking-[0.2em] mt-1 flex items-center gap-1">
+            <h2 className="text-xl md:text-2xl font-bold text-app tracking-tight">Spending Reports</h2>
+            <p className="text-xs text-soft uppercase tracking-[0.2em] mt-1 flex items-center gap-1">
               <CalendarRange className="w-3 h-3" /> {range === 'day' && 'Today'}
               {range === 'week' && 'This Week'}
               {range === 'month' && 'This Month'}
@@ -79,15 +79,15 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <div className="inline-flex bg-zinc-900/80 rounded-full p-1 border border-zinc-800">
+          <div className="inline-flex bg-surface-2 rounded-full p-1 border border-app">
             {(['day', 'week', 'month'] as Range[]).map(r => (
               <button
                 key={r}
                 onClick={() => setRange(r)}
                 className={`px-3 py-1.5 rounded-full text-[11px] font-semibold transition-all ${
                   range === r
-                    ? 'bg-zinc-100 text-black shadow-[0_0_15px_rgba(250,250,250,0.3)]'
-                    : 'text-zinc-400 hover:text-zinc-100'
+                    ? 'bg-gold text-white shadow-card-soft'
+                    : 'text-soft hover:text-app'
                 }`}
               >
                 {r === 'day' ? 'Day' : r === 'week' ? 'Week' : 'Month'}
@@ -96,7 +96,7 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
           </div>
           <button
             onClick={handleDownloadCsv}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-100 text-black text-xs font-semibold shadow-[0_0_18px_rgba(250,250,250,0.5)] hover:bg-white transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-2 text-app text-xs font-semibold shadow-card-soft hover:bg-surface-3 transition-all"
           >
             <Download className="w-4 h-4" /> Export CSV
           </button>
@@ -104,39 +104,39 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-        <div className="bg-[#121215]/70 border border-white/5 rounded-[1.75rem] p-5 shadow-xl relative overflow-hidden">
-          <div className="absolute inset-x-0 -top-8 h-16 bg-gradient-to-b from-emerald-500/25 to-transparent pointer-events-none" />
-          <p className="text-[11px] font-semibold text-zinc-400 uppercase tracking-[0.18em] mb-1">Income</p>
-          <p className="text-2xl font-bold text-emerald-400">{fmt(totalIncome)}</p>
+        <div className="bg-surface border border-app rounded-[1.75rem] p-5 shadow-xl relative overflow-hidden">
+          <div className="absolute inset-x-0 -top-8 h-16 bg-gradient-to-b from-brand/20 to-transparent pointer-events-none" />
+          <p className="text-[11px] font-semibold text-soft uppercase tracking-[0.18em] mb-1">Income</p>
+          <p className="text-2xl font-bold text-brand-ink">{fmt(totalIncome)}</p>
         </div>
-        <div className="bg-[#121215]/70 border border-white/5 rounded-[1.75rem] p-5 shadow-xl relative overflow-hidden">
+        <div className="bg-surface border border-app rounded-[1.75rem] p-5 shadow-xl relative overflow-hidden">
           <div className="absolute inset-x-0 -top-8 h-16 bg-gradient-to-b from-red-500/25 to-transparent pointer-events-none" />
-          <p className="text-[11px] font-semibold text-zinc-400 uppercase tracking-[0.18em] mb-1">Expenses</p>
+          <p className="text-[11px] font-semibold text-soft uppercase tracking-[0.18em] mb-1">Expenses</p>
           <p className="text-2xl font-bold text-red-400">{fmt(totalExpense)}</p>
         </div>
-        <div className="bg-[#121215]/70 border border-white/5 rounded-[1.75rem] p-5 shadow-xl relative overflow-hidden">
-          <div className="absolute inset-x-0 -top-8 h-16 bg-gradient-to-b from-indigo-500/25 to-transparent pointer-events-none" />
-          <p className="text-[11px] font-semibold text-zinc-400 uppercase tracking-[0.18em] mb-1">Net</p>
-          <p className={`text-2xl font-bold ${net >= 0 ? 'text-emerald-300' : 'text-red-300'}`}>{fmt(net)}</p>
+        <div className="bg-surface border border-app rounded-[1.75rem] p-5 shadow-xl relative overflow-hidden">
+          <div className="absolute inset-x-0 -top-8 h-16 bg-gradient-to-b from-gold/20 to-transparent pointer-events-none" />
+          <p className="text-[11px] font-semibold text-soft uppercase tracking-[0.18em] mb-1">Net</p>
+          <p className={`text-2xl font-bold ${net >= 0 ? 'text-brand-ink' : 'text-red-300'}`}>{fmt(net)}</p>
         </div>
       </div>
 
-      <div className="bg-[#121215]/70 border border-white/5 rounded-[2rem] p-6 md:p-8 shadow-2xl">
-        <h3 className="text-sm font-semibold text-zinc-300 mb-4 flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shadow-[0_0_10px_rgba(129,140,248,0.7)]" />
+      <div className="bg-surface border border-app rounded-[2rem] p-6 md:p-8 shadow-2xl">
+        <h3 className="text-sm font-semibold text-soft mb-4 flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-gold" />
           Top Spending Categories
         </h3>
         {byCategory.length === 0 ? (
-          <p className="text-xs text-zinc-500">No expenses in this period.</p>
+          <p className="text-xs text-faint">No expenses in this period.</p>
         ) : (
           <div className="space-y-2">
             {byCategory.map(c => (
               <div
                 key={c.name}
-                className="flex items-center justify-between bg-zinc-900/70 border border-zinc-800 rounded-2xl px-4 py-2.5"
+                className="flex items-center justify-between bg-surface-2 border border-app rounded-2xl px-4 py-2.5"
               >
-                <span className="text-xs text-zinc-200">{c.name}</span>
-                <span className="text-xs font-semibold text-zinc-300">{fmt(c.value)}</span>
+                <span className="text-xs text-app">{c.name}</span>
+                <span className="text-xs font-semibold text-soft">{fmt(c.value)}</span>
               </div>
             ))}
           </div>

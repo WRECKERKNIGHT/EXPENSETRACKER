@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+﻿import React, { useEffect, useMemo, useState } from 'react';
 import { Expense, Category } from '../types';
 import { getRecurringAPI, createRecurringAPI, deleteRecurringAPI } from '../services/apiService';
 import { Bell, Plus, Trash2, Loader2, Clock3 } from 'lucide-react';
@@ -117,7 +117,7 @@ const RecurringCard: React.FC<RecurringCardProps> = ({ expenses, currency }) => 
   };
 
   return (
-    <div className="bg-[#121215]/60 backdrop-blur-xl border border-white/5 p-6 md:p-7 rounded-[2rem] shadow-2xl relative overflow-hidden">
+    <div className="bg-surface backdrop-blur-xl border border-app p-6 md:p-7 rounded-[2rem] shadow-2xl relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 opacity-70" />
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
@@ -125,40 +125,40 @@ const RecurringCard: React.FC<RecurringCardProps> = ({ expenses, currency }) => 
             <Bell size={18} />
           </div>
           <div>
-            <h3 className="text-zinc-100 font-semibold text-sm md:text-base">Upcoming Bills</h3>
-            <p className="text-[11px] text-zinc-500 uppercase tracking-[0.18em] font-semibold">
+            <h3 className="text-app font-semibold text-sm md:text-base">Upcoming Bills</h3>
+            <p className="text-[11px] text-faint uppercase tracking-[0.18em] font-semibold">
               Recurring expenses & reminders
             </p>
           </div>
         </div>
-        {loading && <Loader2 className="w-4 h-4 text-zinc-400 animate-spin" />}
+        {loading && <Loader2 className="w-4 h-4 text-soft animate-spin" />}
       </div>
 
       <div className="space-y-2 mb-4 max-h-40 overflow-y-auto custom-scrollbar">
         {upcoming.length === 0 && (
-          <p className="text-[11px] text-zinc-500">Add your rent, subscriptions, or EMIs to see reminders here.</p>
+          <p className="text-[11px] text-faint">Add your rent, subscriptions, or EMIs to see reminders here.</p>
         )}
         {upcoming.map((i) => (
           <div
             key={i.id}
-            className="flex items-center justify-between bg-zinc-900/70 border border-zinc-800 rounded-2xl px-3 py-2 group"
+            className="flex items-center justify-between bg-surface-2 border border-app rounded-2xl px-3 py-2 group"
           >
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-zinc-800 flex items-center justify-center text-amber-300">
+              <div className="w-7 h-7 rounded-full bg-surface-3 flex items-center justify-center text-amber-300">
                 <Clock3 size={14} />
               </div>
               <div>
-                <p className="text-[12px] text-zinc-100 font-semibold">{i.name}</p>
-                <p className="text-[10px] text-zinc-500">
+                <p className="text-[12px] text-app font-semibold">{i.name}</p>
+                <p className="text-[10px] text-faint">
                   {i.category} · in {i.daysLeft === 0 ? 'today' : `${i.daysLeft} day${i.daysLeft === 1 ? '' : 's'}`}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-[11px] font-semibold text-zinc-200">{formatCurrency(i.amount)}</span>
+              <span className="text-[11px] font-semibold text-app">{formatCurrency(i.amount)}</span>
               <button
                 onClick={() => handleDelete(i.id)}
-                className="p-1 rounded-full text-zinc-500 hover:text-red-400 hover:bg-zinc-800 transition-colors opacity-0 group-hover:opacity-100"
+                className="p-1 rounded-full text-faint hover:text-red-400 hover:bg-surface-3 transition-colors opacity-0 group-hover:opacity-100"
               >
                 <Trash2 size={13} />
               </button>
@@ -174,21 +174,21 @@ const RecurringCard: React.FC<RecurringCardProps> = ({ expenses, currency }) => 
             placeholder="Bill name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="bg-black/30 border border-zinc-700 rounded-2xl px-3 py-2.5 text-[12px] text-zinc-100 focus:outline-none focus:ring-2 focus:ring-amber-500/40 transition-all"
+            className="bg-app-soft border border-app rounded-2xl px-3 py-2.5 text-[12px] text-app focus:outline-none focus:ring-2 focus:ring-amber-500/40 transition-all"
           />
           <input
             type="number"
             placeholder="Amount"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="bg-black/30 border border-zinc-700 rounded-2xl px-3 py-2.5 text-[12px] text-zinc-100 focus:outline-none focus:ring-2 focus:ring-amber-500/40 transition-all"
+            className="bg-app-soft border border-app rounded-2xl px-3 py-2.5 text-[12px] text-app focus:outline-none focus:ring-2 focus:ring-amber-500/40 transition-all"
           />
         </div>
         <div className="grid grid-cols-2 gap-3">
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="bg-black/30 border border-zinc-700 rounded-2xl px-3 py-2.5 text-[12px] text-zinc-100 focus:outline-none focus:ring-2 focus:ring-amber-500/40 transition-all"
+            className="bg-app-soft border border-app rounded-2xl px-3 py-2.5 text-[12px] text-app focus:outline-none focus:ring-2 focus:ring-amber-500/40 transition-all"
           >
             {categoryOptions.map((c) => (
               <option key={c} value={c}>
@@ -203,7 +203,7 @@ const RecurringCard: React.FC<RecurringCardProps> = ({ expenses, currency }) => 
             placeholder="Due day"
             value={dueDay}
             onChange={(e) => setDueDay(e.target.value)}
-            className="bg-black/30 border border-zinc-700 rounded-2xl px-3 py-2.5 text-[12px] text-zinc-100 focus:outline-none focus:ring-2 focus:ring-amber-500/40 transition-all"
+            className="bg-app-soft border border-app rounded-2xl px-3 py-2.5 text-[12px] text-app focus:outline-none focus:ring-2 focus:ring-amber-500/40 transition-all"
           />
         </div>
         {error && <p className="text-[11px] text-red-400">{error}</p>}

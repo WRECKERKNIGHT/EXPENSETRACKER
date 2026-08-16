@@ -61,48 +61,51 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
     }
   };
 
+  const inputCls = "bg-app-soft border border-app rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand/40 transition-all text-app placeholder:text-faint";
+
   return (
-    <div className="min-h-screen bg-[#09090b] text-white flex items-center justify-center p-6 font-sans relative">
+    <div className="min-h-screen bg-app text-app flex items-center justify-center p-6 font-sans relative">
       {/* Background Ambience */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-           <div className="absolute bottom-0 right-0 w-[50%] h-[50%] bg-indigo-900/10 rounded-full blur-[120px]"></div>
+           <div className="absolute bottom-0 right-0 w-[50%] h-[50%] bg-gold/10 rounded-full blur-[120px]"></div>
+           <div className="absolute top-0 left-0 w-[40%] h-[40%] bg-brand/10 rounded-full blur-[120px]"></div>
       </div>
 
-      <div className="relative z-10 w-full max-w-2xl bg-[#121215]/80 backdrop-blur-xl border border-white/10 p-8 rounded-[2rem] shadow-2xl card-glow animate-fade-in">
+      <div className="relative z-10 w-full max-w-2xl bg-surface border border-app p-8 rounded-[2rem] shadow-card animate-fade-in">
         
         {/* Progress */}
         <div className="flex items-center gap-2 mb-8">
-            <div className={`h-2 flex-1 rounded-full ${step >= 1 ? 'bg-indigo-500' : 'bg-zinc-800'}`}></div>
-            <div className={`h-2 flex-1 rounded-full ${step >= 2 ? 'bg-indigo-500' : 'bg-zinc-800'}`}></div>
+            <div className={`h-2 flex-1 rounded-full ${step >= 1 ? 'bg-gradient-to-r from-brand-deep to-brand' : 'bg-surface-3'}`}></div>
+            <div className={`h-2 flex-1 rounded-full ${step >= 2 ? 'bg-gradient-to-r from-brand-deep to-brand' : 'bg-surface-3'}`}></div>
         </div>
 
         {step === 1 && (
           <div className="animate-fade-in">
              <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-rose-600 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg transform rotate-3">
+                <div className="w-16 h-16 bg-gradient-to-br from-brand-deep to-brand rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-card-soft transform rotate-3">
                    <Home size={28} className="text-white" />
                 </div>
-                <h2 className="text-2xl font-bold mb-2">Fixed Monthly Expenses</h2>
-                <p className="text-zinc-400">Do you have rent, internet, or Netflix subscriptions?</p>
+                <h2 className="heading-serif text-2xl font-bold mb-2">Fixed Monthly Expenses</h2>
+                <p className="text-soft">Do you have rent, internet, or Netflix subscriptions?</p>
              </div>
 
-             <div className="bg-black/30 p-4 rounded-xl border border-zinc-800 mb-6">
+             <div className="bg-surface-2 p-4 rounded-xl border border-app mb-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
                    <input 
                      placeholder="Name (e.g. Rent)" 
-                     className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-indigo-500"
+                     className={inputCls}
                      value={desc}
                      onChange={e => setDesc(e.target.value)}
                    />
                    <input 
                      type="number" 
                      placeholder="Amount (₹)" 
-                     className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-indigo-500"
+                     className={inputCls}
                      value={amount}
                      onChange={e => setAmount(e.target.value)}
                    />
                    <select 
-                     className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-indigo-500"
+                     className={inputCls}
                      value={cat}
                      onChange={e => setCat(e.target.value as Category)}
                    >
@@ -112,7 +115,7 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
                      <option value={Category.EDUCATION}>Education</option>
                    </select>
                 </div>
-                <button onClick={addItem} className="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 border border-zinc-700">
+                <button onClick={addItem} className="w-full bg-surface-3 hover:bg-surface-2 text-app py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 border border-app transition-all">
                   <Plus size={16} /> Add Expense
                 </button>
              </div>
@@ -122,37 +125,37 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
         {step === 2 && (
           <div className="animate-fade-in">
              <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg transform -rotate-3">
+                <div className="w-16 h-16 bg-gradient-to-br from-gold-soft to-gold rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-card-soft transform -rotate-3">
                    <Car size={28} className="text-white" />
                 </div>
-                <h2 className="text-2xl font-bold mb-2">Loans & EMIs</h2>
-                <p className="text-zinc-400">Add any scheduled loan repayments.</p>
+                <h2 className="heading-serif text-2xl font-bold mb-2">Loans & EMIs</h2>
+                <p className="text-soft">Add any scheduled loan repayments.</p>
              </div>
 
-             <div className="bg-black/30 p-4 rounded-xl border border-zinc-800 mb-6">
+             <div className="bg-surface-2 p-4 rounded-xl border border-app mb-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
                    <input 
                      placeholder="Name (e.g. Car Loan)" 
-                     className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-indigo-500"
+                     className={inputCls}
                      value={desc}
                      onChange={e => setDesc(e.target.value)}
                    />
                    <input 
                      type="number" 
                      placeholder="Amount (₹)" 
-                     className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-indigo-500"
+                     className={inputCls}
                      value={amount}
                      onChange={e => setAmount(e.target.value)}
                    />
                    <select 
-                     className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-indigo-500"
+                     className={inputCls}
                      value={cat}
                      onChange={e => setCat(e.target.value as Category)}
                    >
                      <option value={Category.EMI}>Loan / EMI</option>
                    </select>
                 </div>
-                <button onClick={addItem} className="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 border border-zinc-700">
+                <button onClick={addItem} className="w-full bg-surface-3 hover:bg-surface-2 text-app py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 border border-app transition-all">
                   <Plus size={16} /> Add EMI
                 </button>
              </div>
@@ -162,17 +165,17 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
         {/* List of Added Items */}
         {items.length > 0 && (
           <div className="mb-8 max-h-40 overflow-y-auto custom-scrollbar">
-            <h3 className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Added Items</h3>
+            <h3 className="text-xs font-bold text-faint uppercase tracking-wider mb-2">Added Items</h3>
             <div className="space-y-2">
               {items.map((item, idx) => (
-                <div key={idx} className="flex justify-between items-center bg-zinc-900/50 p-3 rounded-lg border border-zinc-800">
+                <div key={idx} className="flex justify-between items-center bg-surface-2 p-3 rounded-lg border border-app">
                   <div className="flex items-center gap-3">
                      <span className="text-sm font-medium">{item.description}</span>
-                     <span className="text-xs text-zinc-500 bg-zinc-800 px-2 py-0.5 rounded">{item.category}</span>
+                     <span className="text-xs text-faint bg-surface-3 px-2 py-0.5 rounded">{item.category}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-sm font-mono text-red-400">-₹{item.amount}</span>
-                    <button onClick={() => removeItem(idx)} className="text-zinc-600 hover:text-red-400"><Plus size={16} className="rotate-45" /></button>
+                    <span className="text-sm font-mono text-danger">-₹{item.amount}</span>
+                    <button onClick={() => removeItem(idx)} className="text-faint hover:text-danger"><Plus size={16} className="rotate-45" /></button>
                   </div>
                 </div>
               ))}
@@ -183,16 +186,16 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
         <button 
           onClick={handleNext}
           disabled={isLoading}
-          className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-700 text-white font-bold py-4 rounded-2xl transition-all shadow-[0_0_20px_rgba(79,70,229,0.4)] hover:shadow-[0_0_30px_rgba(79,70,229,0.6)] flex items-center justify-center gap-2 tracking-wide"
+          className="w-full bg-gradient-to-br from-brand-deep to-brand hover:brightness-110 disabled:opacity-60 text-white font-bold py-4 rounded-2xl transition-all shadow-card flex items-center justify-center gap-2 tracking-wide"
         >
           {isLoading ? 'Saving...' : step === 1 ? 'Next: Add EMIs' : 'Finish Setup'} {!isLoading && <ArrowRight size={20} />}
         </button>
         
         {step === 1 && (
-            <button onClick={() => setStep(2)} className="w-full text-center text-zinc-500 text-sm mt-4 hover:text-zinc-300">Skip to EMIs</button>
+            <button onClick={() => setStep(2)} className="w-full text-center text-faint text-sm mt-4 hover:text-app transition-colors">Skip to EMIs</button>
         )}
          {step === 2 && (
-            <button onClick={handleSkip} disabled={isLoading} className="w-full text-center text-zinc-500 text-sm mt-4 hover:text-zinc-300 disabled:text-zinc-600">Skip Setup</button>
+            <button onClick={handleSkip} disabled={isLoading} className="w-full text-center text-faint text-sm mt-4 hover:text-app transition-colors disabled:text-faint">Skip Setup</button>
         )}
 
       </div>

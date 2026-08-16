@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { parseSMSAPI } from '../services/apiService';
 import { Expense } from '../types';
 
@@ -42,35 +42,35 @@ const SmsImportModal: React.FC<SmsImportModalProps> = ({ isOpen, onClose, onImpo
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="w-full max-w-2xl bg-[#0b0b0d] rounded-2xl p-6 border border-white/5 shadow-2xl">
+      <div className="w-full max-w-2xl bg-[#0b0b0d] rounded-2xl p-6 border border-app shadow-2xl">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold">Import SMS Transactions</h3>
-          <button onClick={onClose} className="text-zinc-400 hover:text-white">Close</button>
+          <button onClick={onClose} className="text-soft hover:text-app">Close</button>
         </div>
 
-        <p className="text-sm text-zinc-400 mb-4">Paste the raw SMS content below (you can paste multiple messages separated by newlines). Optionally enter the sender/bank name to assist parsing.</p>
+        <p className="text-sm text-soft mb-4">Paste the raw SMS content below (you can paste multiple messages separated by newlines). Optionally enter the sender/bank name to assist parsing.</p>
 
         <div className="mb-3">
           <input
             placeholder="Sender (e.g., HDFCBNK)"
             value={sender}
             onChange={(e) => setSender(e.target.value)}
-            className="w-full bg-black/30 border border-zinc-800 rounded-lg px-3 py-2 text-white mb-2"
+            className="w-full bg-app-soft border border-app rounded-lg px-3 py-2 text-app mb-2"
           />
           <textarea
             placeholder="Paste SMS content here..."
             value={text}
             onChange={(e) => setText(e.target.value)}
             rows={8}
-            className="w-full bg-black/30 border border-zinc-800 rounded-lg px-3 py-2 text-white font-mono"
+            className="w-full bg-app-soft border border-app rounded-lg px-3 py-2 text-app font-mono"
           />
         </div>
 
         {error && <div className="text-red-400 text-sm mb-3">{error}</div>}
 
         <div className="flex items-center justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 rounded-lg bg-zinc-800 text-zinc-300">Cancel</button>
-          <button onClick={handleParse} disabled={isLoading} className="px-4 py-2 rounded-lg bg-indigo-600 text-white font-bold">
+          <button onClick={onClose} className="px-4 py-2 rounded-lg bg-surface-3 text-soft">Cancel</button>
+          <button onClick={handleParse} disabled={isLoading} className="px-4 py-2 rounded-lg bg-brand-deep text-white font-bold">
             {isLoading ? 'Parsing...' : 'Parse & Import'}
           </button>
         </div>

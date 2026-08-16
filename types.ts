@@ -52,7 +52,25 @@ export interface ChartDataPoint {
 }
 
 export type ViewMode = 'dashboard' | 'expenses' | 'advisor' | 'reports';
-export type AppScreen = 'landing' | 'signup' | 'setup' | 'login' | 'app';
+export type AppScreen = 'landing' | 'signup' | 'setup' | 'login' | 'onboarding' | 'app';
+
+export type FinancialGoal = 'save' | 'debt' | 'invest' | 'track';
+export type SpendingStyle = 'strict' | 'balanced' | 'free';
+export type ReminderFrequency = 'daily' | 'weekly' | 'off';
+
+export type WidgetKey = 'goal' | 'allowance' | 'runway' | 'streak';
+
+export interface UserPreferences {
+  primaryGoal: FinancialGoal;
+  goalName: string;
+  goalAmount: number;
+  goalDeadline: string; // 'YYYY-MM'
+  spendingStyle: SpendingStyle;
+  reminder: ReminderFrequency;
+  theme: 'dark' | 'light';
+  widgets: WidgetKey[]; // enabled, in display order
+  updatedAt: number;
+}
 
 export interface ChatMessage {
   id: string;

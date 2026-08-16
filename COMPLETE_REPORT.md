@@ -80,7 +80,7 @@ EXPENSETRACKER/
 │   ├── SetupWizard.tsx                 # Setup flow (saves to DB)
 │   ├── Advisor.tsx                     # AI advisor
 │   ├── AddExpenseModal.tsx             # Add transaction form
-│   └── SpaceBackground.tsx             # UI component
+│   └── MoneyScape.tsx                  # Animated landing background
 │
 ├── SETUP_GUIDE.md                      # Detailed setup instructions
 ├── IMPLEMENTATION_COMPLETE.md          # Feature list & API docs

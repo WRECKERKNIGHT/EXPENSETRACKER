@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { createExpenseAPI } from '../services/apiService';
 import { addToCache, initCache } from '../services/cacheService';
 import { Expense, Category } from '../types';
@@ -89,17 +89,17 @@ const QuickAddInline: React.FC<QuickAddInlineProps> = ({ onCreated, onClose }) =
   };
 
   return (
-    <div className={`md:hidden fixed bottom-20 right-4 z-50 w-[92%] max-w-sm border rounded-2xl p-4 shadow-2xl ${isOffline ? 'bg-orange-900/40 border-orange-500/30' : 'bg-[#0b0b0d]/90 border-white/10'}`}>
+    <div className={`md:hidden fixed bottom-20 right-4 z-50 w-[92%] max-w-sm border rounded-2xl p-4 shadow-2xl ${isOffline ? 'bg-orange-900/40 border-orange-500/30' : 'bg-[#0b0b0d]/90 border-app'}`}>
       <form onSubmit={handleSubmit} className="flex gap-2 items-center">
         <input
-          className="flex-1 bg-transparent border border-zinc-700 rounded-xl px-3 py-2 text-white placeholder:text-zinc-500"
+          className="flex-1 bg-transparent border border-app rounded-xl px-3 py-2 text-app placeholder:text-faint"
           placeholder="Amount (₹)"
           inputMode="decimal"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
 
-        <select value={category} onChange={(e) => setCategory(e.target.value as Category)} className="bg-transparent border border-zinc-700 text-xs rounded-xl px-2 py-2 text-white">
+        <select value={category} onChange={(e) => setCategory(e.target.value as Category)} className="bg-transparent border border-app text-xs rounded-xl px-2 py-2 text-app">
           {Object.values(Category).map((c) => (
             <option key={c} value={c} className="text-black">{c}</option>
           ))}
@@ -108,7 +108,7 @@ const QuickAddInline: React.FC<QuickAddInlineProps> = ({ onCreated, onClose }) =
         <button
           type="submit"
           disabled={isLoading}
-          className="bg-indigo-600 text-white px-3 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-700 disabled:opacity-50"
+          className="bg-brand-deep text-white px-3 py-2 rounded-xl text-sm font-semibold hover:brightness-110 disabled:opacity-50"
         >
           {isLoading ? '...' : isOffline ? '📱' : 'Add'}
         </button>
