@@ -14,6 +14,7 @@ import DailyAllowanceCard from './DailyAllowanceCard';
 import RunwayCard from './RunwayCard';
 import StreakCard from './StreakCard';
 import AlertStrip from './AlertStrip';
+import SpendingInsightsCard from './SpendingInsightsCard';
 
 interface OverviewProps {
   expenses: Expense[];
@@ -218,6 +219,9 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
 
       {/* Budget alerts */}
       <AlertStrip expenses={expenses} currency={currency} />
+
+      {/* Spending insights */}
+      <SpendingInsightsCard expenses={expenses} monthlyIncome={monthlyIncome} currency={currency} />
 
       {/* Personalized widgets */}
       {preferences && widgetOrder.length > 0 && (
