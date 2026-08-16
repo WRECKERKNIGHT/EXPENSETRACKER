@@ -4,6 +4,7 @@ import { Expense } from '../types';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, AreaChart, Area, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
 import { TrendingUp, TrendingDown, Wallet, Plus, PieChart as PieChartIcon, Activity, ListChecks, Link as LinkIcon, CheckCircle2, Loader2, Sparkles, UploadCloud, MessageSquare } from 'lucide-react';
 import QuickAdd from './QuickAdd';
+import QuickAddInline from './QuickAddInline';
 import { connectBankAPI, getBankConnectionsAPI, uploadBankCSVAPI } from '../services/apiService';
 import SmsImportModal from './SmsImportModal';
 
@@ -31,6 +32,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
   const [isBankConnecting, setIsBankConnecting] = useState(false);
   const [isBankConnected, setIsBankConnected] = useState(false);
   const [showSmsModal, setShowSmsModal] = useState(false);
+  const [showQuickInline, setShowQuickInline] = useState(false);
   const [isUploadingCsv, setIsUploadingCsv] = useState(false);
   const [csvMessage, setCsvMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const fileRef = useRef<HTMLInputElement | null>(null);
@@ -191,7 +193,18 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, onAddTx, o
         </div>
 
         {/* Mobile Quick Add floating button */}
-        <QuickAdd onQuickAdd={onAddTx} />
+        <QuickAdd onQuickAdd={() => setShowQuickInline(true)} />
+
+        {showQuickInline && (
+          <QuickAddInline
+            onCreated={(expense) => {
+              // Let parent know a new expense was added so it can refresh local state
+              onImportComplete && onImportComplete();
+              setShowQuickInline(false);
+            }}
+            onClose={() => setShowQuickInline(false)}
+          />
+        )}
 
         {/* Balance Card */}
         <div className="col-span-1 md:col-span-2 lg:col-span-2 relative overflow-hidden bg-[#121215]/60 backdrop-blur-xl p-6 rounded-[2rem] shadow-2xl border border-white/5 group card-glow-hover flex flex-col justify-between min-h-[160px]">
