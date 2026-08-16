@@ -21,11 +21,12 @@
               sans: ['Outfit', 'sans-serif'],
             },
             colors: {
-              background: '#09090b',
-              surface: '#18181b',
-              primary: '#6366f1', // Indigo 500
-              secondary: '#10b981',
-              accent: '#8b5cf6',
+              background: '#020617', // Slate 950 (Darker, more Navy)
+              surface: '#0f172a', // Slate 900
+              primary: '#10b981', // Emerald 500 (Brand Green)
+              primaryDark: '#059669', // Emerald 600
+              secondary: '#14b8a6', // Teal 500
+              accent: '#06b6d4', // Cyan 500
               danger: '#ef4444',
             },
             animation: {
@@ -34,6 +35,7 @@
               'fade-in': 'fadeIn 0.5s ease-out',
               'spin-slow': 'spin 12s linear infinite',
               'orbit': 'orbit 20s linear infinite',
+              'float': 'float 6s ease-in-out infinite',
             },
             keyframes: {
               fadeIn: {
@@ -43,6 +45,10 @@
               orbit: {
                 '0%': { transform: 'rotate(0deg)' },
                 '100%': { transform: 'rotate(360deg)' },
+              },
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-20px)' },
               }
             }
           }
@@ -56,19 +62,19 @@
         height: 6px;
       }
       ::-webkit-scrollbar-track {
-        background: #09090b; 
+        background: #020617; 
       }
       ::-webkit-scrollbar-thumb {
-        background: #27272a; 
+        background: #1e293b; 
         border-radius: 3px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #3f3f46; 
+        background: #334155; 
       }
 
       /* Glowing Text Utilities */
       .text-glow {
-        text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+        text-shadow: 0 0 20px rgba(16, 185, 129, 0.5); /* Emerald Glow */
       }
       .text-glow-sm {
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
@@ -79,13 +85,16 @@
       .text-glow-danger {
         text-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
       }
+      .text-glow-accent {
+         text-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+      }
 
       /* Card Glow Utilities */
       .card-glow {
-        box-shadow: 0 0 40px -10px rgba(99, 102, 241, 0.15);
+        box-shadow: 0 0 40px -10px rgba(16, 185, 129, 0.15);
       }
       .card-glow-hover:hover {
-        box-shadow: 0 0 30px -5px rgba(99, 102, 241, 0.3);
+        box-shadow: 0 0 30px -5px rgba(16, 185, 129, 0.25);
       }
     </style>
   <script type="importmap">
@@ -96,7 +105,9 @@
     "react": "https://aistudiocdn.com/react@^19.2.0",
     "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "recharts": "https://aistudiocdn.com/recharts@^3.5.0"
+    "recharts": "https://aistudiocdn.com/recharts@^3.5.0",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1",
+    "vite": "https://aistudiocdn.com/vite@^7.2.4"
   }
 }
 </script>

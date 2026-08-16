@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Category, Expense } from '../types';
 import { Check, ArrowRight, Home, Zap, Car, PlayCircle, Plus } from 'lucide-react';
@@ -39,18 +38,18 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-white flex items-center justify-center p-6 font-sans relative">
+    <div className="min-h-screen bg-[#020617] text-white flex items-center justify-center p-6 font-sans relative">
       {/* Background Ambience */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-           <div className="absolute bottom-0 right-0 w-[50%] h-[50%] bg-indigo-900/10 rounded-full blur-[120px]"></div>
+           <div className="absolute bottom-0 right-0 w-[50%] h-[50%] bg-emerald-900/10 rounded-full blur-[120px]"></div>
       </div>
 
-      <div className="relative z-10 w-full max-w-2xl bg-[#121215]/80 backdrop-blur-xl border border-white/10 p-8 rounded-[2rem] shadow-2xl card-glow animate-fade-in">
+      <div className="relative z-10 w-full max-w-2xl bg-[#0f172a]/80 backdrop-blur-xl border border-white/10 p-8 rounded-[2rem] shadow-2xl card-glow animate-fade-in">
         
         {/* Progress */}
         <div className="flex items-center gap-2 mb-8">
-            <div className={`h-2 flex-1 rounded-full ${step >= 1 ? 'bg-indigo-500' : 'bg-zinc-800'}`}></div>
-            <div className={`h-2 flex-1 rounded-full ${step >= 2 ? 'bg-indigo-500' : 'bg-zinc-800'}`}></div>
+            <div className={`h-2 flex-1 rounded-full ${step >= 1 ? 'bg-emerald-500' : 'bg-zinc-800'}`}></div>
+            <div className={`h-2 flex-1 rounded-full ${step >= 2 ? 'bg-emerald-500' : 'bg-zinc-800'}`}></div>
         </div>
 
         {step === 1 && (
@@ -67,19 +66,19 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
                    <input 
                      placeholder="Name (e.g. Rent)" 
-                     className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-indigo-500"
+                     className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-emerald-500"
                      value={desc}
                      onChange={e => setDesc(e.target.value)}
                    />
                    <input 
                      type="number" 
                      placeholder="Amount (₹)" 
-                     className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-indigo-500"
+                     className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-emerald-500"
                      value={amount}
                      onChange={e => setAmount(e.target.value)}
                    />
                    <select 
-                     className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-indigo-500"
+                     className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-emerald-500"
                      value={cat}
                      onChange={e => setCat(e.target.value as Category)}
                    >
@@ -110,19 +109,19 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
                    <input 
                      placeholder="Name (e.g. Car Loan)" 
-                     className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-indigo-500"
+                     className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-emerald-500"
                      value={desc}
                      onChange={e => setDesc(e.target.value)}
                    />
                    <input 
                      type="number" 
                      placeholder="Amount (₹)" 
-                     className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-indigo-500"
+                     className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-emerald-500"
                      value={amount}
                      onChange={e => setAmount(e.target.value)}
                    />
                    <select 
-                     className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-indigo-500"
+                     className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-emerald-500"
                      value={cat}
                      onChange={e => setCat(e.target.value as Category)}
                    >
@@ -159,7 +158,7 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
 
         <button 
           onClick={handleNext}
-          className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl transition-all shadow-[0_0_20px_rgba(79,70,229,0.4)] hover:shadow-[0_0_30px_rgba(79,70,229,0.6)] flex items-center justify-center gap-2 tracking-wide"
+          className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-2xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] flex items-center justify-center gap-2 tracking-wide"
         >
           {step === 1 ? 'Next: Add EMIs' : 'Finish Setup'} <ArrowRight size={20} />
         </button>

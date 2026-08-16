@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Expense, Category } from '../types';
 import { 
@@ -6,7 +5,7 @@ import {
   Utensils, ShoppingBasket, Bus, Fuel, Home, Zap, 
   Landmark, Film, Stethoscope, ShoppingBag, Plane, 
   GraduationCap, TrendingUp, Banknote, Briefcase, MoreHorizontal,
-  Calendar, Tag
+  Calendar, Gift, Shield, FileText, Smile, Repeat, PawPrint, Wrench
 } from 'lucide-react';
 
 interface ExpenseListProps {
@@ -25,6 +24,13 @@ const getCategoryIcon = (category: Category) => {
     case Category.EMI: return <Landmark size={18} />;
     case Category.ENTERTAINMENT: return <Film size={18} />;
     case Category.HEALTH: return <Stethoscope size={18} />;
+    case Category.PERSONAL_CARE: return <Smile size={18} />;
+    case Category.INSURANCE: return <Shield size={18} />;
+    case Category.TAX: return <FileText size={18} />;
+    case Category.SUBSCRIPTIONS: return <Repeat size={18} />;
+    case Category.GIFTS: return <Gift size={18} />;
+    case Category.PETS: return <PawPrint size={18} />;
+    case Category.MAINTENANCE: return <Wrench size={18} />;
     case Category.SHOPPING: return <ShoppingBag size={18} />;
     case Category.TRAVEL: return <Plane size={18} />;
     case Category.EDUCATION: return <GraduationCap size={18} />;
@@ -57,8 +63,8 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete }) => {
   return (
     <div className="space-y-6 animate-fade-in font-sans pb-20">
       {/* Header & Search */}
-      <div className="bg-[#121215]/80 backdrop-blur-md border border-zinc-800 rounded-[2rem] p-6 shadow-xl flex flex-col md:flex-row justify-between items-center gap-6 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-50"></div>
+      <div className="bg-[#0f172a]/80 backdrop-blur-md border border-zinc-800 rounded-[2rem] p-6 shadow-xl flex flex-col md:flex-row justify-between items-center gap-6 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 opacity-50"></div>
         
         <div>
            <h3 className="text-2xl font-bold text-white tracking-tight text-glow-sm">Transactions</h3>
@@ -67,20 +73,20 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete }) => {
 
         <div className="relative w-full md:w-96 group">
           <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-            <Search className="text-zinc-500 group-focus-within:text-indigo-400 transition-colors" size={20} />
+            <Search className="text-zinc-500 group-focus-within:text-emerald-400 transition-colors" size={20} />
           </div>
           <input 
             type="text" 
             placeholder="Search transactions..."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="w-full bg-black/40 border border-zinc-700/50 rounded-2xl pl-12 pr-4 py-4 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all shadow-inner text-sm font-medium"
+            className="w-full bg-black/40 border border-zinc-700/50 rounded-2xl pl-12 pr-4 py-4 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all shadow-inner text-sm font-medium"
           />
         </div>
       </div>
       
       {/* Content */}
-      <div className="bg-[#121215]/60 backdrop-blur-md border border-zinc-800 rounded-[2.5rem] overflow-hidden shadow-2xl min-h-[400px]">
+      <div className="bg-[#0f172a]/60 backdrop-blur-md border border-zinc-800 rounded-[2.5rem] overflow-hidden shadow-2xl min-h-[400px]">
         {filteredExpenses.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-96 gap-6 text-zinc-500">
             <div className="p-6 bg-zinc-800/30 rounded-full border border-zinc-700/30 shadow-inner">
