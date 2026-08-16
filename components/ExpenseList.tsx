@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { Expense, Category } from '../types';
 import { 
-  Trash2, Search, ArrowUpRight, ArrowDownRight, Edit3,
+  Trash2, Search, ArrowUpRight, ArrowDownRight, Edit3, CalendarDays,
   Utensils, ShoppingBasket, Bus, Fuel, Home, Zap, 
   Landmark, Film, Stethoscope, ShoppingBag, Plane, 
   GraduationCap, TrendingUp, Banknote, Briefcase, MoreHorizontal,
@@ -45,12 +45,19 @@ const getCategoryIcon = (category: Category) => {
 
 const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit }) => {
   const [filter, setFilter] = React.useState('');
+  const [dateFrom, setDateFrom] = React.useState('');
+  const [dateTo, setDateTo] = React.useState('');
 
   const filteredExpenses = expenses
     .filter(e => 
       e.description.toLowerCase().includes(filter.toLowerCase()) || 
       e.category.toLowerCase().includes(filter.toLowerCase())
     )
+    .filter(e => {
+      if (dateFrom && e.date < dateFrom) return false;
+      if (dateTo && e.date > dateTo) return false;
+      return true;
+    })
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   const formatCurrency = (amount: number) => {
@@ -83,6 +90,33 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
             onChange={(e) => setFilter(e.target.value)}
             className="w-full bg-app-soft border border-app rounded-2xl pl-12 pr-4 py-4 text-app focus:outline-none focus:ring-2 focus:ring-brand/40 transition-all shadow-inner text-sm font-medium"
           />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <CalendarDays size={14} className="text-faint shrink-0" />
+          <input
+            type="date"
+            value={dateFrom}
+            onChange={(e) => setDateFrom(e.target.value)}
+            className="bg-app-soft border border-app rounded-xl px-3 py-2 text-xs text-app focus:outline-none focus:ring-2 focus:ring-brand/40 font-mono"
+            placeholder="From"
+          />
+          <span className="text-faint text-xs">—</span>
+          <input
+            type="date"
+            value={dateTo}
+            onChange={(e) => setDateTo(e.target.value)}
+            className="bg-app-soft border border-app rounded-xl px-3 py-2 text-xs text-app focus:outline-none focus:ring-2 focus:ring-brand/40 font-mono"
+            placeholder="To"
+          />
+          {(dateFrom || dateTo) && (
+            <button
+              onClick={() => { setDateFrom(''); setDateTo(''); }}
+              className="text-xs font-bold text-faint hover:text-danger transition-colors px-2 py-1"
+            >
+              Clear
+            </button>
+          )}
         </div>
       </div>
       
