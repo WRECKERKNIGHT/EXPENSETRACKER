@@ -1,0 +1,19 @@
+{
+  "name": "SpendSmart AI - Expense Tracker",
+  "short_name": "SpendSmart",
+  "description": "Smart expense tracking with AI-powered insights, budget management, and financial planning",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b1d14",
+  "theme_color": "#0b1d14",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "productivity"]
+}
