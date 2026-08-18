@@ -76,11 +76,6 @@
       }
     </script>
     <style>
-      /* ============================================================
-         SPENDSMART — "MONEY THEME" DESIGN SYSTEM
-         Deep forest greens + aged gold + warm cream. No neon.
-         ============================================================ */
-
       :root, html[data-theme="dark"] {
         --bg: #071510;
         --bg-soft: #0c2118;
@@ -166,20 +161,11 @@
       }
 
       * { scroll-behavior: auto; }
-
       ::-webkit-scrollbar { width: 6px; }
       ::-webkit-scrollbar-track { background: var(--bg); }
       ::-webkit-scrollbar-thumb { background: var(--gold-soft); border-radius: 4px; }
-      ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+      body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; transition: background-color 0.5s ease, color 0.5s ease; overflow-x: hidden; }
 
-      body {
-        background: var(--bg);
-        color: var(--text);
-        font-family: 'Outfit', sans-serif;
-        transition: background-color 0.4s ease, color 0.4s ease;
-      }
-
-      /* ---------- Semantic theme utilities ---------- */
       .bg-app      { background: var(--bg); }
       .bg-app-soft { background: var(--bg-soft); }
       .bg-surface  { background: var(--surface); }
@@ -214,10 +200,37 @@
         border-color: var(--gold-soft);
       }
 
-      /* ---------- Typography helpers ---------- */
       .font-display { font-family: 'Playfair Display', serif; }
       .heading-serif { font-family: 'Playfair Display', serif; font-weight: 700; letter-spacing: -0.02em; }
 
+      /* Scroll reveal */
+      .reveal {
+        opacity: 0;
+        transform: translateY(50px);
+        transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+        will-change: opacity, transform;
+      }
+      .reveal-left { transform: translateX(-70px); }
+      .reveal-right { transform: translateX(70px); }
+      .reveal-scale { transform: scale(0.88); }
+      .reveal.in { opacity: 1; transform: translate(0, 0) scale(1); }
+      .reveal-d1 { transition-delay: 0.1s; }
+      .reveal-d2 { transition-delay: 0.2s; }
+      .reveal-d3 { transition-delay: 0.3s; }
+      .reveal-d4 { transition-delay: 0.4s; }
+
+      /* 3D helpers */
+      .preserve-3d { transform-style: preserve-3d; }
+      .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+
+      /* Ticker */
+      .ticker-strip {
+        background: var(--tick-bg);
+        border-top: 1px solid var(--border-soft);
+        border-bottom: 1px solid var(--border-soft);
+      }
+
+      /* Grain texture overlay */
       .grain-overlay::before {
         content: '';
         position: fixed;
@@ -254,43 +267,6 @@
         to { opacity: 1; transform: translateY(0) scale(1); }
       }
 
-      /* Scroll reveal */
-      .reveal {
-        opacity: 0;
-        transform: translateY(50px);
-        transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
-        will-change: opacity, transform;
-      }
-      .reveal-left { transform: translateX(-70px); }
-      .reveal-right { transform: translateX(70px); }
-      .reveal-scale { transform: scale(0.88); }
-      .reveal.in { opacity: 1; transform: translate(0, 0) scale(1); }
-      .reveal-d1 { transition-delay: 0.1s; }
-      .reveal-d2 { transition-delay: 0.2s; }
-      .reveal-d3 { transition-delay: 0.3s; }
-      .reveal-d4 { transition-delay: 0.4s; }
-
-      /* 3D helpers */
-      .preserve-3d { transform-style: preserve-3d; }
-      .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-
-      /* Old glow classes kept but toned to gold */
-      .text-glow { text-shadow: 0 0 22px rgba(212, 175, 55, 0.25); }
-      .text-glow-sm { text-shadow: 0 1px 2px rgba(0,0,0,0.06); }
-      .text-glow-success { text-shadow: 0 0 18px rgba(46, 204, 113, 0.2); }
-      .text-glow-danger { text-shadow: 0 0 18px rgba(231, 76, 60, 0.2); }
-      .text-glow-accent { text-shadow: 0 0 18px rgba(212, 175, 55, 0.3); }
-      .card-glow { box-shadow: var(--shadow); }
-      .card-glow-hover:hover { box-shadow: var(--shadow); border-color: var(--gold-soft); }
-
-      /* Ticker */
-      .ticker-strip {
-        background: var(--tick-bg);
-        border-top: 1px solid var(--border-soft);
-        border-bottom: 1px solid var(--border-soft);
-      }
-
-      /* Hide scrollbar for pill rows */
       .no-scrollbar::-webkit-scrollbar { display: none; }
       .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
