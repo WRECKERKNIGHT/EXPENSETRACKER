@@ -5,7 +5,7 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="description" content="SpendSmart AI - Smart expense tracking with AI-powered insights, budget management, and financial planning" />
-    <meta name="theme-color" content="#0b1d14" />
+    <meta name="theme-color" content="#071510" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="SpendSmart" />
@@ -181,11 +181,11 @@
         color-scheme: light;
       }
 
-      * { scroll-behavior: smooth; }
+      * { scroll-behavior: auto; }
 
-      ::-webkit-scrollbar { width: 9px; height: 9px; }
+      ::-webkit-scrollbar { width: 6px; }
       ::-webkit-scrollbar-track { background: var(--bg); }
-      ::-webkit-scrollbar-thumb { background: var(--gold-soft); border-radius: 5px; border: 2px solid var(--bg); }
+      ::-webkit-scrollbar-thumb { background: var(--gold-soft); border-radius: 4px; }
       ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
       body {
@@ -220,12 +220,12 @@
       .card-2d {
         background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: 1.4rem;
+        border-radius: 1rem;
         box-shadow: var(--shadow-soft);
-        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+        transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease, border-color 0.4s ease;
       }
       .card-2d:hover {
-        transform: translateY(-5px);
+        transform: translateY(-6px);
         box-shadow: var(--shadow);
         border-color: var(--gold-soft);
       }
@@ -330,7 +330,7 @@
 }
 </script>
 </head>
-  <body class="bg-app text-app font-sans antialiased min-h-screen overflow-x-hidden">
+  <body class="bg-app text-app font-sans antialiased min-h-screen overflow-x-hidden grain-overlay">
     <div id="root"></div>
     <script type="module" src="./index.tsx"></script>
   </body>
