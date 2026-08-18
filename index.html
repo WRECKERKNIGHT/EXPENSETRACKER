@@ -270,32 +270,27 @@
         to { opacity: 1; transform: translateY(0) scale(1); }
       }
 
-      /* ---------- Scroll reveal ---------- */
+      /* Scroll reveal */
       .reveal {
         opacity: 0;
-        transform: translateY(46px);
-        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        transform: translateY(50px);
+        transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
         will-change: opacity, transform;
       }
-      .reveal-left { transform: translateX(-60px); }
-      .reveal-right { transform: translateX(60px); }
-      .reveal-scale { transform: scale(0.9); }
-      .reveal.in {
-        opacity: 1;
-        transform: translate(0, 0) scale(1);
-      }
-      .reveal-d1 { transition-delay: 0.08s; }
-      .reveal-d2 { transition-delay: 0.16s; }
-      .reveal-d3 { transition-delay: 0.24s; }
-      .reveal-d4 { transition-delay: 0.32s; }
+      .reveal-left { transform: translateX(-70px); }
+      .reveal-right { transform: translateX(70px); }
+      .reveal-scale { transform: scale(0.88); }
+      .reveal.in { opacity: 1; transform: translate(0, 0) scale(1); }
+      .reveal-d1 { transition-delay: 0.1s; }
+      .reveal-d2 { transition-delay: 0.2s; }
+      .reveal-d3 { transition-delay: 0.3s; }
+      .reveal-d4 { transition-delay: 0.4s; }
 
-      /* ---------- 3D helpers for dollar & coin ---------- */
+      /* 3D helpers */
       .preserve-3d { transform-style: preserve-3d; }
       .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-      .perspective-1200 { perspective: 1200px; }
-      .perspective-2000 { perspective: 2000px; }
 
-      /* ---------- Old glow classes kept but toned to gold ---------- */
+      /* Old glow classes kept but toned to gold */
       .text-glow { text-shadow: 0 0 22px rgba(212, 175, 55, 0.25); }
       .text-glow-sm { text-shadow: 0 1px 2px rgba(0,0,0,0.06); }
       .text-glow-success { text-shadow: 0 0 18px rgba(46, 204, 113, 0.2); }
@@ -304,7 +299,7 @@
       .card-glow { box-shadow: var(--shadow); }
       .card-glow-hover:hover { box-shadow: var(--shadow); border-color: var(--gold-soft); }
 
-      /* ---------- Number ticker strip ---------- */
+      /* Ticker */
       .ticker-strip {
         background: var(--tick-bg);
         border-top: 1px solid var(--border-soft);
