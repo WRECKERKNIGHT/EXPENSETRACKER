@@ -37,7 +37,7 @@ const STEPS = [
 const STATS = [
   { value: 24, suffix: '+', label: 'Smart categories' },
   { value: 98, suffix: '%', label: 'Parsing accuracy' },
-  { value: 42, suffix: 'k+', label: 'Tracked by users' },
+  { value: 500, suffix: '+', label: 'Transactions tracked' },
   { value: 3, suffix: ' min', label: 'To full setup' },
 ];
 
