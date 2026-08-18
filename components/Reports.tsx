@@ -113,43 +113,31 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
   const net = totalIncome - totalExpense;
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      <div className="card-3d gold-shimmer p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 relative overflow-hidden">
-        <div className="absolute bottom-0 right-0 w-56 h-56 opacity-[0.05] pointer-events-none" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&q=80)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
-        <div className="flex items-center gap-4 relative z-10">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-gold-soft to-gold shadow-gold-glow">
-            <BarChart2 className="w-7 h-7 text-white" />
+    <div className="space-y-6 animate-fade-in">
+      <div className="card-3d gold-line-top p-5 md:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 relative overflow-hidden">
+        <div className="flex items-center gap-3 relative z-10">
+          <div className="p-2.5 rounded-xl bg-gold/10 text-gold border border-gold/20">
+            <BarChart2 size={20} />
           </div>
           <div>
-            <h2 className="heading-serif text-2xl md:text-3xl font-bold text-app tracking-tight">Spending Reports</h2>
-            <p className="text-sm text-soft uppercase tracking-[0.2em] mt-1 flex items-center gap-1">
-              <CalendarRange className="w-4 h-4" /> {range === 'day' && 'Today'}
-              {range === 'week' && 'This Week'}
-              {range === 'month' && 'This Month'}
+            <h2 className="heading-serif text-xl md:text-2xl font-bold">Spending Reports</h2>
+            <p className="text-xs text-faint uppercase tracking-wider mt-0.5 flex items-center gap-1">
+              <CalendarRange size={12} /> {range === 'day' ? 'Today' : range === 'week' ? 'This Week' : 'This Month'}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <div className="inline-flex bg-surface-2 rounded-full p-1 border border-app">
+          <div className="inline-flex bg-surface-2 rounded-lg p-0.5 border border-app">
             {(['day', 'week', 'month'] as Range[]).map(r => (
-              <button
-                key={r}
-                onClick={() => setRange(r)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
-                  range === r
-                    ? 'bg-gold text-white shadow-gold-glow'
-                    : 'text-soft hover:text-app'
-                }`}
-              >
+              <button key={r} onClick={() => setRange(r)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${range === r ? 'bg-gold text-[#0a0f0a]' : 'text-soft hover:text-app'}`}>
                 {r === 'day' ? 'Day' : r === 'week' ? 'Week' : 'Month'}
               </button>
             ))}
           </div>
-          <button
-            onClick={handleDownloadCsv}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-surface-2 text-app text-sm font-semibold shadow-card-soft hover:bg-surface-3 hover:border-gold-soft border border-app transition-all"
-          >
-            <Download className="w-4 h-4" /> Export CSV
+          <button onClick={handleDownloadCsv}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-2 text-app text-xs font-bold border border-app hover:border-gold/40 transition-all">
+            <Download size={14} /> Export
           </button>
         </div>
       </div>

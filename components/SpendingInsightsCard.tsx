@@ -99,17 +99,15 @@ const SpendingInsightsCard: React.FC<SpendingInsightsCardProps> = ({ expenses, m
   ];
 
   return (
-    <div className="card-3d gold-shimmer p-6 md:p-8">
+    <div className="card-3d gold-line-top p-5 md:p-6">
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-gold/15 rounded-xl text-gold border border-gold/30 shadow-gold-glow">
-            <Lightbulb size={20} />
+          <div className="p-2 bg-gold/10 rounded-lg text-gold border border-gold/20">
+            <Lightbulb size={18} />
           </div>
-          <h3 className="heading-serif text-lg font-bold text-app tracking-wide">Spending Insights</h3>
+          <h3 className="heading-serif text-lg font-bold">Spending Insights</h3>
         </div>
-        <span className="text-xs text-faint font-semibold uppercase tracking-wider">
-          {insights.transactionCount} txns this month
-        </span>
+        <span className="text-xs text-faint font-bold uppercase tracking-wider">{insights.transactionCount} txns</span>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {items.map((item) => (
