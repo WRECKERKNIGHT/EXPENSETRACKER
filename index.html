@@ -30,8 +30,8 @@
         theme: {
           extend: {
             fontFamily: {
-              sans: ['Outfit', 'sans-serif'],
-              display: ['Fraunces', 'serif'],
+              sans: ['Inter', 'sans-serif'],
+              display: ['Playfair Display', 'serif'],
             },
             colors: {
               app: 'rgb(var(--rgb-bg) / <alpha-value>)',
@@ -51,24 +51,24 @@
               success: 'rgb(var(--rgb-success) / <alpha-value>)',
             },
             animation: {
-              'fade-in': 'fadeIn 0.5s ease-out',
+              'fade-in': 'fadeIn 0.6s cubic-bezier(0.16,1,0.3,1)',
               'bounce-slow': 'bounce 3s infinite',
               'float': 'float 6s ease-in-out infinite',
               'float-slow': 'float 9s ease-in-out infinite',
               'spin-slow': 'spin 14s linear infinite',
               'coin-spin': 'coinSpin 6s ease-in-out infinite',
               'bill-shimmer': 'billShimmer 3.5s linear infinite',
-              'ticker': 'ticker 28s linear infinite',
+              'ticker': 'ticker 32s linear infinite',
               'marquee-up': 'marqueeUp 22s linear infinite',
             },
             keyframes: {
               fadeIn: {
-                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
               },
               float: {
                 '0%, 100%': { transform: 'translateY(0) rotate(var(--rot,0deg))' },
-                '50%': { transform: 'translateY(-18px) rotate(var(--rot,0deg))' },
+                '50%': { transform: 'translateY(-20px)' },
               },
               coinSpin: {
                 '0%, 100%': { transform: 'rotateY(0deg)' },
