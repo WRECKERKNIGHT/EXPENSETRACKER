@@ -2,7 +2,7 @@
 import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import { Expense, UserPreferences, WidgetKey } from '../types';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, AreaChart, Area, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
-import { TrendingUp, TrendingDown, Wallet, Plus, PieChart as PieChartIcon, Activity, ListChecks, Link as LinkIcon, CheckCircle2, Loader2, Sparkles, UploadCloud, MessageSquare, SlidersHorizontal, X, Gauge, DollarSign } from 'lucide-react';
+import { TrendingUp, TrendingDown, Wallet, Plus, PieChart as PieChartIcon, Activity, ListChecks, Link as LinkIcon, CheckCircle2, Loader2, Sparkles, UploadCloud, MessageSquare, SlidersHorizontal, X, Gauge, DollarSign, Landmark, Shield, Zap, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import QuickAdd from './QuickAdd';
 import QuickAddInline from './QuickAddInline';
 import { connectBankAPI, getBankConnectionsAPI, uploadBankCSVAPI } from '../services/apiService';
@@ -34,8 +34,8 @@ interface OverviewProps {
   onDismissCustomize?: () => void;
 }
 
-const COLORS_CATEGORY = ['#3fae6e', '#d4af37', '#3f7d9e', '#b3492f', '#6f8f5e', '#8a6f4d', '#2f8f9e', '#7a5ea8', '#64748b'];
-const COLORS_HEALTH = ['#3fae6e', '#e07a5f'];
+const COLORS_CATEGORY = ['#d4af37', '#c5a028', '#3fae6e', '#b3492f', '#6f8f5e', '#8a6f4d', '#2f8f9e', '#7a5ea8', '#64748b'];
+const COLORS_HEALTH = ['#d4af37', '#3fae6e'];
 
 const formatCurrency = (amount: number, currency: string) => {
   return new Intl.NumberFormat(undefined, {
@@ -44,6 +44,29 @@ const formatCurrency = (amount: number, currency: string) => {
     maximumFractionDigits: 0,
   }).format(amount);
 };
+
+/* ─── Floating Dollar Background ─── */
+const FloatingDollars: React.FC = () => (
+  <div className="floating-dollars">
+    <span>$</span><span>$</span><span>$</span><span>$</span><span>$</span>
+  </div>
+);
+
+/* ─── Gold Coin SVG for hero ─── */
+const GoldCoin: React.FC<{ size?: number; className?: string }> = ({ size = 80, className = '' }) => (
+  <div className={`preserve-3d ${className}`} style={{ width: size, height: size }}>
+    <div className="w-full h-full rounded-full" style={{
+      background: 'radial-gradient(circle at 35% 30%, #f3e29a, #d4af37 40%, #b8960b 65%, #8a6510 100%)',
+      boxShadow: '0 8px 32px rgba(212,175,55,0.5), inset 0 2px 6px rgba(255,255,255,0.5), inset 0 -4px 8px rgba(0,0,0,0.3), 0 0 0 3px rgba(212,175,55,0.3)',
+    }}>
+      <div className="w-full h-full rounded-full flex items-center justify-center border-2 border-[#8a6510]/40" style={{
+        background: 'linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 40%, rgba(0,0,0,0.1) 100%)',
+      }}>
+        <span className="font-display font-black text-[#5d4306]" style={{ fontSize: size * 0.4 }}>$</span>
+      </div>
+    </div>
+  </div>
+);
 
 const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, onAddTx, onManageExpenses, userName, onImportComplete, preferences, showCustomizePrompt, onCustomize, onDismissCustomize }) => {
   const [isBankConnecting, setIsBankConnecting] = useState(false);
@@ -61,13 +84,13 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
     const cards = containerRef.current.querySelectorAll('.scroll-reveal');
     cards.forEach((card, i) => {
       window.gsap.fromTo(card,
-        { opacity: 0, y: 50, scale: 0.97 },
+        { opacity: 0, y: 60, scale: 0.95, rotateX: 4 },
         {
-          opacity: 1, y: 0, scale: 1,
-          duration: 0.8,
-          delay: i * 0.05,
+          opacity: 1, y: 0, scale: 1, rotateX: 0,
+          duration: 1,
+          delay: i * 0.08,
           ease: 'power3.out',
-          scrollTrigger: { trigger: card, start: 'top 92%', toggleActions: 'play none none none' }
+          scrollTrigger: { trigger: card, start: 'top 90%', toggleActions: 'play none none none' }
         }
       );
     });
@@ -220,73 +243,114 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
   }, [expenses]);
 
   return (
-    <div ref={containerRef} className="space-y-8 animate-fade-in font-sans">
+    <div ref={containerRef} className="space-y-8 animate-fade-in font-sans relative">
       
-      {/* Mobile Welcome Header */}
-      <div className="md:hidden mb-6 card-3d gold-shimmer p-6 relative overflow-hidden">
-         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&q=80)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
-         <div className="relative z-10">
-            <h2 className="heading-serif text-3xl font-bold mb-1">Hi, {userName || 'User'}</h2>
-            <p className="text-gold text-base font-semibold">Your finances are looking sharp today.</p>
-         </div>
-         <div className="absolute top-0 right-0 w-40 h-40 bg-gold/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
-         <div className="absolute -bottom-4 -right-4 text-gold/5 pointer-events-none select-none">
-           <DollarSign size={100} strokeWidth={1} />
-         </div>
+      {/* ━━━ FLOATING DOLLAR BACKGROUND ━━━ */}
+      <FloatingDollars />
+
+      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          VAULT HERO BANNER
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <div className="vault-hero gold-shimmer p-8 md:p-10 scroll-reveal">
+        <img src="https://images.unsplash.com/photo-1610375461246-83df859d849d?w=1200&q=80" alt="" className="absolute inset-0 w-full h-full object-cover opacity-[0.07] mix-blend-luminosity" loading="lazy" />
+        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-6">
+          <div className="gold-ring-pulse rounded-full p-1">
+            <GoldCoin size={72} />
+          </div>
+          <div className="flex-1">
+            <p className="text-gold text-xs font-bold uppercase tracking-[0.3em] mb-2">Vault Overview</p>
+            <h1 className="heading-serif text-3xl md:text-5xl font-black text-app leading-tight mb-2 text-glow-gold">
+              Welcome back, <span className="text-gold">{userName || 'Investor'}</span>
+            </h1>
+            <p className="text-soft text-base md:text-lg">Your portfolio is performing. Here's your financial command center.</p>
+          </div>
+          <div className="flex flex-col items-end gap-1">
+            <p className="text-xs text-faint uppercase tracking-widest font-bold">Net Worth</p>
+            <p className={`heading-serif text-4xl md:text-5xl font-black ${calculations.balance >= 0 ? 'text-gold text-glow-gold' : 'text-danger text-glow-danger'}`}>
+              {formatCurrency(calculations.balance, currency)}
+            </p>
+          </div>
+        </div>
+        <div className="absolute top-0 right-0 w-80 h-80 bg-gold/[0.06] rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-60 h-60 bg-brand/[0.04] rounded-full blur-[60px] -ml-10 -mb-10 pointer-events-none" />
       </div>
 
-      {/* One-time customize prompt for returning users */}
+      {/* ━━━ QUICK ACTIONS BAR ━━━ */}
+      <div className="flex flex-col sm:flex-row gap-4 scroll-reveal">
+        <button onClick={onAddTx} className="flex-1 btn-premium flex items-center justify-center gap-3 text-base py-5 rounded-2xl">
+          <div className="bg-black/20 p-2 rounded-xl"><Plus size={20} strokeWidth={3} /></div>
+          <span>Quick Add Transaction</span>
+        </button>
+        <button onClick={onManageExpenses} className="flex-1 card-3d flex items-center justify-center gap-3 text-base py-5 rounded-2xl font-bold text-app hover:text-gold cursor-pointer transition-all">
+          <div className="p-2 bg-gold/15 rounded-xl text-gold border border-gold/30"><ListChecks size={20} /></div>
+          <span>Manage Expenses</span>
+        </button>
+      </div>
+
+      {/* ━━━ IMPORT BAR ━━━ */}
+      <div className="card-3d p-4 flex flex-wrap items-center gap-3 scroll-reveal metallic-sheen">
+        <Landmark size={18} className="text-gold" />
+        <span className="text-sm font-bold text-faint uppercase tracking-wider">Data Import</span>
+        <div className="flex-1" />
+        <button onClick={handleConnectBank} disabled={isBankConnecting || isBankConnected}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all border-2 ${
+            isBankConnected ? 'bg-gold/15 text-gold border-gold/40 gold-ring-pulse' : 'bg-surface-2 text-soft border-gold/20 hover:border-gold/50 hover:bg-gold/5'
+          }`}>
+          {isBankConnecting ? <Loader2 size={13} className="animate-spin" /> : isBankConnected ? <CheckCircle2 size={13} /> : <LinkIcon size={13} />}
+          {isBankConnecting ? 'Syncing...' : isBankConnected ? 'Bank Connected' : 'Connect Bank'}
+        </button>
+        <button onClick={() => setShowSmsModal(true)} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-surface-2 text-soft border-2 border-gold/20 hover:border-gold/50 hover:bg-gold/5 transition-all">
+          <MessageSquare size={13} /> Import SMS
+        </button>
+        <button onClick={handleFilePick} disabled={isUploadingCsv} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-surface-2 text-soft border-2 border-gold/20 hover:border-gold/50 hover:bg-gold/5 transition-all disabled:opacity-50">
+          {isUploadingCsv ? <Loader2 size={13} className="animate-spin" /> : <UploadCloud size={13} />} CSV Upload
+        </button>
+        <input ref={fileRef} type="file" accept=".csv" className="hidden" onChange={handleFileChange} />
+      </div>
+
+      {/* ━━━ CUSTOMIZE PROMPT ━━━ */}
       {showCustomizePrompt && !preferences && (
-        <div className="relative overflow-hidden card-3d gold-shimmer p-6 md:p-8 scroll-reveal">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-deep via-gold to-brand" />
-          <button
-            onClick={onDismissCustomize}
-            className="absolute top-4 right-4 p-1.5 rounded-full text-faint hover:text-app hover:bg-surface-3 transition-colors"
-            aria-label="Dismiss"
-          >
+        <div className="relative overflow-hidden card-3d gold-shimmer p-6 md:p-8 scroll-reveal border-gold/40">
+          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-gold via-gold-soft to-gold" style={{ boxShadow: '0 0 20px rgba(212,175,55,0.5)' }} />
+          <button onClick={onDismissCustomize} className="absolute top-4 right-4 p-1.5 rounded-full text-faint hover:text-app hover:bg-surface-3 transition-colors z-10" aria-label="Dismiss">
             <X size={18} />
           </button>
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-5">
-            <div className="p-3 bg-gold/15 rounded-2xl text-gold border border-gold/30 shrink-0 animate-pulse-gold">
-              <Sparkles size={28} />
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-5 relative z-10">
+            <div className="p-4 bg-gold/20 rounded-2xl text-gold border-2 border-gold/40 shrink-0 gold-ring-pulse">
+              <Sparkles size={32} />
             </div>
             <div className="flex-1">
-              <h3 className="heading-serif text-2xl font-bold mb-1">Make this dashboard yours</h3>
-              <p className="text-base text-soft">
-                Answer 6 quick questions to get a personalized savings goal, daily spending allowance, runway, and streaks.
-              </p>
+              <h3 className="heading-serif text-2xl font-black mb-1 text-glow-gold">Personalize Your Vault</h3>
+              <p className="text-base text-soft">Answer 6 quick questions to unlock personalized savings goals, daily spending allowance, and financial runway projections.</p>
             </div>
-            <button
-              onClick={onCustomize}
-              className="shrink-0 flex items-center gap-2 btn-premium text-base"
-            >
+            <button onClick={onCustomize} className="shrink-0 btn-premium flex items-center gap-2 text-base">
               <SlidersHorizontal size={18} /> Personalize
             </button>
           </div>
         </div>
       )}
 
-      {/* Budget alerts */}
+      {/* ━━━ BUDGET ALERTS ━━━ */}
       <AlertStrip expenses={expenses} currency={currency} />
 
-      {/* Spending insights */}
+      {/* ━━━ SPENDING INSIGHTS ━━━ */}
       <SpendingInsightsCard expenses={expenses} monthlyIncome={monthlyIncome} currency={currency} />
 
-      {/* Personalized widgets */}
+      {/* ━━━ PERSONALIZED WIDGETS ━━━ */}
       {preferences && widgetOrder.length > 0 && (
         <div className="scroll-reveal">
-          <div className="flex items-center justify-between mb-5">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gold/15 rounded-xl text-gold border border-gold/30">
-                <Sparkles size={20} />
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-gold/20 rounded-2xl text-gold border-2 border-gold/40 gold-ring-pulse">
+                <Sparkles size={24} />
               </div>
-              <h3 className="heading-serif text-2xl md:text-3xl font-bold tracking-tight">Your Plan</h3>
+              <div>
+                <h3 className="heading-serif text-2xl md:text-3xl font-black tracking-tight text-glow-gold">Your Financial Plan</h3>
+                <p className="text-xs text-faint uppercase tracking-widest font-bold mt-1">Personalized Strategy</p>
+              </div>
             </div>
-            <button
-              onClick={onCustomize}
-              className="flex items-center gap-1.5 text-sm font-bold text-faint hover:text-app bg-surface-2 border border-app hover:border-gold-soft px-4 py-2.5 rounded-full transition-all"
-            >
-              <SlidersHorizontal size={14} /> Edit
+            <button onClick={onCustomize} className="flex items-center gap-2 text-sm font-bold text-gold bg-gold/10 border-2 border-gold/30 hover:border-gold/60 hover:bg-gold/20 px-5 py-2.5 rounded-xl transition-all">
+              <SlidersHorizontal size={14} /> Edit Plan
             </button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-5 md:gap-6">
@@ -297,340 +361,305 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
         </div>
       )}
 
-      {/* Top Row: Quick Actions & KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 md:gap-6 scroll-reveal">
-        
-        {/* Actions Column */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-1 flex flex-row md:flex-col gap-3">
-             {/* Quick Add Button Card */}
-            <div 
-              onClick={onAddTx}
-              className="flex-1 hover-3d cursor-pointer group"
-            >
-              <div className="bg-gradient-to-br from-brand-deep to-brand p-[2px] rounded-2xl md:rounded-2xl shadow-card-soft group-hover:shadow-brand-glow transition-all duration-300">
-                <div className="bg-surface h-full w-full rounded-[14px] md:rounded-[14px] flex flex-col md:flex-row items-center md:items-center justify-center md:justify-start p-3 md:p-4 border border-transparent group-hover:border-gold-soft transition-colors gap-2 md:gap-3">
-                  <div className="bg-gradient-to-br from-brand-deep to-brand text-white p-2.5 rounded-full shadow-card-soft">
-                    <Plus size={20} strokeWidth={3} />
-                  </div>
-                  <div className="text-center md:text-left">
-                      <h3 className="font-bold text-sm md:text-base leading-tight">Quick Add</h3>
-                      <p className="hidden md:block text-faint text-xs uppercase tracking-wide">Transaction</p>
-                  </div>
-                </div>
+      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          KPI CARDS — METALLIC GOLD METERS
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <div className="scroll-reveal">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="p-2 bg-gold/20 rounded-xl text-gold border border-gold/30"><Gauge size={20} /></div>
+          <h3 className="heading-serif text-2xl font-black tracking-tight">Financial Dashboard</h3>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          
+          {/* Balance KPI */}
+          <div className="kpi-card gold-shimmer group">
+            <div className="flex items-center gap-3 mb-4 relative z-10">
+              <div className="p-3 bg-gold/20 rounded-xl text-gold border border-gold/40 shadow-gold-glow">
+                <Wallet size={24} />
               </div>
+              <span className="text-xs font-black uppercase tracking-[0.2em] text-gold">Balance</span>
             </div>
-
-            {/* Manage Expenses Button Card */}
-            <div 
-              onClick={onManageExpenses}
-              className="flex-1 hover-3d cursor-pointer group"
-            >
-              <div className="bg-surface-3 p-[2px] rounded-2xl md:rounded-2xl shadow-card-soft border border-app group-hover:border-gold-soft transition-all duration-300">
-                <div className="bg-surface h-full w-full rounded-[14px] md:rounded-[14px] flex flex-col md:flex-row items-center md:items-center justify-center md:justify-start p-3 md:p-4 border border-transparent group-hover:border-gold-soft transition-colors gap-2 md:gap-3">
-                  <div className="bg-surface-3 text-app p-2.5 rounded-full border border-app">
-                    <ListChecks size={20} strokeWidth={2} />
-                  </div>
-                  <div className="text-center md:text-left">
-                      <h3 className="font-bold text-sm md:text-base leading-tight">Manage</h3>
-                      <p className="hidden md:block text-faint text-xs uppercase tracking-wide">Expenses</p>
-                  </div>
-                </div>
-              </div>
+            <p className="heading-serif text-4xl md:text-5xl font-black mb-2 text-glow-gold relative z-10 text-gold">
+              {formatCurrency(calculations.balance, currency)}
+            </p>
+            <p className="text-sm text-faint font-medium relative z-10">Available Funds</p>
+            <div className="mt-4 gold-ingot-bar relative z-10">
+              <div style={{ width: `${monthlyIncome > 0 ? Math.min((calculations.balance / monthlyIncome) * 100, 100) : 0}%` }} />
             </div>
-        </div>
+            <div className="flex justify-between mt-2 relative z-10">
+              <span className="text-[10px] text-faint font-bold uppercase tracking-wider">0</span>
+              <span className="text-[10px] text-faint font-bold uppercase tracking-wider">{formatCurrency(monthlyIncome, currency)}</span>
+            </div>
+          </div>
 
-        {/* Mobile Quick Add floating button */}
-        <QuickAdd onQuickAdd={() => setShowQuickInline(true)} />
-
-        {showQuickInline && (
-          <QuickAddInline
-            onCreated={(expense) => {
-              onImportComplete && onImportComplete();
-              setShowQuickInline(false);
-            }}
-            onClose={() => setShowQuickInline(false)}
-          />
-        )}
-
-        {/* Balance Card */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-2 card-3d dollar-watermark p-6 flex flex-col justify-between min-h-[180px]">
-           <div className="absolute top-0 right-0 w-48 h-48 bg-brand/8 rounded-full blur-3xl -mr-12 -mt-12"></div>
-           <div className="flex items-center justify-between mb-5 relative z-10">
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-brand/15 rounded-xl text-brand border border-brand/20 shadow-brand-glow">
-                    <Wallet size={22} />
-                </div>
-                <span className="text-faint font-bold text-sm uppercase tracking-wider">Balance</span>
+          {/* Spent KPI */}
+          <div className="kpi-card gold-shimmer group">
+            <div className="flex items-center gap-3 mb-4 relative z-10">
+              <div className="p-3 bg-red-500/15 rounded-xl text-red-400 border border-red-500/30">
+                <TrendingDown size={24} />
               </div>
-              
-              <div className="flex items-center gap-2">
-                <button 
-                  onClick={handleConnectBank}
-                  disabled={isBankConnecting || isBankConnected}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${
-                      isBankConnected 
-                      ? 'bg-brand/15 text-brand border-brand/30' 
-                      : 'bg-surface-2 text-soft border-app hover:bg-surface-3'
-                  }`}
-                >
-                    {isBankConnecting ? <Loader2 size={12} className="animate-spin" /> : isBankConnected ? <CheckCircle2 size={12} /> : <LinkIcon size={12} />}
-                    {isBankConnecting ? 'Syncing...' : isBankConnected ? 'Bank Connected' : 'Connect Bank'}
-                </button>
+              <span className="text-xs font-black uppercase tracking-[0.2em] text-red-400">Spent</span>
+            </div>
+            <p className="heading-serif text-4xl md:text-5xl font-black mb-2 text-glow-danger relative z-10 text-red-400">
+              {formatCurrency(calculations.totalExpense, currency)}
+            </p>
+            <p className="text-sm text-faint font-medium relative z-10">Total Outflow</p>
+            <div className="mt-4 gold-ingot-bar relative z-10">
+              <div style={{
+                width: `${monthlyIncome > 0 ? Math.min((calculations.totalExpense / monthlyIncome) * 100, 100) : 0}%`,
+                background: 'linear-gradient(180deg, #f5a0a0 0%, #e74c3c 40%, #c0392b 70%, #962d22 100%)',
+              }} />
+            </div>
+            <div className="flex justify-between mt-2 relative z-10">
+              <span className="text-[10px] text-faint font-bold uppercase tracking-wider">0</span>
+              <span className="text-[10px] text-faint font-bold uppercase tracking-wider">{formatCurrency(monthlyIncome, currency)}</span>
+            </div>
+          </div>
 
-                <button onClick={() => setShowSmsModal(true)} className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-surface-2 text-soft border border-app hover:bg-surface-3">
-                  <MessageSquare size={14} /> Import SMS
-                </button>
-
-                <button onClick={handleFilePick} disabled={isUploadingCsv} className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-surface-2 text-soft border border-app hover:bg-surface-3 disabled:opacity-50">
-                  {isUploadingCsv ? <Loader2 size={14} className="animate-spin" /> : <UploadCloud size={14} />} Import CSV
-                </button>
-                <input ref={fileRef} type="file" accept=".csv" className="hidden" onChange={handleFileChange} />
-
+          {/* Income KPI */}
+          <div className="kpi-card gold-shimmer group">
+            <div className="flex items-center gap-3 mb-4 relative z-10">
+              <div className="p-3 bg-brand/15 rounded-xl text-brand border border-brand/30 shadow-brand-glow">
+                <TrendingUp size={24} />
               </div>
-           </div>
-           <div className="relative z-10">
-               <p className="text-4xl md:text-5xl font-bold mb-1 text-glow-success font-display">{formatCurrency(calculations.balance, currency)}</p>
-               <p className="text-sm text-faint font-medium">Available Funds on Hand</p>
-           </div>
-        </div>
-
-        {/* Expense Card */}
-        <div className="col-span-1 md:col-span-1 lg:col-span-1 card-3d p-6 flex flex-col justify-between">
-           <div className="absolute top-0 right-0 w-36 h-36 bg-danger/8 rounded-full blur-3xl -mr-10 -mt-10"></div>
-           <div className="flex items-center gap-3 mb-5 relative z-10">
-              <div className="p-3 bg-danger/15 rounded-xl text-danger border border-danger/20">
-                <TrendingDown size={22} />
-              </div>
-              <span className="text-faint font-bold text-sm uppercase tracking-wider">Spent</span>
-           </div>
-           <div className="relative z-10">
-               <p className="text-3xl md:text-4xl font-bold mb-1 text-glow-danger font-display">{formatCurrency(calculations.totalExpense, currency)}</p>
-               <p className="text-sm text-faint font-medium">Total Outflow</p>
-           </div>
-        </div>
-
-        {/* Income (Salary) Card */}
-        <div className="col-span-1 md:col-span-1 lg:col-span-1 card-3d p-6 flex flex-col justify-between">
-           <div className="absolute top-0 right-0 w-36 h-36 bg-gold/8 rounded-full blur-3xl -mr-10 -mt-10"></div>
-           <div className="flex items-center gap-3 mb-5 relative z-10">
-              <div className="p-3 bg-gold/15 rounded-xl text-gold border border-gold/20 shadow-gold-glow">
-                <TrendingUp size={22} />
-              </div>
-              <span className="text-faint font-bold text-sm uppercase tracking-wider">Salary</span>
-           </div>
-           <div className="relative z-10">
-               <p className="text-3xl md:text-4xl font-bold mb-1 text-glow-gold font-display">{formatCurrency(monthlyIncome, currency)}</p>
-               <p className="text-sm text-faint font-medium">Registered Income</p>
-           </div>
+              <span className="text-xs font-black uppercase tracking-[0.2em] text-brand">Income</span>
+            </div>
+            <p className="heading-serif text-4xl md:text-5xl font-black mb-2 text-glow-success relative z-10 text-brand">
+              {formatCurrency(monthlyIncome, currency)}
+            </p>
+            <p className="text-sm text-faint font-medium relative z-10">Monthly Salary</p>
+            <div className="mt-4 gold-ingot-bar relative z-10">
+              <div style={{
+                width: '100%',
+                background: 'linear-gradient(180deg, #a8e6c3 0%, #2ecc71 40%, #27ae60 70%, #1e8449 100%)',
+              }} />
+            </div>
+            <div className="flex justify-between mt-2 relative z-10">
+              <span className="text-[10px] text-faint font-bold uppercase tracking-wider">Target</span>
+              <span className="text-[10px] text-brand font-bold uppercase tracking-wider">● Active</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* CSV Import Feedback */}
+      {/* ━━━ CSV IMPORT FEEDBACK ━━━ */}
       {csvMessage && (
-        <div className={`p-4 rounded-2xl text-sm font-bold border mb-6 animate-fade-in ${
-          csvMessage.type === 'success' 
-            ? 'bg-brand/10 text-brand border-brand/30' 
-            : 'bg-danger/10 text-danger border-danger/30'
+        <div className={`p-5 rounded-2xl text-sm font-bold border-2 mb-6 animate-fade-in flex items-center gap-3 ${
+          csvMessage.type === 'success' ? 'bg-gold/10 text-gold border-gold/40' : 'bg-danger/10 text-danger border-danger/40'
         }`}>
+          <div className={`p-2 rounded-xl ${csvMessage.type === 'success' ? 'bg-gold/20' : 'bg-danger/20'}`}>
+            {csvMessage.type === 'success' ? <CheckCircle2 size={18} /> : <X size={18} />}
+          </div>
           {csvMessage.text}
         </div>
       )}
 
-      {/* Spending Velocity */}
-      <div className="card-3d gold-shimmer p-6 md:p-8 scroll-reveal">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2.5 bg-gold/15 rounded-xl text-gold border border-gold/30">
-            <Gauge size={20} />
+      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          SPENDING VELOCITY — VAULT METERS
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <div className="card-3d gold-line-top p-6 md:p-8 scroll-reveal gold-shimmer">
+        <div className="flex items-center gap-3 mb-8 relative z-10">
+          <div className="p-3 bg-gold/20 rounded-xl text-gold border-2 border-gold/40 gold-ring-pulse">
+            <Gauge size={24} />
           </div>
-          <h3 className="heading-serif text-xl md:text-2xl font-bold tracking-tight">Spending Velocity</h3>
+          <div>
+            <h3 className="heading-serif text-2xl font-black tracking-tight">Spending Velocity</h3>
+            <p className="text-xs text-faint uppercase tracking-widest font-bold mt-1">Burn Rate Analysis</p>
+          </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <div className="bg-surface-2 border border-app rounded-2xl p-5 space-y-2 hover-3d">
-            <span className="text-xs font-bold uppercase tracking-wider text-faint">Daily Burn Rate</span>
-            <p className="text-2xl font-bold font-mono text-gold font-display">{formatCurrency(spendingVelocity.dailyBurn, currency)}</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 relative z-10">
+          
+          {/* Daily Burn */}
+          <div className="vault-section bg-surface-2 rounded-2xl p-6 space-y-3 hover-3d" style={{ transformStyle: 'preserve-3d' }}>
+            <div className="flex items-center gap-2">
+              <Zap size={16} className="text-gold" />
+              <span className="text-xs font-black uppercase tracking-[0.2em] text-gold">Daily Burn Rate</span>
+            </div>
+            <p className="heading-serif text-3xl font-black text-glow-gold text-gold">{formatCurrency(spendingVelocity.dailyBurn, currency)}</p>
             <p className="text-xs text-faint">per day average</p>
+            <div className="gold-ingot-bar">
+              <div style={{ width: `${Math.min((spendingVelocity.dailyBurn / (monthlyIncome / 30)) * 100, 100)}%` }} />
+            </div>
           </div>
-          <div className="bg-surface-2 border border-app rounded-2xl p-5 space-y-2 hover-3d">
-            <span className="text-xs font-bold uppercase tracking-wider text-faint">Projected Month-End</span>
-            <p className={`text-2xl font-bold font-mono font-display ${spendingVelocity.burnPct > 100 ? 'text-danger' : spendingVelocity.burnPct > 80 ? 'text-gold' : 'text-brand-ink'}`}>
+
+          {/* Projected */}
+          <div className="vault-section bg-surface-2 rounded-2xl p-6 space-y-3 hover-3d" style={{ transformStyle: 'preserve-3d' }}>
+            <div className="flex items-center gap-2">
+              <Activity size={16} className={spendingVelocity.burnPct > 100 ? 'text-danger' : spendingVelocity.burnPct > 80 ? 'text-gold' : 'text-brand'} />
+              <span className={`text-xs font-black uppercase tracking-[0.2em] ${spendingVelocity.burnPct > 100 ? 'text-danger' : spendingVelocity.burnPct > 80 ? 'text-gold' : 'text-brand'}`}>Projected Month-End</span>
+            </div>
+            <p className={`heading-serif text-3xl font-black ${spendingVelocity.burnPct > 100 ? 'text-danger text-glow-danger' : spendingVelocity.burnPct > 80 ? 'text-gold text-glow-gold' : 'text-brand text-glow-success'}`}>
               {formatCurrency(spendingVelocity.projectedMonthEnd, currency)}
             </p>
-            <div className="w-full bg-app-soft rounded-full h-2 overflow-hidden mt-2">
-              <div
-                className="h-full rounded-full transition-all duration-500"
-                style={{
-                  width: `${Math.min(spendingVelocity.burnPct, 100)}%`,
-                  backgroundColor: spendingVelocity.burnPct > 100 ? 'var(--danger)' : spendingVelocity.burnPct > 80 ? 'var(--gold)' : 'var(--brand)',
-                }}
-              />
+            <p className="text-xs text-faint">estimated total spend</p>
+            <div className="gold-ingot-bar">
+              <div style={{
+                width: `${Math.min(spendingVelocity.burnPct, 100)}%`,
+                background: spendingVelocity.burnPct > 100
+                  ? 'linear-gradient(180deg, #f5a0a0 0%, #e74c3c 40%, #c0392b 70%, #962d22 100%)'
+                  : spendingVelocity.burnPct > 80
+                  ? 'linear-gradient(180deg, #f3e29a 0%, #d4af37 40%, #b8960b 70%, #8a6510 100%)'
+                  : 'linear-gradient(180deg, #a8e6c3 0%, #2ecc71 40%, #27ae60 70%, #1e8449 100%)',
+              }} />
             </div>
             <p className="text-xs text-faint">{spendingVelocity.burnPct.toFixed(0)}% of {formatCurrency(monthlyIncome, currency)}</p>
           </div>
-          <div className="bg-surface-2 border border-app rounded-2xl p-5 space-y-2 hover-3d">
-            <span className="text-xs font-bold uppercase tracking-wider text-faint">Remaining Daily Budget</span>
-            <p className={`text-2xl font-bold font-mono font-display ${spendingVelocity.dailyAllowance > 0 ? 'text-brand-ink' : 'text-danger'}`}>
+
+          {/* Remaining */}
+          <div className="vault-section bg-surface-2 rounded-2xl p-6 space-y-3 hover-3d" style={{ transformStyle: 'preserve-3d' }}>
+            <div className="flex items-center gap-2">
+              <Shield size={16} className={spendingVelocity.dailyAllowance > 0 ? 'text-brand' : 'text-danger'} />
+              <span className={`text-xs font-black uppercase tracking-[0.2em] ${spendingVelocity.dailyAllowance > 0 ? 'text-brand' : 'text-danger'}`}>Daily Budget Left</span>
+            </div>
+            <p className={`heading-serif text-3xl font-black ${spendingVelocity.dailyAllowance > 0 ? 'text-brand text-glow-success' : 'text-danger text-glow-danger'}`}>
               {formatCurrency(Math.max(0, spendingVelocity.dailyAllowance), currency)}
             </p>
             <p className="text-xs text-faint">for rest of month</p>
+            <div className="gold-ingot-bar">
+              <div style={{
+                width: `${monthlyIncome > 0 ? Math.min((spendingVelocity.dailyAllowance / (monthlyIncome / 30)) * 100, 100) : 0}%`,
+                background: spendingVelocity.dailyAllowance > 0
+                  ? 'linear-gradient(180deg, #a8e6c3 0%, #2ecc71 40%, #27ae60 70%, #1e8449 100%)'
+                  : 'linear-gradient(180deg, #f5a0a0 0%, #e74c3c 40%, #c0392b 70%, #962d22 100%)',
+              }} />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Row 2: Pie Charts */}
+      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          CHARTS ROW
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 scroll-reveal">
         
-        {/* Chart 1: Saved vs Spent */}
+        {/* Health Chart */}
         <div className="card-3d gold-line-top p-6 md:p-8 relative overflow-hidden min-h-[380px]">
-           <h3 className="heading-serif text-2xl font-bold mb-6 flex items-center gap-3">
-             <div className="p-2 bg-brand/15 rounded-lg text-brand border border-brand/20">
-               <Activity size={20} />
-             </div>
-             Financial Health
-           </h3>
-           <div className="h-64 w-full flex items-center justify-center">
-             <ResponsiveContainer width="100%" height="100%">
+          <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&q=75" alt="" className="absolute inset-0 w-full h-full object-cover opacity-[0.04] mix-blend-luminosity" loading="lazy" />
+          <h3 className="heading-serif text-2xl font-black mb-6 flex items-center gap-3 relative z-10">
+            <div className="p-3 bg-gold/20 rounded-xl text-gold border-2 border-gold/40">
+              <Activity size={22} />
+            </div>
+            Financial Health
+          </h3>
+          <div className="h-64 w-full flex items-center justify-center relative z-10">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie data={healthData} cx="50%" cy="50%" innerRadius={55} outerRadius={85} paddingAngle={5} dataKey="value" stroke="none" cornerRadius={8}>
+                  {healthData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS_HEALTH[index]} />
+                  ))}
+                </Pie>
+                <RechartsTooltip 
+                  contentStyle={{ backgroundColor: 'var(--surface)', borderColor: 'var(--gold)', borderRadius: '16px', color: 'var(--text)', fontFamily: 'Inter', boxShadow: '0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(212,175,55,0.15)', border: '2px solid var(--gold-soft)' }}
+                  itemStyle={{ color: 'var(--text)', fontWeight: 700 }}
+                  formatter={(value: number) => [formatCurrency(value as number, currency), 'Amount']}
+                />
+                <Legend verticalAlign="bottom" height={36} iconType="circle" formatter={(value) => <span className="text-soft font-bold ml-2">{value}</span>} />
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-8 text-center pointer-events-none">
+              <p className="text-[10px] text-gold uppercase font-black tracking-widest">Total</p>
+              <p className="font-black text-xl font-display text-glow-gold">100%</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Category Chart */}
+        <div className="card-3d gold-line-top p-6 md:p-8 relative overflow-hidden min-h-[380px]">
+          <img src="https://images.unsplash.com/photo-1610375461246-83df859d849d?w=600&q=75" alt="" className="absolute inset-0 w-full h-full object-cover opacity-[0.04] mix-blend-luminosity" loading="lazy" />
+          <h3 className="heading-serif text-2xl font-black mb-6 flex items-center gap-3 relative z-10">
+            <div className="p-3 bg-gold/20 rounded-xl text-gold border-2 border-gold/40">
+              <PieChartIcon size={22} />
+            </div>
+            Spending Categories
+          </h3>
+          <div className="flex flex-col md:flex-row items-center h-64 relative z-10">
+            <div className="h-full w-full md:w-1/2">
+              <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie
-                    data={healthData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={85}
-                    paddingAngle={5}
-                    dataKey="value"
-                    stroke="none"
-                    cornerRadius={6}
-                  >
-                    {healthData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS_HEALTH[index]} />
+                  <Pie data={categoryData} cx="50%" cy="50%" innerRadius={45} outerRadius={75} paddingAngle={4} dataKey="value" stroke="none" cornerRadius={6}>
+                    {categoryData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS_CATEGORY[index % COLORS_CATEGORY.length]} />
                     ))}
                   </Pie>
                   <RechartsTooltip 
-                    contentStyle={{ backgroundColor: 'var(--surface)', borderColor: 'var(--gold-soft)', borderRadius: '16px', color: 'var(--text)', fontFamily: 'Inter', boxShadow: '0 10px 30px rgba(0,0,0,0.3)' }}
-                    itemStyle={{ color: 'var(--text)', fontWeight: 600 }}
+                    contentStyle={{ backgroundColor: 'var(--surface)', borderColor: 'var(--gold)', borderRadius: '16px', color: 'var(--text)', fontFamily: 'Inter', boxShadow: '0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(212,175,55,0.15)', border: '2px solid var(--gold-soft)' }}
+                    itemStyle={{ color: 'var(--text)', fontWeight: 700 }}
                     formatter={(value: number) => [formatCurrency(value as number, currency), 'Amount']}
                   />
-                  <Legend 
-                    verticalAlign="bottom" 
-                    height={36} 
-                    iconType="circle"
-                    formatter={(value) => <span className="text-soft font-medium ml-2">{value}</span>}
-                  />
                 </PieChart>
-             </ResponsiveContainer>
-             
-             {/* Center Label */}
-             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-8 text-center pointer-events-none">
-                <p className="text-xs text-faint uppercase font-bold">Total</p>
-                <p className="font-bold text-xl font-display">100%</p>
-             </div>
-           </div>
-        </div>
-
-        {/* Chart 2: Category Breakdown */}
-        <div className="card-3d gold-line-top p-6 md:p-8 relative overflow-hidden min-h-[380px]">
-           <h3 className="heading-serif text-2xl font-bold mb-6 flex items-center gap-3">
-             <div className="p-2 bg-gold/15 rounded-lg text-gold border border-gold/20">
-               <PieChartIcon size={20} />
-             </div>
-             Spending Categories
-           </h3>
-           <div className="flex flex-col md:flex-row items-center h-64">
-             <div className="h-full w-full md:w-1/2">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={categoryData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={50}
-                      outerRadius={75}
-                      paddingAngle={4}
-                      dataKey="value"
-                      stroke="none"
-                      cornerRadius={5}
-                    >
-                      {categoryData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS_CATEGORY[index % COLORS_CATEGORY.length]} />
-                      ))}
-                    </Pie>
-                    <RechartsTooltip 
-                      contentStyle={{ backgroundColor: 'var(--surface)', borderColor: 'var(--gold-soft)', borderRadius: '16px', color: 'var(--text)', fontFamily: 'Inter', boxShadow: '0 10px 30px rgba(0,0,0,0.3)' }}
-                      itemStyle={{ color: 'var(--text)', fontWeight: 600 }}
-                      formatter={(value: number) => [formatCurrency(value as number, currency), 'Amount']}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-             </div>
-             <div className="w-full md:w-1/2 h-full overflow-y-auto pr-2 custom-scrollbar">
-               <div className="space-y-3">
-                 {categoryData.length === 0 && <p className="text-faint text-sm text-center mt-10">No expenses yet.</p>}
-                 {categoryData.map((entry, index) => (
-                   <div key={entry.name} className="flex items-center justify-between p-2.5 rounded-xl hover:bg-surface-2 transition-colors group">
-                     <div className="flex items-center gap-3">
-                       <span className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS_CATEGORY[index % COLORS_CATEGORY.length] }}></span>
-                       <span className="text-sm font-medium text-soft group-hover:text-app">{entry.name}</span>
-                     </div>
-                     <span className="text-sm font-bold text-faint group-hover:text-app font-mono">{formatCurrency(entry.value, currency)}</span>
-                   </div>
-                 ))}
-               </div>
-             </div>
-           </div>
+              </ResponsiveContainer>
+            </div>
+            <div className="w-full md:w-1/2 h-full overflow-y-auto pr-2 custom-scrollbar">
+              <div className="space-y-2">
+                {categoryData.length === 0 && <p className="text-faint text-sm text-center mt-10">No expenses yet.</p>}
+                {categoryData.map((entry, index) => (
+                  <div key={entry.name} className="flex items-center justify-between p-3 rounded-xl hover:bg-gold/5 border border-transparent hover:border-gold/20 transition-all group cursor-default">
+                    <div className="flex items-center gap-3">
+                      <span className="w-3.5 h-3.5 rounded-full border-2 border-white/20" style={{ backgroundColor: COLORS_CATEGORY[index % COLORS_CATEGORY.length] }}></span>
+                      <span className="text-sm font-bold text-soft group-hover:text-gold transition-colors">{entry.name}</span>
+                    </div>
+                    <span className="text-sm font-black text-faint group-hover:text-gold font-display transition-colors">{formatCurrency(entry.value, currency)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Row 3: Budgets + Recurring + Cash Flow */}
+      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          BUDGETS + RECURRING + CASH FLOW
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
       <div className="grid grid-cols-1 2xl:grid-cols-3 gap-6 scroll-reveal">
         <div className="space-y-5 2xl:col-span-1">
           <BudgetsCard expenses={expenses} currency={currency} />
           <RecurringCard expenses={expenses} currency={currency} />
         </div>
         <div className="2xl:col-span-2 card-3d gold-line-top p-6 md:p-8 relative overflow-hidden">
-          <div className="absolute bottom-0 right-0 w-48 h-48 opacity-[0.04] pointer-events-none" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&q=80)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+          <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=75" alt="" className="absolute inset-0 w-full h-full object-cover opacity-[0.05] mix-blend-luminosity" loading="lazy" />
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4 relative z-10">
-            <h3 className="heading-serif text-2xl font-bold flex items-center gap-3">
-              <div className="p-2 bg-brand/15 rounded-lg text-brand border border-brand/20">
-                <TrendingUp size={20} />
+            <h3 className="heading-serif text-2xl font-black flex items-center gap-3">
+              <div className="p-3 bg-gold/20 rounded-xl text-gold border-2 border-gold/40">
+                <TrendingUp size={22} />
               </div>
               Cash Flow Trends
             </h3>
-            <div className="flex gap-5 text-sm font-medium">
-               <div className="flex items-center gap-2 text-brand"><span className="w-2.5 h-2.5 rounded-full bg-brand"></span> Income</div>
-               <div className="flex items-center gap-2 text-danger"><span className="w-2.5 h-2.5 rounded-full bg-danger"></span> Expenses</div>
+            <div className="flex gap-6 text-sm font-bold">
+               <div className="flex items-center gap-2 text-gold"><span className="w-3 h-3 rounded-full bg-gold shadow-gold-glow"></span> Income</div>
+               <div className="flex items-center gap-2 text-danger"><span className="w-3 h-3 rounded-full bg-danger"></span> Expenses</div>
             </div>
           </div>
-          <div className="h-72 w-full">
+          <div className="h-72 w-full relative z-10">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={monthlyData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                 <defs>
-                  <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3fae6e" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#3fae6e" stopOpacity={0}/>
+                  <linearGradient id="colorIncomeGold" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#d4af37" stopOpacity={0.4}/>
+                    <stop offset="95%" stopColor="#d4af37" stopOpacity={0}/>
                   </linearGradient>
-                  <linearGradient id="colorExpense" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#e07a5f" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#e07a5f" stopOpacity={0}/>
+                  <linearGradient id="colorExpenseRed" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#e74c3c" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#e74c3c" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border-soft)" vertical={false} opacity={0.6} />
-                <XAxis dataKey="name" stroke="var(--text-faint)" fontSize={12} tickLine={false} axisLine={false} dy={10} fontFamily="Inter" fontWeight={500} />
-                <YAxis stroke="var(--text-faint)" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(val) => `₹${val/1000}k`} fontFamily="Inter" fontWeight={500} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} opacity={0.4} />
+                <XAxis dataKey="name" stroke="var(--text-faint)" fontSize={12} tickLine={false} axisLine={false} dy={10} fontFamily="Inter" fontWeight={600} />
+                <YAxis stroke="var(--text-faint)" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(val) => `₹${val/1000}k`} fontFamily="Inter" fontWeight={600} />
                 <RechartsTooltip
-                  cursor={{ stroke: 'var(--gold-soft)', strokeWidth: 1 }}
-                  contentStyle={{ backgroundColor: 'var(--surface)', borderColor: 'var(--gold-soft)', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.3)', color: 'var(--text)', fontFamily: 'Inter' }}
-                  itemStyle={{ fontSize: '14px', fontWeight: 600 }}
+                  cursor={{ stroke: 'var(--gold)', strokeWidth: 2 }}
+                  contentStyle={{ backgroundColor: 'var(--surface)', borderColor: 'var(--gold)', borderRadius: '16px', boxShadow: '0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(212,175,55,0.15)', color: 'var(--text)', fontFamily: 'Inter', border: '2px solid var(--gold-soft)' }}
+                  itemStyle={{ fontSize: '14px', fontWeight: 700 }}
                 />
-                <Area type="monotone" dataKey="Income" stroke="#3fae6e" strokeWidth={3} fillOpacity={1} fill="url(#colorIncome)" activeDot={{ r: 7, strokeWidth: 0, fill: '#fff' }} />
-                <Area type="monotone" dataKey="Expense" stroke="#e07a5f" strokeWidth={3} fillOpacity={1} fill="url(#colorExpense)" activeDot={{ r: 7, strokeWidth: 0, fill: '#fff' }} />
+                <Area type="monotone" dataKey="Income" stroke="#d4af37" strokeWidth={3} fillOpacity={1} fill="url(#colorIncomeGold)" activeDot={{ r: 8, fill: '#d4af37', stroke: '#fff', strokeWidth: 2 }} />
+                <Area type="monotone" dataKey="Expense" stroke="#e74c3c" strokeWidth={3} fillOpacity={1} fill="url(#colorExpenseRed)" activeDot={{ r: 8, fill: '#e74c3c', stroke: '#fff', strokeWidth: 2 }} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
       </div>
 
-        <SmsImportModal isOpen={showSmsModal} onClose={() => setShowSmsModal(false)} onImported={onImportComplete} />
-
+      <SmsImportModal isOpen={showSmsModal} onClose={() => setShowSmsModal(false)} onImported={onImportComplete} />
     </div>
   );
 };
