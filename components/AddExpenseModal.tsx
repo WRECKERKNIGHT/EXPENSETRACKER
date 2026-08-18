@@ -182,18 +182,19 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-fade-in font-sans">
-      <div className="bg-surface border border-app rounded-[2rem] w-full max-w-2xl shadow-2xl overflow-hidden transform transition-all flex flex-col max-h-[90vh]">
+      <div className="card-3d w-full max-w-2xl overflow-hidden transform transition-all flex flex-col max-h-[90vh]">
         
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b border-app/50 bg-surface-2">
+        <div className="flex justify-between items-center p-6 border-b border-app/50 bg-surface-2 relative">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-deep via-gold to-brand"></div>
           <div className="flex items-center gap-3">
-             <div className="bg-gradient-to-br from-brand-deep to-brand p-2 rounded-xl shadow-card">
-               <ScanLine size={20} className="text-app" />
+             <div className="bg-gradient-to-br from-brand-deep to-brand p-2.5 rounded-xl shadow-brand-glow">
+               <ScanLine size={22} className="text-white" />
              </div>
-             <h2 className="text-xl font-bold text-app tracking-tight text-glow-sm">Add Transaction</h2>
+             <h2 className="heading-serif text-2xl font-bold text-app tracking-tight">Add Transaction</h2>
           </div>
-          <button onClick={onClose} className="text-faint hover:text-app transition-colors bg-surface-3 p-2 rounded-full hover:bg-surface-2">
-            <X size={20} />
+          <button onClick={onClose} className="text-faint hover:text-app transition-colors bg-surface-3 p-2.5 rounded-xl hover:bg-surface-2">
+            <X size={22} />
           </button>
         </div>
 
@@ -202,9 +203,9 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
              <div className="flex p-1 gap-1 bg-surface-2 rounded-xl border border-app">
                 <button
                     onClick={() => setActiveTab('auto')}
-                    className={`flex-1 py-3 text-sm font-bold rounded-lg flex items-center justify-center gap-2 transition-all ${
+                    className={`flex-1 py-3.5 text-sm font-bold rounded-lg flex items-center justify-center gap-2 transition-all ${
                     activeTab === 'auto' 
-                        ? 'bg-surface-3 text-app shadow-inner ring-1 ring-app' 
+                        ? 'bg-surface-3 text-app shadow-inner ring-1 ring-gold/30' 
                         : 'text-faint hover:text-soft'
                     }`}
                 >
@@ -212,9 +213,9 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                 </button>
                 <button
                     onClick={() => setActiveTab('import')}
-                    className={`flex-1 py-3 text-sm font-bold rounded-lg flex items-center justify-center gap-2 transition-all ${
+                    className={`flex-1 py-3.5 text-sm font-bold rounded-lg flex items-center justify-center gap-2 transition-all ${
                     activeTab === 'import' 
-                        ? 'bg-surface-3 text-app shadow-inner ring-1 ring-app' 
+                        ? 'bg-surface-3 text-app shadow-inner ring-1 ring-gold/30' 
                         : 'text-faint hover:text-soft'
                     }`}
                 >
@@ -222,9 +223,9 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                 </button>
                 <button
                     onClick={() => setActiveTab('manual')}
-                    className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${
+                    className={`flex-1 py-3.5 text-sm font-bold rounded-lg transition-all ${
                     activeTab === 'manual' 
-                        ? 'bg-surface-3 text-app shadow-inner ring-1 ring-app' 
+                        ? 'bg-surface-3 text-app shadow-inner ring-1 ring-gold/30' 
                         : 'text-faint hover:text-soft'
                     }`}
                 >
@@ -295,12 +296,12 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                                 className="bg-surface-2 border border-app hover:border-gold-soft hover:bg-surface-3 p-6 rounded-2xl flex flex-col items-center gap-3 transition-all group relative overflow-hidden"
                             >
                                 <div className="absolute inset-0 bg-brand/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                <div className="w-12 h-12 rounded-full bg-surface-3 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg relative z-10">
-                                    <Clipboard className="text-brand-ink" size={24} />
+                                <div className="w-14 h-14 rounded-2xl bg-surface-3 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg relative z-10 border border-brand/20">
+                                    <Clipboard className="text-brand-ink" size={26} />
                                 </div>
                                 <div className="text-center relative z-10">
-                                    <p className="text-app font-bold text-sm">Scan Clipboard</p>
-                                    <p className="text-faint text-[10px] uppercase tracking-wide">Copy SMS & Click</p>
+                                    <p className="text-app font-bold text-base">Scan Clipboard</p>
+                                    <p className="text-faint text-xs uppercase tracking-wide">Copy SMS & Click</p>
                                 </div>
                             </button>
 
@@ -316,32 +317,32 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                                     onChange={handleImageUpload}
                                     disabled={isParsing}
                                 />
-                                <div className="w-12 h-12 rounded-full bg-surface-3 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    {isParsing ? <Loader2 className="animate-spin text-gold" size={24} /> : <ImageIcon className="text-gold" size={24} />}
+                                <div className="w-14 h-14 rounded-2xl bg-surface-3 flex items-center justify-center group-hover:scale-110 transition-transform border border-gold/20">
+                                    {isParsing ? <Loader2 className="animate-spin text-gold" size={26} /> : <ImageIcon className="text-gold" size={26} />}
                                 </div>
                                 <div className="text-center">
-                                    <p className="text-app font-bold text-sm">Upload Screenshot</p>
-                                    <p className="text-faint text-[10px] uppercase tracking-wide">Payment App / GPay</p>
+                                    <p className="text-app font-bold text-base">Upload Screenshot</p>
+                                    <p className="text-faint text-xs uppercase tracking-wide">Payment App / GPay</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Text Paste Area */}
                         <div>
-                            <div className="flex items-center gap-2 mb-2">
-                                <FileText size={14} className="text-faint" />
-                                <span className="text-xs font-bold text-faint uppercase">Or Paste Text</span>
+                            <div className="flex items-center gap-2 mb-3">
+                                <FileText size={16} className="text-faint" />
+                                <span className="text-sm font-bold text-faint uppercase tracking-wider">Or Paste Text</span>
                             </div>
                             <textarea
                                 value={aiInput}
                                 onChange={(e) => setAiInput(e.target.value)}
                                 placeholder={`Paste SMS or text here...\n"Sent Rs 250 to Starbucks on 12th March"`}
-                                className="w-full h-24 bg-app-soft border border-app rounded-2xl p-4 text-app focus:outline-none focus:ring-2 focus:ring-brand/40 resize-none placeholder:text-faint text-sm font-mono"
+                                className="w-full h-24 bg-app-soft border border-app rounded-2xl p-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 resize-none placeholder:text-faint text-sm font-mono"
                             />
                             <button
                                 onClick={() => handleTextParse()}
                                 disabled={isParsing || !aiInput.trim()}
-                                className="w-full mt-3 bg-surface-3 hover:bg-surface-2 text-soft font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 text-sm"
+                                className="w-full mt-3 bg-surface-3 hover:bg-surface-2 text-soft font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 text-sm border border-app hover:border-gold-soft"
                             >
                                 <Sparkles size={16} /> Analyze Text
                             </button>
@@ -352,17 +353,17 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                 {/* Import Tab */}
                 {activeTab === 'import' && (
                     <div className="space-y-6 flex flex-col items-center justify-center h-full text-center">
-                         <div className="w-20 h-20 bg-brand/10 rounded-full flex items-center justify-center mb-4 animate-pulse-slow">
-                            <UploadCloud size={40} className="text-brand-ink" />
+                         <div className="w-20 h-20 bg-brand/15 rounded-2xl flex items-center justify-center mb-4 border border-brand/20 shadow-brand-glow">
+                            <UploadCloud size={36} className="text-brand-ink" />
                          </div>
-                         <h3 className="text-lg font-bold text-app">Import Bank Statement</h3>
-                         <p className="text-soft text-sm max-w-xs">Upload a CSV or Excel file extracted from your net banking portal (HDFC, SBI, ICICI, etc.)</p>
+                         <h3 className="heading-serif text-2xl font-bold text-app">Import Bank Statement</h3>
+                         <p className="text-soft text-base max-w-xs">Upload a CSV or Excel file extracted from your net banking portal (HDFC, SBI, ICICI, etc.)</p>
                          
                          <button 
                             onClick={() => csvInputRef.current?.click()}
-                            className="bg-brand-deep hover:brightness-110 text-white font-bold py-3 px-8 rounded-full transition-all shadow-lg flex items-center gap-2"
+                            className="btn-premium px-8 py-4 rounded-2xl flex items-center gap-2 text-lg"
                          >
-                            {isParsing ? <Loader2 className="animate-spin" /> : <FileText size={20} />}
+                            {isParsing ? <Loader2 className="animate-spin" /> : <FileText size={22} />}
                             Select CSV File
                          </button>
                          <input 
@@ -374,11 +375,11 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                             disabled={isParsing}
                          />
                          
-                         <div className="mt-6 bg-surface-2 p-4 rounded-xl border border-app text-left w-full">
-                            <h4 className="text-xs font-bold text-faint uppercase mb-2 flex items-center gap-2">
-                                <AlertCircle size={12} /> Instructions
+                         <div className="mt-6 bg-surface-2 p-5 rounded-2xl border border-app text-left w-full">
+                            <h4 className="text-sm font-bold text-faint uppercase mb-3 flex items-center gap-2">
+                                <AlertCircle size={14} /> Instructions
                             </h4>
-                            <ul className="text-xs text-soft space-y-1 list-disc list-inside">
+                            <ul className="text-sm text-soft space-y-2 list-disc list-inside">
                                 <li>Log in to your bank's website</li>
                                 <li>Download statement as <strong>CSV</strong> (Not PDF)</li>
                                 <li>Upload it here directly</li>
@@ -473,9 +474,9 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                         <div className="pt-2">
                             <button
                             type="submit"
-                            className="w-full bg-white text-black hover:bg-zinc-200 font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] tracking-wide"
+                            className="w-full btn-premium py-4 rounded-2xl flex items-center justify-center gap-2 tracking-wide text-lg"
                             >
-                            <Check size={20} />
+                            <Check size={22} />
                             SAVE TRANSACTION
                             </button>
                         </div>

@@ -99,26 +99,28 @@ const SpendingInsightsCard: React.FC<SpendingInsightsCardProps> = ({ expenses, m
   ];
 
   return (
-    <div className="bg-surface border border-app rounded-[2rem] p-6 shadow-card-soft">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <Lightbulb size={18} className="text-gold" />
-          <h3 className="text-sm font-bold text-app tracking-wide">Spending Insights</h3>
+    <div className="card-3d gold-shimmer p-6 md:p-8">
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 bg-gold/15 rounded-xl text-gold border border-gold/30 shadow-gold-glow">
+            <Lightbulb size={20} />
+          </div>
+          <h3 className="heading-serif text-lg font-bold text-app tracking-wide">Spending Insights</h3>
         </div>
-        <span className="text-[10px] text-faint font-medium uppercase tracking-wider">
+        <span className="text-xs text-faint font-semibold uppercase tracking-wider">
           {insights.transactionCount} txns this month
         </span>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {items.map((item) => (
           <div
             key={item.label}
-            className={`p-3 rounded-2xl border ${item.borderColor} ${item.bgColor} flex flex-col gap-1.5`}
+            className={`p-4 rounded-2xl border ${item.borderColor} ${item.bgColor} flex flex-col gap-2 hover-3d`}
           >
-            <item.icon size={14} className={item.color} />
-            <span className="text-[10px] font-bold uppercase tracking-wider text-soft">{item.label}</span>
-            <span className={`text-sm font-bold font-mono ${item.color}`}>{item.value}</span>
-            {item.sub && <span className="text-[10px] text-faint font-mono">{item.sub}</span>}
+            <item.icon size={18} className={item.color} />
+            <span className="text-xs font-bold uppercase tracking-wider text-soft">{item.label}</span>
+            <span className={`text-lg font-bold font-mono ${item.color}`}>{item.value}</span>
+            {item.sub && <span className="text-xs text-faint font-mono">{item.sub}</span>}
           </div>
         ))}
       </div>

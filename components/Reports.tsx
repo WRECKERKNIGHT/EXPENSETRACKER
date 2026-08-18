@@ -113,16 +113,17 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
   const net = totalIncome - totalExpense;
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="bg-surface border border-app rounded-[2rem] p-6 md:p-8 shadow-2xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-gold-soft to-gold shadow-card-soft">
-            <BarChart2 className="w-6 h-6 text-app" />
+    <div className="space-y-8 animate-fade-in">
+      <div className="card-3d gold-shimmer p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 relative overflow-hidden">
+        <div className="absolute bottom-0 right-0 w-56 h-56 opacity-[0.05] pointer-events-none" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&q=80)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+        <div className="flex items-center gap-4 relative z-10">
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-gold-soft to-gold shadow-gold-glow">
+            <BarChart2 className="w-7 h-7 text-white" />
           </div>
           <div>
-            <h2 className="text-xl md:text-2xl font-bold text-app tracking-tight">Spending Reports</h2>
-            <p className="text-xs text-soft uppercase tracking-[0.2em] mt-1 flex items-center gap-1">
-              <CalendarRange className="w-3 h-3" /> {range === 'day' && 'Today'}
+            <h2 className="heading-serif text-2xl md:text-3xl font-bold text-app tracking-tight">Spending Reports</h2>
+            <p className="text-sm text-soft uppercase tracking-[0.2em] mt-1 flex items-center gap-1">
+              <CalendarRange className="w-4 h-4" /> {range === 'day' && 'Today'}
               {range === 'week' && 'This Week'}
               {range === 'month' && 'This Month'}
             </p>
@@ -134,9 +135,9 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
               <button
                 key={r}
                 onClick={() => setRange(r)}
-                className={`px-3 py-1.5 rounded-full text-[11px] font-semibold transition-all ${
+                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
                   range === r
-                    ? 'bg-gold text-white shadow-card-soft'
+                    ? 'bg-gold text-white shadow-gold-glow'
                     : 'text-soft hover:text-app'
                 }`}
               >
@@ -146,38 +147,38 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
           </div>
           <button
             onClick={handleDownloadCsv}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-2 text-app text-xs font-semibold shadow-card-soft hover:bg-surface-3 transition-all"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-surface-2 text-app text-sm font-semibold shadow-card-soft hover:bg-surface-3 hover:border-gold-soft border border-app transition-all"
           >
             <Download className="w-4 h-4" /> Export CSV
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-        <div className="bg-surface border border-app rounded-[1.75rem] p-5 shadow-xl relative overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+        <div className="card-3d p-6 relative overflow-hidden">
           <div className="absolute inset-x-0 -top-8 h-16 bg-gradient-to-b from-brand/20 to-transparent pointer-events-none" />
-          <p className="text-[11px] font-semibold text-soft uppercase tracking-[0.18em] mb-1">Income</p>
-          <p className="text-2xl font-bold text-brand-ink">{fmt(totalIncome)}</p>
+          <p className="text-sm font-semibold text-soft uppercase tracking-[0.18em] mb-2">Income</p>
+          <p className="text-3xl font-bold text-brand-ink font-display">{fmt(totalIncome)}</p>
         </div>
-        <div className="bg-surface border border-app rounded-[1.75rem] p-5 shadow-xl relative overflow-hidden">
+        <div className="card-3d p-6 relative overflow-hidden">
           <div className="absolute inset-x-0 -top-8 h-16 bg-gradient-to-b from-red-500/25 to-transparent pointer-events-none" />
-          <p className="text-[11px] font-semibold text-soft uppercase tracking-[0.18em] mb-1">Expenses</p>
-          <p className="text-2xl font-bold text-red-400">{fmt(totalExpense)}</p>
+          <p className="text-sm font-semibold text-soft uppercase tracking-[0.18em] mb-2">Expenses</p>
+          <p className="text-3xl font-bold text-red-400 font-display">{fmt(totalExpense)}</p>
         </div>
-        <div className="bg-surface border border-app rounded-[1.75rem] p-5 shadow-xl relative overflow-hidden">
+        <div className="card-3d p-6 relative overflow-hidden">
           <div className="absolute inset-x-0 -top-8 h-16 bg-gradient-to-b from-gold/20 to-transparent pointer-events-none" />
-          <p className="text-[11px] font-semibold text-soft uppercase tracking-[0.18em] mb-1">Net</p>
-          <p className={`text-2xl font-bold ${net >= 0 ? 'text-brand-ink' : 'text-red-300'}`}>{fmt(net)}</p>
+          <p className="text-sm font-semibold text-soft uppercase tracking-[0.18em] mb-2">Net</p>
+          <p className={`text-3xl font-bold font-display ${net >= 0 ? 'text-brand-ink' : 'text-red-300'}`}>{fmt(net)}</p>
         </div>
       </div>
 
-      <div className="bg-surface border border-app rounded-[2rem] p-6 md:p-8 shadow-2xl">
-        <h3 className="text-sm font-semibold text-soft mb-4 flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+      <div className="card-3d gold-line-top p-6 md:p-8">
+        <h3 className="heading-serif text-xl font-bold text-soft mb-5 flex items-center gap-3">
+          <span className="w-2 h-2 rounded-full bg-gold" />
           Top Spending Categories
         </h3>
         {byCategory.length === 0 ? (
-          <p className="text-xs text-faint">No expenses in this period.</p>
+          <p className="text-sm text-faint">No expenses in this period.</p>
         ) : (
           <div className="space-y-3">
             {byCategory.map((c, idx) => {
@@ -188,16 +189,16 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
               return (
                 <div
                   key={c.name}
-                  className="bg-surface-2 border border-app rounded-2xl px-4 py-3 space-y-2"
+                  className="bg-surface-2 border border-app rounded-2xl px-4 py-3 space-y-2 hover:border-gold-soft transition-all"
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
-                      <span className="text-xs font-bold text-app">{c.name}</span>
+                    <div className="flex items-center gap-3">
+                      <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: color }} />
+                      <span className="text-sm font-bold text-app">{c.name}</span>
                     </div>
-                    <span className="text-xs font-bold text-soft font-mono">{fmt(c.value)}</span>
+                    <span className="text-sm font-bold text-soft font-mono">{fmt(c.value)}</span>
                   </div>
-                  <div className="w-full bg-app-soft rounded-full h-1.5 overflow-hidden">
+                  <div className="w-full bg-app-soft rounded-full h-2 overflow-hidden">
                     <div
                       className="h-full rounded-full transition-all duration-500"
                       style={{ width: `${pct}%`, backgroundColor: color }}
@@ -211,24 +212,24 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
       </div>
 
       {/* Monthly Comparison */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-        <div className="md:col-span-2 bg-surface border border-app rounded-[2rem] p-6 md:p-8 shadow-2xl">
-          <h3 className="text-sm font-semibold text-soft mb-6 flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-brand" />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+        <div className="md:col-span-2 card-3d gold-line-top p-6 md:p-8">
+          <h3 className="heading-serif text-xl font-bold text-soft mb-6 flex items-center gap-3">
+            <span className="w-2 h-2 rounded-full bg-brand" />
             Month-over-Month Comparison
           </h3>
           {monthlyComparison.thisMonthExpense === 0 && monthlyComparison.lastMonthExpense === 0 ? (
-            <p className="text-xs text-faint text-center py-10">No expense data for comparison.</p>
+            <p className="text-sm text-faint text-center py-10">No expense data for comparison.</p>
           ) : (
-            <div className="h-56">
+            <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={comparisonBarData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border-soft)" vertical={false} opacity={0.6} />
-                  <XAxis dataKey="name" stroke="var(--text-faint)" fontSize={12} tickLine={false} axisLine={false} fontFamily="Outfit" />
-                  <YAxis stroke="var(--text-faint)" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(val) => `₹${val/1000}k`} fontFamily="Outfit" />
+                  <XAxis dataKey="name" stroke="var(--text-faint)" fontSize={12} tickLine={false} axisLine={false} fontFamily="Inter" fontWeight={500} />
+                  <YAxis stroke="var(--text-faint)" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(val) => `₹${val/1000}k`} fontFamily="Inter" fontWeight={500} />
                   <RechartsTooltip
                     cursor={{ fill: 'var(--surface-2)', radius: 8 }}
-                    contentStyle={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)', borderRadius: '12px', color: 'var(--text)', fontFamily: 'Outfit' }}
+                    contentStyle={{ backgroundColor: 'var(--surface)', borderColor: 'var(--gold-soft)', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.3)', color: 'var(--text)', fontFamily: 'Inter' }}
                     formatter={(value: number) => [fmt(value), 'Spent']}
                   />
                   <Bar dataKey="amount" radius={[8, 8, 0, 0]} barSize={56}>
@@ -242,21 +243,21 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
           )}
         </div>
 
-        <div className="bg-surface border border-app rounded-[2rem] p-6 shadow-2xl flex flex-col justify-center items-center text-center">
-          <h3 className="text-sm font-semibold text-soft mb-4">vs Last Month</h3>
+        <div className="card-3d p-6 flex flex-col justify-center items-center text-center">
+          <h3 className="heading-serif text-lg font-semibold text-soft mb-5">vs Last Month</h3>
           {monthlyComparison.change === 0 ? (
-            <Minus size={36} className="text-faint mb-3" />
+            <Minus size={44} className="text-faint mb-3" />
           ) : monthlyComparison.change > 0 ? (
-            <TrendingUp size={36} className="text-red-400 mb-3" />
+            <TrendingUp size={44} className="text-red-400 mb-3" />
           ) : (
-            <TrendingDown size={36} className="text-brand mb-3" />
+            <TrendingDown size={44} className="text-brand mb-3" />
           )}
-          <p className={`text-4xl font-bold font-mono ${
+          <p className={`text-5xl font-bold font-mono font-display ${
             monthlyComparison.change > 0 ? 'text-red-400' : monthlyComparison.change < 0 ? 'text-brand-ink' : 'text-faint'
           }`}>
             {monthlyComparison.change > 0 ? '+' : ''}{monthlyComparison.change.toFixed(1)}%
           </p>
-          <p className="text-xs text-faint mt-2">
+          <p className="text-sm text-faint mt-3">
             {monthlyComparison.change > 0 ? 'Spending increased' : monthlyComparison.change < 0 ? 'Spending decreased' : 'No change yet'}
           </p>
         </div>

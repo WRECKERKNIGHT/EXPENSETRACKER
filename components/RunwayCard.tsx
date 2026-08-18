@@ -27,35 +27,37 @@ const RunwayCard: React.FC<RunwayCardProps> = ({ expenses, monthlyIncome, curren
     : 'no expenses yet — data will appear as you log spend';
 
   return (
-    <div className="bg-surface border border-app p-6 rounded-[2rem] shadow-card-soft relative overflow-hidden group card-glow-hover">
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand via-gold to-brand opacity-60" />
-      <div className="flex items-center gap-3 mb-5">
-        <div className="p-2.5 bg-brand/15 rounded-xl text-brand-ink border border-brand/30">
-          <LifeBuoy size={20} />
+    <div className="card-3d gold-line-top p-6 relative overflow-hidden group card-glow-hover">
+      <div className="absolute -bottom-4 -right-4 text-brand/5 pointer-events-none select-none">
+        <LifeBuoy size={80} strokeWidth={1} />
+      </div>
+      <div className="flex items-center gap-3 mb-5 relative z-10">
+        <div className="p-3 bg-brand/15 rounded-xl text-brand-ink border border-brand/30 shadow-brand-glow">
+          <LifeBuoy size={22} />
         </div>
         <div>
-          <h3 className="font-semibold text-sm text-app">Runway</h3>
-          <p className="text-[11px] text-faint uppercase tracking-[0.18em] font-semibold">Financial cushion</p>
+          <h3 className="heading-serif text-lg font-bold text-app">Runway</h3>
+          <p className="text-xs text-faint uppercase tracking-[0.18em] font-semibold">Financial cushion</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 relative z-10">
         <div>
-          <p className="font-display text-3xl font-bold text-app tracking-tight">{runwayLabel}<span className="text-lg text-faint font-medium"> mo</span></p>
-          <p className="text-[11px] text-faint font-medium mt-1">expenses covered</p>
+          <p className="font-display text-4xl font-bold text-app tracking-tight">{runwayLabel}<span className="text-xl text-faint font-medium"> mo</span></p>
+          <p className="text-xs text-faint font-medium mt-1">expenses covered</p>
         </div>
         <div>
-          <p className="font-display text-3xl font-bold text-app tracking-tight">{savingsRate.toFixed(0)}<span className="text-lg text-faint font-medium">%</span></p>
-          <p className="text-[11px] text-faint font-medium mt-1">savings rate</p>
+          <p className="font-display text-4xl font-bold text-app tracking-tight">{savingsRate.toFixed(0)}<span className="text-xl text-faint font-medium">%</span></p>
+          <p className="text-xs text-faint font-medium mt-1">savings rate</p>
         </div>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-app/60">
-        <div className="flex items-center justify-between text-xs mb-1.5">
+      <div className="mt-4 pt-3 border-t border-app/60 relative z-10">
+        <div className="flex items-center justify-between text-sm mb-1.5">
           <span className="text-faint font-semibold uppercase tracking-wide">Avg monthly burn</span>
-          <span className="font-bold text-gold">{fmt(stats.avgMonthlyExpense, currency)}</span>
+          <span className="font-bold text-gold font-display">{fmt(stats.avgMonthlyExpense, currency)}</span>
         </div>
-        <p className="text-xs text-soft">{runwayText}</p>
+        <p className="text-sm text-soft">{runwayText}</p>
       </div>
     </div>
   );

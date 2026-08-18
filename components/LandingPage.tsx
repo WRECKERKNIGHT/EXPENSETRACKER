@@ -572,8 +572,12 @@ const LeakSection: React.FC<{
    FEATURES
 ================================================================ */
 const FeaturesSection: React.FC = () => (
-  <section className="relative py-28 md:py-40 bg-app-soft border-y border-app">
-    <div className="max-w-7xl mx-auto px-6 md:px-10">
+  <section className="relative py-28 md:py-40 bg-app-soft border-y border-app overflow-hidden">
+    <div className="absolute inset-0 pointer-events-none">
+      <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1400&q=75" alt="" className="absolute top-0 right-0 w-[500px] h-[500px] object-cover opacity-[0.03] mix-blend-luminosity rounded-full blur-3xl" loading="lazy" />
+      <img src="https://images.unsplash.com/photo-1610375461246-83df859d849d?w=1200&q=75" alt="" className="absolute bottom-0 left-0 w-[400px] h-[400px] object-cover opacity-[0.03] mix-blend-luminosity rounded-full blur-3xl" loading="lazy" />
+    </div>
+    <div className="max-w-7xl mx-auto px-6 md:px-10 relative z-10">
       <Reveal className="max-w-2xl mb-20">
         <p className="text-[11px] uppercase tracking-[0.4em] text-gold font-bold mb-5">Chapter 02 — The Fix</p>
         <h2 className="heading-serif text-4xl md:text-6xl leading-[1.05] mb-7">
@@ -724,8 +728,11 @@ const StatsSection: React.FC = () => (
    TESTIMONIAL
 ================================================================ */
 const TestimonialSection: React.FC = () => (
-  <section className="relative py-28 bg-app">
-    <div className="max-w-4xl mx-auto px-6">
+  <section className="relative py-28 bg-app overflow-hidden">
+    <div className="absolute inset-0 pointer-events-none">
+      <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1400&q=75" alt="" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] object-cover opacity-[0.025] mix-blend-luminosity blur-2xl" loading="lazy" />
+    </div>
+    <div className="max-w-4xl mx-auto px-6 relative z-10">
       <Reveal>
         <div className="card-2d p-12 md:p-16 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-gold-soft to-gold" />
@@ -763,7 +770,10 @@ const FinaleSection: React.FC<{
   const textIn = range(finaleP, 0.35, 0.55);
 
   return (
-    <section ref={finaleRef} className="relative h-[260vh] bg-app">
+    <section ref={finaleRef} className="relative h-[260vh] bg-app overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none">
+        <img src="https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=1200&q=75" alt="" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] object-cover opacity-[0.04] mix-blend-luminosity rounded-full blur-3xl" loading="lazy" />
+      </div>
       <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-[0.06]" style={{ background: 'radial-gradient(circle, var(--gold) 0%, transparent 60%)' }} />

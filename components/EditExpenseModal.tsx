@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Category, Expense, TransactionType } from '../types';
-import { X, Check, ArrowDownCircle, ArrowUpCircle, Pencil } from 'lucide-react';
+import { X, Check, ArrowDownCircle, ArrowUpCircle, Pencil, DollarSign } from 'lucide-react';
 
 interface EditExpenseModalProps {
   isOpen: boolean;
@@ -42,17 +42,18 @@ const EditExpenseModal: React.FC<EditExpenseModalProps> = ({ isOpen, onClose, on
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-fade-in font-sans">
-      <div className="bg-surface border border-app rounded-[2rem] w-full max-w-lg shadow-2xl overflow-hidden transform transition-all flex flex-col max-h-[90vh]">
+      <div className="card-3d bg-surface border border-gold/20 rounded-[2rem] w-full max-w-lg shadow-2xl overflow-hidden transform transition-all flex flex-col max-h-[90vh] perspective-1000">
         
-        <div className="flex justify-between items-center p-6 border-b border-app/50 bg-surface-2">
-          <div className="flex items-center gap-3">
-            <div className="bg-gradient-to-br from-gold-soft to-gold p-2 rounded-xl shadow-card">
+        <div className="flex justify-between items-center p-6 border-b border-gold/20 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-gold/5 to-transparent" />
+          <div className="relative flex items-center gap-3">
+            <div className="bg-gradient-to-br from-gold-soft to-gold p-2.5 rounded-2xl shadow-card-soft">
               <Pencil size={20} className="text-white" />
             </div>
-            <h2 className="text-xl font-bold text-app tracking-tight text-glow-sm">Edit Transaction</h2>
+            <h2 className="heading-serif text-xl font-bold text-app tracking-tight">Edit Transaction</h2>
           </div>
-          <button onClick={onClose} className="text-faint hover:text-app transition-colors bg-surface-3 p-2 rounded-full hover:bg-surface-2">
-            <X size={20} />
+          <button onClick={onClose} className="relative text-faint hover:text-app transition-colors bg-surface-3 p-2.5 rounded-full hover:bg-surface-2 border border-app">
+            <X size={18} />
           </button>
         </div>
 
@@ -61,10 +62,10 @@ const EditExpenseModal: React.FC<EditExpenseModalProps> = ({ isOpen, onClose, on
             <button
               type="button"
               onClick={() => setType('expense')}
-              className={`flex items-center justify-center gap-2 py-3 rounded-2xl border transition-all font-semibold text-sm ${
+              className={`flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 transition-all font-bold text-sm ${
                 type === 'expense'
-                  ? 'bg-red-500/10 border-red-500/50 text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.2)]'
-                  : 'bg-surface-2 border-app text-faint hover:bg-surface-3'
+                  ? 'bg-red-500/10 border-red-500/50 text-red-400 shadow-[0_0_20px_rgba(239,68,68,0.15)]'
+                  : 'bg-surface-2 border-app text-faint hover:bg-surface-3 hover:border-gold/30'
               }`}
             >
               <ArrowDownCircle size={18} /> Expense
@@ -72,10 +73,10 @@ const EditExpenseModal: React.FC<EditExpenseModalProps> = ({ isOpen, onClose, on
             <button
               type="button"
               onClick={() => setType('income')}
-              className={`flex items-center justify-center gap-2 py-3 rounded-2xl border transition-all font-semibold text-sm ${
+              className={`flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 transition-all font-bold text-sm ${
                 type === 'income'
-                  ? 'bg-brand/10 border-gold-soft text-brand-ink shadow-card-soft'
-                  : 'bg-surface-2 border-app text-faint hover:bg-surface-3'
+                  ? 'bg-gold/10 border-gold/50 text-gold shadow-gold-glow'
+                  : 'bg-surface-2 border-app text-faint hover:bg-surface-3 hover:border-gold/30'
               }`}
             >
               <ArrowUpCircle size={18} /> Income
@@ -83,40 +84,40 @@ const EditExpenseModal: React.FC<EditExpenseModalProps> = ({ isOpen, onClose, on
           </div>
 
           <div>
-            <label className="block text-sm text-soft mb-2 ml-1 font-medium tracking-wide">AMOUNT</label>
+            <label className="block text-sm text-soft mb-2 ml-1 font-bold tracking-wide uppercase">Amount</label>
             <div className="relative">
-              <span className="absolute left-5 top-1/2 -translate-y-1/2 text-faint font-semibold text-lg">₹</span>
+              <span className="absolute left-5 top-1/2 -translate-y-1/2 text-gold font-bold text-lg">₹</span>
               <input
                 type="number"
                 step="1"
                 required
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="w-full bg-app-soft border border-app rounded-2xl pl-12 pr-5 py-3.5 text-app focus:outline-none focus:ring-2 focus:ring-brand/40 transition-all font-mono text-lg shadow-inner"
+                className="w-full bg-app-soft border-2 border-app rounded-2xl pl-12 pr-5 py-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition-all font-display font-bold text-xl shadow-inner"
                 placeholder="0"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm text-soft mb-2 ml-1 font-medium tracking-wide">DESCRIPTION</label>
+            <label className="block text-sm text-soft mb-2 ml-1 font-bold tracking-wide uppercase">Description</label>
             <input
               type="text"
               required
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-app-soft border border-app rounded-2xl px-5 py-3.5 text-app focus:outline-none focus:ring-2 focus:ring-brand/40 transition-all shadow-inner"
+              className="w-full bg-app-soft border-2 border-app rounded-2xl px-5 py-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition-all shadow-inner"
               placeholder="What was it?"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-soft mb-2 ml-1 font-medium tracking-wide">CATEGORY</label>
+              <label className="block text-sm text-soft mb-2 ml-1 font-bold tracking-wide uppercase">Category</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as Category)}
-                className="w-full bg-app-soft border border-app rounded-2xl px-4 py-3.5 text-app focus:outline-none focus:ring-2 focus:ring-brand/40 transition-all appearance-none shadow-inner"
+                className="w-full bg-app-soft border-2 border-app rounded-2xl px-4 py-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition-all appearance-none shadow-inner font-medium"
               >
                 {Object.values(Category).map((cat) => (
                   <option key={cat} value={cat}>{cat}</option>
@@ -124,13 +125,13 @@ const EditExpenseModal: React.FC<EditExpenseModalProps> = ({ isOpen, onClose, on
               </select>
             </div>
             <div>
-              <label className="block text-sm text-soft mb-2 ml-1 font-medium tracking-wide">DATE</label>
+              <label className="block text-sm text-soft mb-2 ml-1 font-bold tracking-wide uppercase">Date</label>
               <input
                 type="date"
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full bg-app-soft border border-app rounded-2xl px-4 py-3.5 text-app focus:outline-none focus:ring-2 focus:ring-brand/40 transition-all shadow-inner"
+                className="w-full bg-app-soft border-2 border-app rounded-2xl px-4 py-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition-all shadow-inner font-medium"
               />
             </div>
           </div>
@@ -139,13 +140,13 @@ const EditExpenseModal: React.FC<EditExpenseModalProps> = ({ isOpen, onClose, on
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 bg-surface-3 hover:bg-surface-2 text-soft font-bold py-3.5 rounded-2xl transition-all"
+              className="flex-1 bg-surface-3 hover:bg-surface-2 text-soft font-bold py-4 rounded-2xl transition-all border border-app hover:border-gold/20"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-[2] bg-gradient-to-br from-brand-deep to-brand hover:brightness-110 text-white font-bold py-3.5 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-card-soft"
+              className="flex-[2] btn-premium text-white font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-2"
             >
               <Check size={18} /> Save Changes
             </button>

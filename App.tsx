@@ -16,7 +16,7 @@ import LandingPage from './components/LandingPage';
 import ThemeToggle from './components/ThemeToggle';
 import OnboardingQuiz from './components/OnboardingQuiz';
 import { initTheme, applyTheme } from './services/theme';
-import { LayoutDashboard, Receipt, Sparkles, Plus, Wallet, LogOut, User, Mail, Key, BarChart2, SlidersHorizontal } from 'lucide-react';
+import { LayoutDashboard, Receipt, Sparkles, Plus, Wallet, LogOut, User, Mail, Key, BarChart2, SlidersHorizontal, DollarSign } from 'lucide-react';
 
 // Google Icon Component
 const GoogleIcon = () => (
@@ -343,77 +343,81 @@ const App: React.FC = () => {
 
   if (screen === 'login') {
     return (
-      <div className="min-h-screen bg-app text-app flex items-center justify-center p-6 relative font-sans">
+      <div className="min-h-screen bg-app text-app flex items-center justify-center p-6 relative font-sans overflow-hidden">
         <MoneyBackground />
+        <div className="absolute top-0 left-0 w-full h-full hero-gradient-dark opacity-60 pointer-events-none"></div>
 
-        <div className="relative z-10 w-full max-w-md bg-surface border border-app p-8 rounded-[2rem] shadow-card animate-fade-in">
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-br from-brand-deep to-brand rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-card-soft transform rotate-3">
-               <User size={28} className="text-white" />
-            </div>
-            <h2 className="heading-serif text-3xl font-bold mb-2 tracking-tight">Welcome Back</h2>
-            <p className="text-soft">Sign in to your account</p>
-          </div>
-          
-          <button 
-            onClick={handleGoogleAuth}
-            className="w-full bg-gold hover:brightness-110 text-white font-bold py-4 rounded-2xl transition-all shadow-card-soft flex items-center justify-center gap-3 mb-6"
-          >
-            <GoogleIcon />
-            Continue with Google
-          </button>
-
-          <div className="relative flex py-2 items-center mb-6">
-            <div className="flex-grow border-t border-app"></div>
-            <span className="flex-shrink mx-4 text-faint text-xs uppercase tracking-widest font-bold">Or continue with email</span>
-            <div className="flex-grow border-t border-app"></div>
-          </div>
-
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div>
-              <label className="block text-xs font-bold text-soft mb-2 ml-1 tracking-widest uppercase">Email Address</label>
-              <div className="relative">
-                <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-faint" size={18} />
-                <input
-                    type="email"
-                    required
-                    value={loginEmail}
-                    onChange={(e) => setLoginEmail(e.target.value)}
-                    className="w-full bg-app-soft border border-app rounded-2xl pl-12 pr-5 py-4 text-app focus:outline-none focus:ring-2 focus:ring-brand/50 transition-all placeholder:text-faint"
-                    placeholder="you@example.com"
-                />
+        <div className="relative z-10 w-full max-w-md perspective-1000">
+          <div className="card-3d gold-shimmer p-8 md:p-10 animate-fade-in-up">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-deep via-gold to-brand"></div>
+            <div className="text-center mb-8">
+              <div className="w-20 h-20 bg-gradient-to-br from-brand-deep to-brand rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-brand-glow transform rotate-3 hover-3d cursor-pointer">
+                 <User size={32} className="text-white" />
               </div>
+              <h2 className="heading-serif text-4xl md:text-5xl font-bold mb-2 tracking-tight">Welcome Back</h2>
+              <p className="text-soft text-lg">Sign in to your account</p>
             </div>
-
-            <div>
-              <label className="block text-xs font-bold text-soft mb-2 ml-1 tracking-widest uppercase">Password</label>
-              <div className="relative">
-                <Key className="absolute left-5 top-1/2 -translate-y-1/2 text-faint" size={18} />
-                <input
-                    type="password"
-                    required
-                    value={loginPassword}
-                    onChange={(e) => setLoginPassword(e.target.value)}
-                    className="w-full bg-app-soft border border-app rounded-2xl pl-12 pr-5 py-4 text-app focus:outline-none focus:ring-2 focus:ring-brand/50 transition-all placeholder:text-faint"
-                    placeholder="••••••••"
-                />
-              </div>
-            </div>
-
-            {authError && <p className="text-danger text-sm bg-danger/10 p-3 rounded-xl border border-danger/20 flex items-center gap-2 animate-fade-in">{authError}</p>}
             
             <button 
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-gradient-to-br from-brand-deep to-brand hover:brightness-110 disabled:opacity-60 text-white font-bold py-4 rounded-2xl transition-all shadow-card mt-2 text-lg tracking-wide"
+              onClick={handleGoogleAuth}
+              className="w-full bg-gold hover:brightness-110 text-white font-bold py-4 rounded-2xl transition-all shadow-gold-glow flex items-center justify-center gap-3 mb-6 text-lg"
             >
-              {isLoading ? 'Signing In...' : 'Sign In'}
+              <GoogleIcon />
+              Continue with Google
             </button>
-          </form>
 
-          <button onClick={() => setScreen('landing')} className="w-full mt-6 text-faint text-sm hover:text-app transition-colors">
-            Cancel
-          </button>
+            <div className="relative flex py-2 items-center mb-6">
+              <div className="flex-grow border-t border-app"></div>
+              <span className="flex-shrink mx-4 text-faint text-xs uppercase tracking-widest font-bold">Or continue with email</span>
+              <div className="flex-grow border-t border-app"></div>
+            </div>
+
+            <form onSubmit={handleLogin} className="space-y-5">
+              <div>
+                <label className="block text-sm font-bold text-soft mb-2 ml-1 tracking-wider uppercase">Email Address</label>
+                <div className="relative">
+                  <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-faint" size={20} />
+                  <input
+                      type="email"
+                      required
+                      value={loginEmail}
+                      onChange={(e) => setLoginEmail(e.target.value)}
+                      className="w-full bg-app-soft border border-app rounded-2xl pl-13 pr-5 py-4 text-app text-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold-soft transition-all placeholder:text-faint"
+                      placeholder="you@example.com"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-soft mb-2 ml-1 tracking-wider uppercase">Password</label>
+                <div className="relative">
+                  <Key className="absolute left-5 top-1/2 -translate-y-1/2 text-faint" size={20} />
+                  <input
+                      type="password"
+                      required
+                      value={loginPassword}
+                      onChange={(e) => setLoginPassword(e.target.value)}
+                      className="w-full bg-app-soft border border-app rounded-2xl pl-13 pr-5 py-4 text-app text-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold-soft transition-all placeholder:text-faint"
+                      placeholder="••••••••"
+                  />
+                </div>
+              </div>
+
+              {authError && <p className="text-danger text-sm bg-danger/10 p-3 rounded-xl border border-danger/20 flex items-center gap-2 animate-fade-in">{authError}</p>}
+              
+              <button 
+                type="submit"
+                disabled={isLoading}
+                className="w-full btn-premium disabled:opacity-60 text-lg tracking-wide py-4"
+              >
+                {isLoading ? 'Signing In...' : 'Sign In'}
+              </button>
+            </form>
+
+            <button onClick={() => setScreen('landing')} className="w-full mt-6 text-faint text-sm hover:text-app transition-colors">
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -421,110 +425,116 @@ const App: React.FC = () => {
 
   if (screen === 'signup') {
     return (
-      <div className="min-h-screen bg-app text-app flex items-center justify-center p-6 relative font-sans">
+      <div className="min-h-screen bg-app text-app flex items-center justify-center p-6 relative font-sans overflow-hidden">
         <MoneyBackground />
+        <div className="absolute top-0 left-0 w-full h-full hero-gradient-dark opacity-60 pointer-events-none"></div>
 
-        <div className="relative z-10 w-full max-w-lg bg-surface border border-app p-8 rounded-[2rem] shadow-card animate-fade-in max-h-[90vh] overflow-y-auto custom-scrollbar">
-          <div className="text-center mb-6">
-            <h2 className="heading-serif text-3xl font-bold mb-3 tracking-tight">Create Account</h2>
-            <p className="text-soft font-light">Join SpendSmart and take control.</p>
-          </div>
-          
-          <button 
-            onClick={handleGoogleAuth}
-            className="w-full bg-gold hover:brightness-110 text-white font-bold py-4 rounded-2xl transition-all shadow-card-soft flex items-center justify-center gap-3 mb-6"
-          >
-            <GoogleIcon />
-            Continue with Google
-          </button>
-
-          <div className="relative flex py-2 items-center mb-6">
-            <div className="flex-grow border-t border-app"></div>
-            <span className="flex-shrink mx-4 text-faint text-xs uppercase tracking-widest font-bold">Or sign up with email</span>
-            <div className="flex-grow border-t border-app"></div>
-          </div>
-
-          <form onSubmit={handleSignup} className="space-y-4">
-            
-            {/* Personal Info */}
-            <div>
-              <label className="block text-xs font-bold text-soft mb-2 ml-1 tracking-widest uppercase">Full Name</label>
-              <input
-                type="text"
-                required
-                value={nameInput}
-                onChange={(e) => setNameInput(e.target.value)}
-                className="w-full bg-app-soft border border-app rounded-2xl px-5 py-3 text-app focus:outline-none focus:ring-2 focus:ring-brand/50 transition-all placeholder:text-faint"
-                placeholder="Rahul Sharma"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-soft mb-2 ml-1 tracking-widest uppercase">Email Address</label>
-              <input
-                type="email"
-                required
-                value={emailInput}
-                onChange={(e) => setEmailInput(e.target.value)}
-                className="w-full bg-app-soft border border-app rounded-2xl px-5 py-3 text-app focus:outline-none focus:ring-2 focus:ring-brand/50 transition-all placeholder:text-faint"
-                placeholder="rahul@example.com"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-soft mb-2 ml-1 tracking-widest uppercase">Password</label>
-              <input
-                type="password"
-                required
-                minLength={6}
-                value={passwordInput}
-                onChange={(e) => setPasswordInput(e.target.value)}
-                className="w-full bg-app-soft border border-app rounded-2xl px-5 py-3 text-app focus:outline-none focus:ring-2 focus:ring-brand/50 transition-all placeholder:text-faint"
-                placeholder="••••••••"
-              />
+        <div className="relative z-10 w-full max-w-lg perspective-1000">
+          <div className="card-3d gold-shimmer p-8 md:p-10 animate-fade-in-up max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-deep via-gold to-brand"></div>
+            <div className="text-center mb-6">
+              <h2 className="heading-serif text-4xl md:text-5xl font-bold mb-3 tracking-tight">Create Account</h2>
+              <p className="text-soft font-light text-lg">Join SpendSmart and take control.</p>
             </div>
             
-            {/* Financial Info */}
-            <div className="pt-4 border-t border-app">
-                <p className="text-sm font-semibold text-gold mb-4 uppercase tracking-wider">Financial Setup</p>
-                <div className="grid grid-cols-2 gap-4">
-                    <div>
-                    <label className="block text-xs font-bold text-soft mb-2 ml-1 tracking-widest uppercase">Current Balance (₹)</label>
-                    <input
-                        type="number"
-                        required
-                        value={balanceInput}
-                        onChange={(e) => setBalanceInput(e.target.value)}
-                        className="w-full bg-app-soft border border-app rounded-2xl px-4 py-3 text-app focus:outline-none focus:ring-2 focus:ring-brand/50 transition-all placeholder:text-faint font-mono"
-                        placeholder="0"
-                    />
-                    </div>
-
-                    <div>
-                    <label className="block text-xs font-bold text-soft mb-2 ml-1 tracking-widest uppercase">Monthly Salary (₹)</label>
-                    <input
-                        type="number"
-                        required
-                        value={incomeInput}
-                        onChange={(e) => setIncomeInput(e.target.value)}
-                        className="w-full bg-app-soft border border-app rounded-2xl px-4 py-3 text-app focus:outline-none focus:ring-2 focus:ring-brand/50 transition-all placeholder:text-faint font-mono"
-                        placeholder="0"
-                    />
-                    </div>
-                </div>
-            </div>
-
             <button 
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-gradient-to-br from-brand-deep to-brand hover:brightness-110 disabled:opacity-60 text-white font-bold py-4 rounded-2xl transition-all shadow-card mt-4 text-lg tracking-wide"
+              onClick={handleGoogleAuth}
+              className="w-full bg-gold hover:brightness-110 text-white font-bold py-4 rounded-2xl transition-all shadow-gold-glow flex items-center justify-center gap-3 mb-6 text-lg"
             >
-              {isLoading ? 'Setting Up...' : 'Continue Setup'}
+              <GoogleIcon />
+              Continue with Google
             </button>
-          </form>
-          <button onClick={() => setScreen('landing')} className="w-full mt-6 text-faint text-sm hover:text-app transition-colors">
-            Back to Home
-          </button>
+
+            <div className="relative flex py-2 items-center mb-6">
+              <div className="flex-grow border-t border-app"></div>
+              <span className="flex-shrink mx-4 text-faint text-xs uppercase tracking-widest font-bold">Or sign up with email</span>
+              <div className="flex-grow border-t border-app"></div>
+            </div>
+
+            <form onSubmit={handleSignup} className="space-y-4">
+              
+              {/* Personal Info */}
+              <div>
+                <label className="block text-sm font-bold text-soft mb-2 ml-1 tracking-wider uppercase">Full Name</label>
+                <input
+                  type="text"
+                  required
+                  value={nameInput}
+                  onChange={(e) => setNameInput(e.target.value)}
+                  className="w-full bg-app-soft border border-app rounded-2xl px-5 py-4 text-app text-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold-soft transition-all placeholder:text-faint"
+                  placeholder="Rahul Sharma"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-soft mb-2 ml-1 tracking-wider uppercase">Email Address</label>
+                <input
+                  type="email"
+                  required
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
+                  className="w-full bg-app-soft border border-app rounded-2xl px-5 py-4 text-app text-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold-soft transition-all placeholder:text-faint"
+                  placeholder="rahul@example.com"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-soft mb-2 ml-1 tracking-wider uppercase">Password</label>
+                <input
+                  type="password"
+                  required
+                  minLength={6}
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
+                  className="w-full bg-app-soft border border-app rounded-2xl px-5 py-4 text-app text-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold-soft transition-all placeholder:text-faint"
+                  placeholder="••••••••"
+                />
+              </div>
+              
+              {/* Financial Info */}
+              <div className="pt-4 border-t border-app">
+                  <p className="text-base font-semibold text-gold mb-4 uppercase tracking-wider flex items-center gap-2">
+                    <DollarSign size={18} /> Financial Setup
+                  </p>
+                  <div className="grid grid-cols-2 gap-4">
+                      <div>
+                      <label className="block text-sm font-bold text-soft mb-2 ml-1 tracking-wider uppercase">Current Balance (₹)</label>
+                      <input
+                          type="number"
+                          required
+                          value={balanceInput}
+                          onChange={(e) => setBalanceInput(e.target.value)}
+                          className="w-full bg-app-soft border border-app rounded-2xl px-4 py-4 text-app text-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold-soft transition-all placeholder:text-faint font-mono"
+                          placeholder="0"
+                      />
+                      </div>
+
+                      <div>
+                      <label className="block text-sm font-bold text-soft mb-2 ml-1 tracking-wider uppercase">Monthly Salary (₹)</label>
+                      <input
+                          type="number"
+                          required
+                          value={incomeInput}
+                          onChange={(e) => setIncomeInput(e.target.value)}
+                          className="w-full bg-app-soft border border-app rounded-2xl px-4 py-4 text-app text-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold-soft transition-all placeholder:text-faint font-mono"
+                          placeholder="0"
+                      />
+                      </div>
+                  </div>
+              </div>
+
+              <button 
+                type="submit"
+                disabled={isLoading}
+                className="w-full btn-premium disabled:opacity-60 text-lg tracking-wide py-4 mt-4"
+              >
+                {isLoading ? 'Setting Up...' : 'Continue Setup'}
+              </button>
+            </form>
+            <button onClick={() => setScreen('landing')} className="w-full mt-6 text-faint text-sm hover:text-app transition-colors">
+              Back to Home
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -536,15 +546,19 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-app text-app flex flex-col md:flex-row overflow-hidden font-sans">
       
       {/* Sidebar Navigation */}
-      <aside className="w-full md:w-80 bg-surface border-r border-app flex-shrink-0 flex flex-col h-auto md:h-screen sticky top-0 z-20 shadow-card-soft">
-        <div className="p-6 md:p-8 flex items-center justify-between gap-4">
+      <aside className="w-full md:w-80 bg-surface border-r border-app flex-shrink-0 flex flex-col h-auto md:h-screen sticky top-0 z-20 shadow-card-soft relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-deep via-gold to-brand"></div>
+        <div className="absolute -bottom-10 -right-10 text-gold/5 pointer-events-none select-none">
+          <DollarSign size={160} strokeWidth={1} />
+        </div>
+        <div className="p-6 md:p-8 flex items-center justify-between gap-4 relative z-10">
           <div className="flex items-center gap-4">
-            <div className="bg-gradient-to-br from-brand-deep to-brand p-3 rounded-2xl shadow-card-soft">
-              <Wallet className="w-6 h-6 text-white" />
+            <div className="bg-gradient-to-br from-brand-deep to-brand p-3 rounded-2xl shadow-brand-glow hover-3d cursor-pointer">
+              <Wallet className="w-7 h-7 text-white" />
             </div>
             <div>
-              <span className="font-display text-xl md:text-2xl font-black tracking-tight block text-glow-sm">SpendSmart</span>
-              <span className="text-[10px] md:text-xs text-gold font-semibold tracking-wider uppercase">AI Expense Tracker</span>
+              <span className="heading-serif text-2xl md:text-3xl font-black tracking-tight block text-glow-gold">SpendSmart</span>
+              <span className="text-xs md:text-sm text-gold font-semibold tracking-wider uppercase">AI Expense Tracker</span>
             </div>
           </div>
           <div className="hidden md:block">
@@ -556,58 +570,58 @@ const App: React.FC = () => {
         <nav className="flex-1 px-4 space-y-3 py-6 overflow-y-auto hidden md:block">
           <button 
             onClick={() => setView('dashboard')}
-            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-medium border ${
+            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-semibold border text-base ${
               view === 'dashboard' 
-              ? 'bg-surface-2 text-app border-app shadow-card-soft' 
+              ? 'bg-surface-2 text-app border-gold/30 shadow-card-soft' 
               : 'border-transparent text-soft hover:text-app hover:bg-surface-2'
             }`}
           >
-            <LayoutDashboard size={20} className={view === 'dashboard' ? 'text-brand' : ''} />
+            <LayoutDashboard size={22} className={view === 'dashboard' ? 'text-brand' : ''} />
             Dashboard
           </button>
           <button 
             onClick={() => setView('expenses')}
-            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-medium border ${
+            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-semibold border text-base ${
               view === 'expenses' 
-              ? 'bg-surface-2 text-app border-app shadow-card-soft' 
+              ? 'bg-surface-2 text-app border-gold/30 shadow-card-soft' 
               : 'border-transparent text-soft hover:text-app hover:bg-surface-2'
             }`}
           >
-            <Receipt size={20} className={view === 'expenses' ? 'text-brand' : ''} />
+            <Receipt size={22} className={view === 'expenses' ? 'text-brand' : ''} />
             Manage Expenses
             {monthlyExpenseCount > 0 && (
-              <span className="ml-auto text-[10px] font-bold bg-brand/15 text-brand px-2 py-0.5 rounded-full">
+              <span className="ml-auto text-xs font-bold bg-brand/15 text-brand px-2.5 py-1 rounded-full">
                 {monthlyExpenseCount}
               </span>
             )}
           </button>
           <button 
             onClick={() => setView('advisor')}
-            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-medium border ${
+            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-semibold border text-base ${
               view === 'advisor' 
-              ? 'bg-surface-2 text-app border-app shadow-card-soft' 
+              ? 'bg-surface-2 text-app border-gold/30 shadow-card-soft' 
               : 'border-transparent text-soft hover:text-app hover:bg-surface-2'
             }`}
           >
-            <Sparkles size={20} className={view === 'advisor' ? 'text-gold' : ''} />
+            <Sparkles size={22} className={view === 'advisor' ? 'text-gold' : ''} />
             AI Advisor
           </button>
           <button 
             onClick={() => setView('reports')}
-            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-medium border ${
+            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-semibold border text-base ${
               view === 'reports' 
-              ? 'bg-surface-2 text-app border-app shadow-card-soft' 
+              ? 'bg-surface-2 text-app border-gold/30 shadow-card-soft' 
               : 'border-transparent text-soft hover:text-app hover:bg-surface-2'
             }`}
           >
-            <BarChart2 size={20} className={view === 'reports' ? 'text-gold' : ''} />
+            <BarChart2 size={22} className={view === 'reports' ? 'text-gold' : ''} />
             Reports
           </button>
           <button 
             onClick={handleOpenCustomization}
-            className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-medium border border-dashed border-gold/30 text-soft hover:text-app hover:bg-surface-2"
+            className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-semibold border border-dashed border-gold/30 text-soft hover:text-app hover:bg-surface-2 text-base"
           >
-            <SlidersHorizontal size={20} className="text-gold" />
+            <SlidersHorizontal size={22} className="text-gold" />
             Customize Dashboard
           </button>
         </nav>
@@ -641,10 +655,10 @@ const App: React.FC = () => {
            </button>
         </div>
 
-        <div className="p-6 border-t border-app space-y-4 hidden md:block bg-surface-2">
+        <div className="p-6 border-t border-app space-y-4 hidden md:block bg-surface-2 relative z-10">
            <button 
              onClick={() => setIsModalOpen(true)}
-             className="w-full bg-gradient-to-br from-brand-deep to-brand hover:brightness-110 text-white font-bold py-4 rounded-2xl shadow-card-soft transition-all flex items-center justify-center gap-2 transform hover:-translate-y-1"
+             className="w-full btn-premium flex items-center justify-center gap-2 text-lg py-4"
            >
              <Plus size={20} />
              Add Transaction
@@ -670,7 +684,7 @@ const App: React.FC = () => {
         {/* Header - Only Show on Desktop (Mobile uses internal headers) */}
         <div className="hidden md:flex justify-between items-end mb-10 animate-fade-in">
            <div>
-               <h1 className="heading-serif text-4xl font-bold mb-2 tracking-tight">
+               <h1 className="heading-serif text-4xl md:text-5xl font-bold mb-3 tracking-tight">
                  {view === 'dashboard' && 'Dashboard Overview'}
                  {view === 'expenses' && 'Manage Expenses'}
                  {view === 'advisor' && 'Financial Assistant'}
@@ -686,7 +700,7 @@ const App: React.FC = () => {
            <div className="flex items-center gap-4">
               <div className="text-right">
                 <p className="text-xs text-faint font-bold uppercase tracking-wider mb-1">Current Date</p>
-                <p className="font-mono text-gold text-lg">
+                <p className="font-mono text-gold text-lg font-semibold">
                   {new Date().toLocaleDateString('en-IN', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
                 </p>
               </div>
@@ -695,11 +709,11 @@ const App: React.FC = () => {
 
         {/* Mobile Header for Logout */}
         <div className="md:hidden flex justify-between items-center mb-6">
-           <span className="font-display text-lg font-black">SpendSmart</span>
+           <span className="heading-serif text-2xl font-black text-glow-gold">SpendSmart</span>
            <div className="flex items-center gap-2">
               <ThemeToggle />
-              <button onClick={handleLogout} className="p-2 bg-surface border border-app rounded-full text-faint">
-                  <LogOut size={16} />
+              <button onClick={handleLogout} className="p-2.5 bg-surface border border-app rounded-xl text-faint hover:text-danger transition-colors">
+                  <LogOut size={18} />
               </button>
            </div>
         </div>

@@ -62,35 +62,35 @@ const AlertStrip: React.FC<AlertStripProps> = ({ expenses, currency }) => {
   if (dismissed || (alerts.over.length === 0 && alerts.near.length === 0)) return null;
 
   return (
-    <div className={`rounded-2xl border p-4 pr-10 relative animate-fade-in shadow-card-soft ${
+    <div className={`card-3d p-5 pr-10 relative animate-fade-in ${
       alerts.over.length > 0 ? 'bg-danger/10 border-danger/30' : 'bg-gold/10 border-gold/30'
     }`}>
       <button
         onClick={() => setDismissed(true)}
-        className="absolute top-3 right-3 p-1 rounded-full hover:bg-surface-2 text-faint hover:text-app transition-colors"
+        className="absolute top-3 right-3 p-1.5 rounded-full hover:bg-surface-2 text-faint hover:text-app transition-colors"
         aria-label="Dismiss alerts"
       >
-        <X size={16} />
+        <X size={18} />
       </button>
 
-      <div className="flex items-start gap-3">
-        <div className={`p-2 rounded-xl ${alerts.over.length > 0 ? 'bg-danger/15 text-danger' : 'bg-gold/15 text-gold'}`}>
-          {alerts.over.length > 0 ? <AlertTriangle size={18} /> : <CheckCircle2 size={18} />}
+      <div className="flex items-start gap-4">
+        <div className={`p-2.5 rounded-xl ${alerts.over.length > 0 ? 'bg-danger/15 text-danger' : 'bg-gold/15 text-gold'}`}>
+          {alerts.over.length > 0 ? <AlertTriangle size={22} /> : <CheckCircle2 size={22} />}
         </div>
         <div>
-          <p className="text-sm font-bold text-app">
+          <p className="text-base font-bold text-app">
             {alerts.over.length > 0
               ? `${alerts.over.length} budget${alerts.over.length > 1 ? 's' : ''} exceeded this month`
               : 'Almost over budget'}
           </p>
           <div className="flex flex-wrap gap-2 mt-2">
             {alerts.over.map(a => (
-              <span key={a.category} className="inline-flex items-center gap-1.5 text-xs font-semibold bg-danger/15 text-danger px-2.5 py-1 rounded-full border border-danger/20">
-                <AlertTriangle size={11} /> {a.category}: {fmt(a.spent, currency)} of {fmt(a.limit, currency)}
+              <span key={a.category} className="inline-flex items-center gap-1.5 text-sm font-semibold bg-danger/15 text-danger px-3 py-1.5 rounded-full border border-danger/20">
+                <AlertTriangle size={13} /> {a.category}: {fmt(a.spent, currency)} of {fmt(a.limit, currency)}
               </span>
             ))}
             {alerts.near.map(a => (
-              <span key={a.category} className="inline-flex items-center gap-1.5 text-xs font-semibold bg-gold/15 text-gold-ink px-2.5 py-1 rounded-full border border-gold/20">
+              <span key={a.category} className="inline-flex items-center gap-1.5 text-sm font-semibold bg-gold/15 text-gold-ink px-3 py-1.5 rounded-full border border-gold/20">
                 {a.category}: {fmt(a.spent, currency)} / {fmt(a.limit, currency)}
               </span>
             ))}

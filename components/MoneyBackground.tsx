@@ -5,7 +5,7 @@ const Coin: React.FC<{ size: number; className?: string; rot?: number }> = ({ si
     <circle cx="24" cy="24" r="22" fill="var(--gold)" stroke="var(--gold-soft)" strokeWidth="2" />
     <circle cx="24" cy="24" r="17" fill="none" stroke="var(--gold-ink)" strokeWidth="1.5" opacity="0.6" />
     <circle cx="24" cy="24" r="13" fill="none" stroke="var(--gold-ink)" strokeWidth="1" opacity="0.4" />
-    <text x="24" y="30" textAnchor="middle" fontFamily="Fraunces, serif" fontWeight="700" fontSize="17" fill="var(--gold-ink)">$</text>
+    <text x="24" y="30" textAnchor="middle" fontFamily="Playfair Display, serif" fontWeight="700" fontSize="17" fill="var(--gold-ink)">$</text>
   </svg>
 );
 
@@ -15,7 +15,7 @@ const TinyBill: React.FC<{ w?: number; className?: string; rot?: number }> = ({ 
     <rect x="5" y="5" width="90" height="32" rx="3.5" fill="none" stroke="var(--brand)" strokeWidth="0.75" opacity="0.7" />
     <circle cx="18" cy="21" r="8" fill="var(--brand-deep)" stroke="var(--brand)" strokeWidth="0.8" />
     <circle cx="82" cy="21" r="8" fill="var(--brand-deep)" stroke="var(--brand)" strokeWidth="0.8" />
-    <text x="50" y="26" textAnchor="middle" fontFamily="Fraunces, serif" fontWeight="700" fontSize="13" fill="var(--text)">$</text>
+    <text x="50" y="26" textAnchor="middle" fontFamily="Playfair Display, serif" fontWeight="700" fontSize="13" fill="var(--text)">$</text>
   </svg>
 );
 

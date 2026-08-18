@@ -5,7 +5,7 @@ import {
   Utensils, ShoppingBasket, Bus, Fuel, Home, Zap, 
   Landmark, Film, Stethoscope, ShoppingBag, Plane, 
   GraduationCap, TrendingUp, Banknote, Briefcase, MoreHorizontal,
-  Calendar, Gift, Shield, FileText, Smile, Repeat, PawPrint, Wrench
+  Calendar, Gift, Shield, FileText, Smile, Repeat, PawPrint, Wrench, DollarSign
 } from 'lucide-react';
 
 interface ExpenseListProps {
@@ -71,24 +71,27 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
   return (
     <div className="space-y-6 animate-fade-in font-sans pb-20">
       {/* Header & Search */}
-      <div className="bg-surface backdrop-blur-md border border-app rounded-[2rem] p-6 shadow-xl flex flex-col md:flex-row justify-between items-center gap-6 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-deep via-brand to-gold opacity-50"></div>
+      <div className="card-3d bg-surface border border-gold/20 rounded-[2rem] p-6 shadow-xl flex flex-col md:flex-row justify-between items-center gap-6 relative overflow-hidden">
+        <div className="gold-line-top" />
+        <div className="absolute top-4 right-6 text-gold/[0.04] pointer-events-none">
+          <DollarSign size={120} strokeWidth={1} />
+        </div>
         
-        <div>
-           <h3 className="text-2xl font-bold text-app tracking-tight text-glow-sm">Transactions</h3>
+        <div className="relative">
+           <h3 className="heading-serif text-2xl font-bold text-app tracking-tight">Transactions</h3>
            <p className="text-faint text-sm font-medium">History & details</p>
         </div>
 
         <div className="relative w-full md:w-96 group">
           <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-            <Search className="text-faint group-focus-within:text-brand-ink transition-colors" size={20} />
+            <Search className="text-faint group-focus-within:text-gold transition-colors" size={20} />
           </div>
           <input 
             type="text" 
             placeholder="Search transactions..."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="w-full bg-app-soft border border-app rounded-2xl pl-12 pr-4 py-4 text-app focus:outline-none focus:ring-2 focus:ring-brand/40 transition-all shadow-inner text-sm font-medium"
+            className="w-full bg-app-soft border-2 border-app rounded-2xl pl-12 pr-4 py-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition-all shadow-inner text-sm font-medium"
           />
         </div>
 
@@ -98,7 +101,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
             type="date"
             value={dateFrom}
             onChange={(e) => setDateFrom(e.target.value)}
-            className="bg-app-soft border border-app rounded-xl px-3 py-2 text-xs text-app focus:outline-none focus:ring-2 focus:ring-brand/40 font-mono"
+            className="bg-app-soft border-2 border-app rounded-xl px-3 py-2 text-xs text-app focus:outline-none focus:ring-2 focus:ring-gold/40 font-mono"
             placeholder="From"
           />
           <span className="text-faint text-xs">—</span>
@@ -106,13 +109,13 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
             type="date"
             value={dateTo}
             onChange={(e) => setDateTo(e.target.value)}
-            className="bg-app-soft border border-app rounded-xl px-3 py-2 text-xs text-app focus:outline-none focus:ring-2 focus:ring-brand/40 font-mono"
+            className="bg-app-soft border-2 border-app rounded-xl px-3 py-2 text-xs text-app focus:outline-none focus:ring-2 focus:ring-gold/40 font-mono"
             placeholder="To"
           />
           {(dateFrom || dateTo) && (
             <button
               onClick={() => { setDateFrom(''); setDateTo(''); }}
-              className="text-xs font-bold text-faint hover:text-danger transition-colors px-2 py-1"
+              className="text-xs font-bold text-faint hover:text-red-400 transition-colors px-2 py-1"
             >
               Clear
             </button>
@@ -121,14 +124,14 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
       </div>
       
       {/* Content */}
-      <div className="bg-surface backdrop-blur-md border border-app rounded-[2.5rem] overflow-hidden shadow-2xl min-h-[400px]">
+      <div className="card-3d bg-surface border border-gold/15 rounded-[2.5rem] overflow-hidden shadow-2xl min-h-[400px]">
         {filteredExpenses.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-96 gap-6 text-faint">
-            <div className="p-6 bg-surface-3 rounded-full border border-app/30 shadow-inner">
-              <Search className="w-10 h-10 opacity-50" />
+            <div className="p-6 bg-surface-3 rounded-full border border-gold/20 shadow-inner">
+              <DollarSign className="w-10 h-10 opacity-30 text-gold" />
             </div>
             <div className="text-center">
-               <p className="text-lg font-bold text-soft">No transactions found</p>
+               <p className="heading-serif text-lg font-bold text-soft">No transactions found</p>
                <p className="text-sm">Try adjusting your search terms</p>
             </div>
           </div>
@@ -137,7 +140,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
             {/* Desktop Table View */}
             <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-left">
-                <thead className="bg-surface-2 text-faint uppercase text-[11px] font-bold tracking-widest border-b border-app">
+                <thead className="bg-surface-2 text-faint uppercase text-[11px] font-bold tracking-widest border-b border-gold/15">
                   <tr>
                     <th className="px-8 py-6">Description</th>
                     <th className="px-6 py-6">Category</th>
@@ -146,14 +149,14 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
                     <th className="px-6 py-6 text-center"></th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-app">
+                <tbody className="divide-y divide-gold/10">
                   {filteredExpenses.map((expense) => (
-                    <tr key={expense.id} className="group hover:bg-white/[0.02] transition-all duration-300">
+                    <tr key={expense.id} className="group hover:bg-gold/[0.03] transition-all duration-300">
                       <td className="px-8 py-5">
                         <div className="flex items-center gap-4">
                           <div className={`p-3 rounded-2xl flex-shrink-0 transition-transform group-hover:scale-110 ${
                             expense.type === 'income' 
-                            ? 'bg-brand/10 text-brand-ink shadow-card-soft ring-1 ring-brand/30' 
+                            ? 'bg-gold/10 text-gold shadow-gold-glow ring-1 ring-gold/30' 
                             : 'bg-red-500/10 text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.15)] ring-1 ring-red-500/20'
                           }`}>
                             {expense.type === 'income' ? <ArrowUpRight size={20} /> : <ArrowDownRight size={20} />}
@@ -167,8 +170,8 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
                       <td className="px-6 py-5">
                         <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold border tracking-wide uppercase transition-colors ${
                              expense.type === 'income' 
-                             ? 'bg-brand/10 text-brand-ink border-brand/20 group-hover:border-gold-soft' 
-                             : 'bg-surface-3 text-soft border-app group-hover:border-app'
+                             ? 'bg-gold/10 text-gold border-gold/20 group-hover:border-gold-soft' 
+                             : 'bg-surface-3 text-soft border-app group-hover:border-gold/20'
                         }`}>
                           {getCategoryIcon(expense.category)}
                           {expense.category}
@@ -182,9 +185,9 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
                          </div>
                       </td>
                       <td className="px-8 py-5 text-right">
-                         <span className={`font-mono text-lg font-bold tracking-tight ${
+                         <span className={`font-display text-lg font-bold tracking-tight ${
                              expense.type === 'income' 
-                             ? 'text-brand-ink drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]' 
+                             ? 'text-gold drop-shadow-[0_0_8px_rgba(212,175,55,0.3)]' 
                              : 'text-app group-hover:text-app'
                          }`}>
                            {expense.type === 'income' ? '+' : '-'} {formatCurrency(expense.amount)}
@@ -219,12 +222,12 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
             {/* Mobile Card View */}
             <div className="md:hidden flex flex-col p-4 gap-3">
               {filteredExpenses.map((expense) => (
-                <div key={expense.id} className="bg-surface-2 border border-app rounded-2xl p-4 flex flex-col gap-4 shadow-lg active:scale-[0.98] transition-transform">
+                <div key={expense.id} className="card-3d bg-surface-2 border border-gold/15 rounded-2xl p-4 flex flex-col gap-4 shadow-lg active:scale-[0.98] transition-transform">
                    <div className="flex justify-between items-start">
                       <div className="flex items-center gap-3">
                         <div className={`p-3 rounded-2xl ${
                               expense.type === 'income' 
-                              ? 'bg-brand/10 text-brand-ink ring-1 ring-brand/30' 
+                              ? 'bg-gold/10 text-gold ring-1 ring-gold/30 shadow-gold-glow' 
                               : 'bg-surface-3 text-soft ring-1 ring-app'
                             }`}>
                               {getCategoryIcon(expense.category)}
@@ -232,7 +235,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
                         <div>
                           <p className="font-bold text-app text-lg leading-tight">{expense.description}</p>
                           <div className="flex items-center gap-2 mt-1">
-                             <span className="text-xs font-bold text-faint uppercase tracking-wider bg-surface-3 px-2 py-0.5 rounded border border-app">{expense.category}</span>
+                             <span className="text-xs font-bold text-faint uppercase tracking-wider bg-surface-3 px-2 py-0.5 rounded border border-gold/15">{expense.category}</span>
                           </div>
                         </div>
                       </div>
@@ -240,27 +243,27 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
                         {onEdit && (
                           <button 
                             onClick={() => onEdit(expense)}
-                            className="text-faint p-2"
+                            className="text-faint hover:text-gold p-2"
                           >
                             <Edit3 size={18} />
                           </button>
                         )}
                         <button 
                             onClick={() => onDelete(expense.id)}
-                            className="text-faint p-2"
-                          >
+                            className="text-faint hover:text-red-400 p-2"
+                        >
                             <Trash2 size={18} />
                         </button>
                       </div>
                    </div>
                    
-                   <div className="flex items-end justify-between border-t border-app/50 pt-3">
+                   <div className="flex items-end justify-between border-t border-gold/15 pt-3">
                       <div className="text-faint text-xs font-medium flex items-center gap-1.5">
                         <Calendar size={14} />
                         {new Date(expense.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
                       </div>
-                      <div className={`text-xl font-mono font-bold ${
-                             expense.type === 'income' ? 'text-brand-ink' : 'text-app'
+                      <div className={`text-xl font-display font-bold ${
+                             expense.type === 'income' ? 'text-gold' : 'text-app'
                          }`}>
                         {expense.type === 'income' ? '+' : '-'} {formatCurrency(expense.amount)}
                       </div>

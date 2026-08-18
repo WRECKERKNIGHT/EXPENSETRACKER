@@ -21,31 +21,33 @@ const GoalCard: React.FC<GoalCardProps> = ({ expenses, prefs, currency }) => {
     : '12 months';
 
   return (
-    <div className="bg-surface border border-app p-6 rounded-[2rem] shadow-card-soft relative overflow-hidden group card-glow-hover">
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-deep via-brand to-gold opacity-60" />
-      <div className="flex items-center gap-3 mb-5">
-        <div className="p-2.5 bg-brand/15 rounded-xl text-brand-ink border border-brand/30">
-          <Target size={20} />
+    <div className="card-3d gold-line-top p-6 relative overflow-hidden group card-glow-hover">
+      <div className="absolute -bottom-4 -right-4 text-gold/5 pointer-events-none select-none">
+        <Target size={80} strokeWidth={1} />
+      </div>
+      <div className="flex items-center gap-3 mb-5 relative z-10">
+        <div className="p-3 bg-brand/15 rounded-xl text-brand-ink border border-brand/30 shadow-brand-glow">
+          <Target size={22} />
         </div>
         <div>
-          <h3 className="font-semibold text-sm text-app">Savings Goal</h3>
-          <p className="text-[11px] text-faint uppercase tracking-[0.18em] font-semibold">{prefs.goalName || 'Custom goal'}</p>
+          <h3 className="heading-serif text-lg font-bold text-app">Savings Goal</h3>
+          <p className="text-xs text-faint uppercase tracking-[0.18em] font-semibold">{prefs.goalName || 'Custom goal'}</p>
         </div>
       </div>
 
-      <div className="flex items-center gap-5">
-        <ProgressRing pct={goal.pct} size={104} strokeWidth={10} sublabel="of target" />
-        <div className="space-y-1.5 flex-1 min-w-0">
-          <p className="text-2xl font-bold text-app tracking-tight">{fmt(goal.remaining, currency)}</p>
-          <p className="text-[11px] text-faint font-medium">remaining of {fmt(prefs.goalAmount, currency)}</p>
+      <div className="flex items-center gap-5 relative z-10">
+        <ProgressRing pct={goal.pct} size={110} strokeWidth={10} sublabel="of target" />
+        <div className="space-y-2 flex-1 min-w-0">
+          <p className="text-3xl font-bold text-app tracking-tight font-display">{fmt(goal.remaining, currency)}</p>
+          <p className="text-xs text-faint font-medium">remaining of {fmt(prefs.goalAmount, currency)}</p>
           <div className="pt-2 border-t border-app/60 mt-2">
-            <p className="text-[11px] text-faint font-semibold uppercase tracking-wide">Monthly pace</p>
-            <p className="text-sm font-bold text-gold">{fmt(goal.monthlyTarget, currency)}<span className="text-faint font-medium text-xs"> /mo</span></p>
+            <p className="text-xs text-faint font-semibold uppercase tracking-wide">Monthly pace</p>
+            <p className="text-base font-bold text-gold font-display">{fmt(goal.monthlyTarget, currency)}<span className="text-faint font-medium text-sm"> /mo</span></p>
           </div>
         </div>
       </div>
 
-      <p className="mt-4 text-xs text-soft">
+      <p className="mt-4 text-sm text-soft relative z-10">
         {goal.pct >= 100
           ? 'Goal reached — treat yourself, then set a new one!'
           : `On track to hit ${fmt(prefs.goalAmount, currency)} by ${deadlineLabel} saving ${fmt(goal.monthlyTarget, currency)} each month.`}

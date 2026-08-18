@@ -23,31 +23,33 @@ const DailyAllowanceCard: React.FC<DailyAllowanceCardProps> = ({ expenses, prefs
   const onTrack = plan.onTrack;
 
   return (
-    <div className="bg-surface border border-app p-6 rounded-[2rem] shadow-card-soft relative overflow-hidden group card-glow-hover">
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gold-soft via-gold to-brand opacity-60" />
-      <div className="flex items-center gap-3 mb-5">
-        <div className="p-2.5 bg-gold/15 rounded-xl text-gold border border-gold/30">
-          <Wallet size={20} />
+    <div className="card-3d gold-line-top p-6 relative overflow-hidden group card-glow-hover">
+      <div className="absolute -bottom-4 -right-4 text-gold/5 pointer-events-none select-none">
+        <Wallet size={80} strokeWidth={1} />
+      </div>
+      <div className="flex items-center gap-3 mb-5 relative z-10">
+        <div className="p-3 bg-gold/15 rounded-xl text-gold border border-gold/30 shadow-gold-glow">
+          <Wallet size={22} />
         </div>
         <div>
-          <h3 className="font-semibold text-sm text-app">Daily Allowance</h3>
-          <p className="text-[11px] text-faint uppercase tracking-[0.18em] font-semibold">Guardrail for today</p>
+          <h3 className="heading-serif text-lg font-bold text-app">Daily Allowance</h3>
+          <p className="text-xs text-faint uppercase tracking-[0.18em] font-semibold">Guardrail for today</p>
         </div>
       </div>
 
-      <p className="text-3xl font-bold text-app tracking-tight">{fmt(plan.remainingToday, currency)}</p>
-      <p className="text-[11px] text-faint font-medium mt-1">
+      <p className="text-4xl font-bold text-app tracking-tight font-display relative z-10">{fmt(plan.remainingToday, currency)}</p>
+      <p className="text-xs text-faint font-medium mt-1 relative z-10">
         {onTrack ? 'left to spend today' : 'over today — pace yourself'}
       </p>
 
-      <div className="mt-4">
-        <div className="relative h-2 rounded-full bg-surface-3 overflow-hidden">
+      <div className="mt-4 relative z-10">
+        <div className="relative h-2.5 rounded-full bg-surface-3 overflow-hidden">
           <div
             className={`absolute inset-y-0 left-0 rounded-full transition-all duration-500 ${onTrack ? 'bg-gradient-to-r from-brand-deep to-brand' : 'bg-gradient-to-r from-danger to-gold'}`}
             style={{ width: `${spentPct}%` }}
           />
         </div>
-        <div className="flex items-center justify-between mt-2 text-[11px] font-medium">
+        <div className="flex items-center justify-between mt-2 text-xs font-medium">
           <span className={onTrack ? 'text-brand' : 'text-danger'}>
             {fmt(plan.spentToday, currency)} spent
           </span>
@@ -57,7 +59,7 @@ const DailyAllowanceCard: React.FC<DailyAllowanceCardProps> = ({ expenses, prefs
         </div>
       </div>
 
-      <p className="mt-3 text-xs text-soft">
+      <p className="mt-3 text-sm text-soft relative z-10">
         {fmt(plan.savingsTarget, currency)}/mo is auto-set aside for "{prefs.goalName || 'your goal'}".
       </p>
     </div>

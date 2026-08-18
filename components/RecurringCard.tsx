@@ -117,78 +117,80 @@ const RecurringCard: React.FC<RecurringCardProps> = ({ expenses, currency }) => 
   };
 
   return (
-    <div className="bg-surface backdrop-blur-xl border border-app p-6 md:p-7 rounded-[2rem] shadow-2xl relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 opacity-70" />
-      <div className="flex items-center justify-between mb-5">
+    <div className="card-3d p-6 md:p-7 relative overflow-hidden">
+      <div className="absolute -bottom-4 -right-4 text-gold/5 pointer-events-none select-none">
+        <Bell size={80} strokeWidth={1} />
+      </div>
+      <div className="flex items-center justify-between mb-5 relative z-10">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-amber-500/15 rounded-xl text-amber-300 border border-amber-500/30 shadow-[0_0_18px_rgba(251,191,36,0.4)]">
-            <Bell size={18} />
+          <div className="p-3 bg-gold/15 rounded-xl text-gold border border-gold/30 shadow-gold-glow">
+            <Bell size={20} />
           </div>
           <div>
-            <h3 className="text-app font-semibold text-sm md:text-base">Upcoming Bills</h3>
-            <p className="text-[11px] text-faint uppercase tracking-[0.18em] font-semibold">
+            <h3 className="heading-serif text-lg font-bold text-app">Upcoming Bills</h3>
+            <p className="text-xs text-faint uppercase tracking-[0.18em] font-semibold">
               Recurring expenses & reminders
             </p>
           </div>
         </div>
-        {loading && <Loader2 className="w-4 h-4 text-soft animate-spin" />}
+        {loading && <Loader2 className="w-5 h-5 text-soft animate-spin" />}
       </div>
 
-      <div className="space-y-2 mb-4 max-h-40 overflow-y-auto custom-scrollbar">
+      <div className="space-y-2.5 mb-4 max-h-40 overflow-y-auto custom-scrollbar relative z-10">
         {upcoming.length === 0 && (
-          <p className="text-[11px] text-faint">Add your rent, subscriptions, or EMIs to see reminders here.</p>
+          <p className="text-sm text-faint">Add your rent, subscriptions, or EMIs to see reminders here.</p>
         )}
         {upcoming.map((i) => (
           <div
             key={i.id}
-            className="flex items-center justify-between bg-surface-2 border border-app rounded-2xl px-3 py-2 group"
+            className="flex items-center justify-between bg-surface-2 border border-app rounded-2xl px-4 py-3 group hover:border-gold-soft transition-all"
           >
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-surface-3 flex items-center justify-center text-amber-300">
-                <Clock3 size={14} />
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-gold/15 border border-gold/20 flex items-center justify-center text-gold">
+                <Clock3 size={16} />
               </div>
               <div>
-                <p className="text-[12px] text-app font-semibold">{i.name}</p>
-                <p className="text-[10px] text-faint">
+                <p className="text-sm text-app font-semibold">{i.name}</p>
+                <p className="text-xs text-faint">
                   {i.category} · in {i.daysLeft === 0 ? 'today' : `${i.daysLeft} day${i.daysLeft === 1 ? '' : 's'}`}
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-semibold text-app">{formatCurrency(i.amount)}</span>
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-semibold text-app font-display">{formatCurrency(i.amount)}</span>
               <button
                 onClick={() => handleDelete(i.id)}
-                className="p-1 rounded-full text-faint hover:text-red-400 hover:bg-surface-3 transition-colors opacity-0 group-hover:opacity-100"
+                className="p-1.5 rounded-full text-faint hover:text-red-400 hover:bg-surface-3 transition-colors opacity-0 group-hover:opacity-100"
               >
-                <Trash2 size={13} />
+                <Trash2 size={14} />
               </button>
             </div>
           </div>
         ))}
       </div>
 
-      <form onSubmit={handleAdd} className="space-y-2 mt-1">
+      <form onSubmit={handleAdd} className="space-y-3 mt-1 relative z-10">
         <div className="grid grid-cols-2 gap-3">
           <input
             type="text"
             placeholder="Bill name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="bg-app-soft border border-app rounded-2xl px-3 py-2.5 text-[12px] text-app focus:outline-none focus:ring-2 focus:ring-amber-500/40 transition-all"
+            className="bg-app-soft border border-app rounded-2xl px-3 py-3 text-sm text-app focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all"
           />
           <input
             type="number"
             placeholder="Amount"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="bg-app-soft border border-app rounded-2xl px-3 py-2.5 text-[12px] text-app focus:outline-none focus:ring-2 focus:ring-amber-500/40 transition-all"
+            className="bg-app-soft border border-app rounded-2xl px-3 py-3 text-sm text-app focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all"
           />
         </div>
         <div className="grid grid-cols-2 gap-3">
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="bg-app-soft border border-app rounded-2xl px-3 py-2.5 text-[12px] text-app focus:outline-none focus:ring-2 focus:ring-amber-500/40 transition-all"
+            className="bg-app-soft border border-app rounded-2xl px-3 py-3 text-sm text-app focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all"
           >
             {categoryOptions.map((c) => (
               <option key={c} value={c}>
@@ -203,16 +205,16 @@ const RecurringCard: React.FC<RecurringCardProps> = ({ expenses, currency }) => 
             placeholder="Due day"
             value={dueDay}
             onChange={(e) => setDueDay(e.target.value)}
-            className="bg-app-soft border border-app rounded-2xl px-3 py-2.5 text-[12px] text-app focus:outline-none focus:ring-2 focus:ring-amber-500/40 transition-all"
+            className="bg-app-soft border border-app rounded-2xl px-3 py-3 text-sm text-app focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all"
           />
         </div>
-        {error && <p className="text-[11px] text-red-400">{error}</p>}
+        {error && <p className="text-xs text-red-400">{error}</p>}
         <button
           type="submit"
           disabled={loading || !name || !amount}
-          className="w-full mt-1 inline-flex items-center justify-center gap-2 text-[12px] font-semibold rounded-2xl py-2.5 bg-gradient-to-r from-amber-500 to-rose-500 text-black shadow-[0_0_18px_rgba(251,191,36,0.6)] hover:shadow-[0_0_24px_rgba(251,191,36,0.9)] disabled:opacity-60 transition-all"
+          className="w-full mt-1 inline-flex items-center justify-center gap-2 text-sm font-semibold rounded-2xl py-3 bg-gradient-to-r from-gold-soft to-gold text-white shadow-gold-glow hover:brightness-110 disabled:opacity-60 transition-all"
         >
-          <Plus size={14} />
+          <Plus size={16} />
           Add Recurring
         </button>
       </form>
