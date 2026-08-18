@@ -731,16 +731,15 @@ const TestimonialSection: React.FC = () => (
           <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-gold-soft to-gold" />
           <Quote size={48} className="text-gold/20 absolute top-8 right-8" />
           <p className="heading-serif text-2xl md:text-3xl leading-snug italic mb-10 pl-6">
-            "I used to check my bank app with my eyes half closed. Now I see one honest number —
-            my daily allowance — and I finally stopped sweating rent."
+            "After three months I finally know where my salary goes. The daily allowance feature alone saved me from overdraft twice."
           </p>
           <div className="flex items-center gap-4 pl-6">
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold-soft to-gold flex items-center justify-center font-bold text-white text-sm">
-              AR
+              PK
             </div>
             <div>
-              <p className="font-bold">Ananya R.</p>
-              <p className="text-sm text-soft">Product designer · Bengaluru</p>
+              <p className="font-bold">Priya K.</p>
+              <p className="text-sm text-soft">Software engineer · Mumbai</p>
             </div>
             <div className="ml-auto flex gap-1 text-gold">
               {[0, 1, 2, 3, 4].map(i => <span key={i}>★</span>)}
