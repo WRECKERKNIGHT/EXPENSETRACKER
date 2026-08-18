@@ -146,7 +146,7 @@ const EditExpenseModal: React.FC<EditExpenseModalProps> = ({ isOpen, onClose, on
             </button>
             <button
               type="submit"
-              className="flex-[2] btn-premium text-white font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-2"
+              className="flex-[2] btn-gold text-white font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-2"
             >
               <Check size={18} /> Save Changes
             </button>

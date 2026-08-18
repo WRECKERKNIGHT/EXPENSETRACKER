@@ -361,7 +361,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                          
                          <button 
                             onClick={() => csvInputRef.current?.click()}
-                            className="btn-premium px-8 py-4 rounded-2xl flex items-center gap-2 text-lg"
+                            className="btn-gold px-8 py-4 rounded-2xl flex items-center gap-2 text-lg"
                          >
                             {isParsing ? <Loader2 className="animate-spin" /> : <FileText size={22} />}
                             Select CSV File
@@ -474,7 +474,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                         <div className="pt-2">
                             <button
                             type="submit"
-                            className="w-full btn-premium py-4 rounded-2xl flex items-center justify-center gap-2 tracking-wide text-lg"
+                            className="w-full btn-gold py-4 rounded-2xl flex items-center justify-center gap-2 tracking-wide text-lg"
                             >
                             <Check size={22} />
                             SAVE TRANSACTION

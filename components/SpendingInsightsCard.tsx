@@ -115,7 +115,7 @@ const SpendingInsightsCard: React.FC<SpendingInsightsCardProps> = ({ expenses, m
         {items.map((item) => (
           <div
             key={item.label}
-            className={`p-4 rounded-2xl border ${item.borderColor} ${item.bgColor} flex flex-col gap-2 hover-3d`}
+            className={`p-4 rounded-2xl border ${item.borderColor} ${item.bgColor} flex flex-col gap-2 tilt-hover`}
           >
             <item.icon size={18} className={item.color} />
             <span className="text-xs font-bold uppercase tracking-wider text-soft">{item.label}</span>

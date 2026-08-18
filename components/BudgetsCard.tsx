@@ -222,7 +222,7 @@ const BudgetsCard: React.FC<BudgetsCardProps> = ({ expenses, currency }) => {
         <button
           type="submit"
           disabled={isLoading || !formLimit}
-          className="w-full mt-1 flex items-center justify-center gap-2 text-sm font-semibold rounded-2xl py-3 btn-premium disabled:opacity-60 transition-all"
+          className="w-full mt-1 flex items-center justify-center gap-2 text-sm font-semibold rounded-2xl py-3 btn-gold disabled:opacity-60 transition-all"
         >
           {editingId ? <Edit3 size={16} /> : <Plus size={16} />}
           {editingId ? 'Update Budget' : 'Add Budget'}

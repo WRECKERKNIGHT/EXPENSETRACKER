@@ -27,7 +27,7 @@ const RunwayCard: React.FC<RunwayCardProps> = ({ expenses, monthlyIncome, curren
     : 'no expenses yet — data will appear as you log spend';
 
   return (
-    <div className="card-3d gold-line-top p-6 relative overflow-hidden group card-glow-hover">
+    <div className="card-3d gold-line-top p-6 relative overflow-hidden group tilt-hover">
       <div className="absolute -bottom-4 -right-4 text-brand/5 pointer-events-none select-none">
         <LifeBuoy size={80} strokeWidth={1} />
       </div>

@@ -126,7 +126,7 @@ const Advisor: React.FC<AdvisorProps> = ({ expenses }) => {
           <button
             onClick={handleSend}
             disabled={loading || !input.trim()}
-            className="btn-premium disabled:opacity-50 px-6 py-4"
+            className="btn-gold disabled:opacity-50 px-6 py-4"
           >
             <Send size={22} />
           </button>
