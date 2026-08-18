@@ -14,7 +14,7 @@
     <meta property="og:type" content="website" />
     <link rel="manifest" href="/manifest.json" />
     <title>SpendSmart AI</title>
-    
+
     <!-- Fonts: Playfair Display (display serif) + Inter (UI sans) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,6 +32,7 @@
             fontFamily: {
               sans: ['Inter', 'sans-serif'],
               display: ['Playfair Display', 'serif'],
+              serif: ['Playfair Display', 'serif'],
             },
             colors: {
               app: 'rgb(var(--rgb-bg) / <alpha-value>)',
@@ -54,12 +55,7 @@
               'fade-in': 'fadeIn 0.6s cubic-bezier(0.16,1,0.3,1)',
               'bounce-slow': 'bounce 3s infinite',
               'float': 'float 6s ease-in-out infinite',
-              'float-slow': 'float 9s ease-in-out infinite',
-              'spin-slow': 'spin 14s linear infinite',
-              'coin-spin': 'coinSpin 6s ease-in-out infinite',
-              'bill-shimmer': 'billShimmer 3.5s linear infinite',
               'ticker': 'ticker 32s linear infinite',
-              'marquee-up': 'marqueeUp 22s linear infinite',
             },
             keyframes: {
               fadeIn: {
@@ -67,25 +63,13 @@
                 '100%': { opacity: '1', transform: 'translateY(0)' },
               },
               float: {
-                '0%, 100%': { transform: 'translateY(0) rotate(var(--rot,0deg))' },
+                '0%, 100%': { transform: 'translateY(0)' },
                 '50%': { transform: 'translateY(-20px)' },
-              },
-              coinSpin: {
-                '0%, 100%': { transform: 'rotateY(0deg)' },
-                '50%': { transform: 'rotateY(180deg)' },
-              },
-              billShimmer: {
-                '0%': { transform: 'translateX(-120%) skewX(-20deg)' },
-                '100%': { transform: 'translateX(240%) skewX(-20deg)' },
               },
               ticker: {
                 '0%': { transform: 'translateX(0)' },
                 '100%': { transform: 'translateX(-50%)' },
               },
-              marqueeUp: {
-                '0%': { transform: 'translateY(0)' },
-                '100%': { transform: 'translateY(-50%)' },
-              }
             }
           }
         }
