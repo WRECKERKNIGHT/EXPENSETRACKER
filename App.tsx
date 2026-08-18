@@ -16,7 +16,7 @@ import LandingPage from './components/LandingPage';
 import ThemeToggle from './components/ThemeToggle';
 import OnboardingQuiz from './components/OnboardingQuiz';
 import { initTheme, applyTheme } from './services/theme';
-import { LayoutDashboard, Receipt, Sparkles, Plus, Wallet, LogOut, User, Mail, Key, BarChart2, SlidersHorizontal, DollarSign } from 'lucide-react';
+import { LayoutDashboard, Receipt, Sparkles, Plus, Wallet, LogOut, User, Mail, Key, BarChart2, SlidersHorizontal } from 'lucide-react';
 
 // Google Icon Component
 const GoogleIcon = () => (
@@ -349,18 +349,17 @@ const App: React.FC = () => {
 
         <div className="relative z-10 w-full max-w-md perspective-1000">
           <div className="card-3d gold-shimmer p-8 md:p-10 animate-fade-in-up">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-deep via-gold to-brand"></div>
             <div className="text-center mb-8">
-              <div className="w-20 h-20 bg-gradient-to-br from-brand-deep to-brand rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-brand-glow transform rotate-3 hover-3d cursor-pointer">
-                 <User size={32} className="text-white" />
+              <div className="w-16 h-16 bg-gradient-to-br from-gold-soft to-gold rounded-2xl mx-auto mb-5 flex items-center justify-center tilt-hover cursor-pointer">
+                 <User size={28} className="text-[#0a0f0a]" />
               </div>
-              <h2 className="heading-serif text-4xl md:text-5xl font-bold mb-2 tracking-tight">Welcome Back</h2>
-              <p className="text-soft text-lg">Sign in to your account</p>
+              <h2 className="heading-serif text-3xl md:text-4xl font-bold mb-2">Welcome Back</h2>
+              <p className="text-soft">Sign in to your account</p>
             </div>
             
             <button 
               onClick={handleGoogleAuth}
-              className="w-full bg-gold hover:brightness-110 text-white font-bold py-4 rounded-2xl transition-all shadow-gold-glow flex items-center justify-center gap-3 mb-6 text-lg"
+              className="w-full btn-gold flex items-center justify-center gap-3 mb-6 py-4 rounded-xl text-base"
             >
               <GoogleIcon />
               Continue with Google
@@ -368,55 +367,34 @@ const App: React.FC = () => {
 
             <div className="relative flex py-2 items-center mb-6">
               <div className="flex-grow border-t border-app"></div>
-              <span className="flex-shrink mx-4 text-faint text-xs uppercase tracking-widest font-bold">Or continue with email</span>
+              <span className="flex-shrink mx-4 text-faint text-xs uppercase tracking-widest font-bold">or email</span>
               <div className="flex-grow border-t border-app"></div>
             </div>
 
-            <form onSubmit={handleLogin} className="space-y-5">
+            <form onSubmit={handleLogin} className="space-y-4">
               <div>
-                <label className="block text-sm font-bold text-soft mb-2 ml-1 tracking-wider uppercase">Email Address</label>
-                <div className="relative">
-                  <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-faint" size={20} />
-                  <input
-                      type="email"
-                      required
-                      value={loginEmail}
-                      onChange={(e) => setLoginEmail(e.target.value)}
-                      className="w-full bg-app-soft border border-app rounded-2xl pl-13 pr-5 py-4 text-app text-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold-soft transition-all placeholder:text-faint"
-                      placeholder="you@example.com"
-                  />
-                </div>
+                <label className="block text-xs font-bold text-soft mb-1.5 ml-1 tracking-wider uppercase">Email</label>
+                <input type="email" required value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)}
+                  className="w-full bg-app-soft border border-app rounded-xl px-4 py-3.5 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition-all placeholder:text-faint"
+                  placeholder="you@example.com" />
               </div>
-
               <div>
-                <label className="block text-sm font-bold text-soft mb-2 ml-1 tracking-wider uppercase">Password</label>
-                <div className="relative">
-                  <Key className="absolute left-5 top-1/2 -translate-y-1/2 text-faint" size={20} />
-                  <input
-                      type="password"
-                      required
-                      value={loginPassword}
-                      onChange={(e) => setLoginPassword(e.target.value)}
-                      className="w-full bg-app-soft border border-app rounded-2xl pl-13 pr-5 py-4 text-app text-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold-soft transition-all placeholder:text-faint"
-                      placeholder="••••••••"
-                  />
-                </div>
+                <label className="block text-xs font-bold text-soft mb-1.5 ml-1 tracking-wider uppercase">Password</label>
+                <input type="password" required value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)}
+                  className="w-full bg-app-soft border border-app rounded-xl px-4 py-3.5 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition-all placeholder:text-faint"
+                  placeholder="••••••••" />
               </div>
-
-              {authError && <p className="text-danger text-sm bg-danger/10 p-3 rounded-xl border border-danger/20 flex items-center gap-2 animate-fade-in">{authError}</p>}
-              
-              <button 
-                type="submit"
-                disabled={isLoading}
-                className="w-full btn-premium disabled:opacity-60 text-lg tracking-wide py-4"
-              >
-                {isLoading ? 'Signing In...' : 'Sign In'}
+              {authError && <p className="text-danger text-sm font-medium">{authError}</p>}
+              <button type="submit" disabled={isLoading} className="w-full btn-gold py-3.5 rounded-xl text-base font-bold disabled:opacity-60">
+                {isLoading ? 'Signing in...' : 'Sign In'}
               </button>
             </form>
-
-            <button onClick={() => setScreen('landing')} className="w-full mt-6 text-faint text-sm hover:text-app transition-colors">
-              Cancel
-            </button>
+            <div className="mt-6 text-center">
+              <button onClick={() => setScreen('signup')} className="text-sm text-faint hover:text-gold transition-colors">
+                Don't have an account? <span className="font-bold">Sign up</span>
+              </button>
+            </div>
+            <button onClick={() => setScreen('landing')} className="w-full mt-4 text-faint text-sm hover:text-app transition-colors">← Back to Home</button>
           </div>
         </div>
       </div>
@@ -526,7 +504,7 @@ const App: React.FC = () => {
               <button 
                 type="submit"
                 disabled={isLoading}
-                className="w-full btn-premium disabled:opacity-60 text-lg tracking-wide py-4 mt-4"
+                className="w-full btn-gold disabled:opacity-60 text-base py-3.5 rounded-xl"
               >
                 {isLoading ? 'Setting Up...' : 'Continue Setup'}
               </button>
@@ -546,19 +524,15 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-app text-app flex flex-col md:flex-row overflow-hidden font-sans">
       
       {/* Sidebar Navigation */}
-      <aside className="w-full md:w-80 bg-surface border-r border-app flex-shrink-0 flex flex-col h-auto md:h-screen sticky top-0 z-20 shadow-card-soft relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-deep via-gold to-brand"></div>
-        <div className="absolute -bottom-10 -right-10 text-gold/5 pointer-events-none select-none">
-          <DollarSign size={160} strokeWidth={1} />
-        </div>
-        <div className="p-6 md:p-8 flex items-center justify-between gap-4 relative z-10">
-          <div className="flex items-center gap-4">
-            <div className="bg-gradient-to-br from-brand-deep to-brand p-3 rounded-2xl shadow-brand-glow hover-3d cursor-pointer">
-              <Wallet className="w-7 h-7 text-white" />
+      <aside className="w-full md:w-72 bg-surface border-r border-app flex-shrink-0 flex flex-col h-auto md:h-screen sticky top-0 z-20 relative overflow-hidden">
+        <div className="p-5 flex items-center justify-between gap-3 relative z-10 border-b border-app">
+          <div className="flex items-center gap-3">
+            <div className="bg-gradient-to-br from-gold-soft to-gold p-2.5 rounded-xl tilt-hover cursor-pointer">
+              <Wallet className="w-5 h-5 text-[#0a0f0a]" />
             </div>
             <div>
-              <span className="heading-serif text-2xl md:text-3xl font-black tracking-tight block text-glow-gold">SpendSmart</span>
-              <span className="text-xs md:text-sm text-gold font-semibold tracking-wider uppercase">AI Expense Tracker</span>
+              <span className="heading-serif text-lg font-black tracking-tight block">SpendSmart</span>
+              <span className="text-[10px] text-gold font-bold tracking-wider uppercase">AI Expense Tracker</span>
             </div>
           </div>
           <div className="hidden md:block">
@@ -567,153 +541,95 @@ const App: React.FC = () => {
         </div>
         
         {/* Desktop Navigation */}
-        <nav className="flex-1 px-4 space-y-3 py-6 overflow-y-auto hidden md:block">
-          <button 
-            onClick={() => setView('dashboard')}
-            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-semibold border text-base ${
-              view === 'dashboard' 
-              ? 'bg-surface-2 text-app border-gold/30 shadow-card-soft' 
-              : 'border-transparent text-soft hover:text-app hover:bg-surface-2'
-            }`}
-          >
-            <LayoutDashboard size={22} className={view === 'dashboard' ? 'text-brand' : ''} />
-            Dashboard
-          </button>
-          <button 
-            onClick={() => setView('expenses')}
-            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-semibold border text-base ${
-              view === 'expenses' 
-              ? 'bg-surface-2 text-app border-gold/30 shadow-card-soft' 
-              : 'border-transparent text-soft hover:text-app hover:bg-surface-2'
-            }`}
-          >
-            <Receipt size={22} className={view === 'expenses' ? 'text-brand' : ''} />
-            Manage Expenses
-            {monthlyExpenseCount > 0 && (
-              <span className="ml-auto text-xs font-bold bg-brand/15 text-brand px-2.5 py-1 rounded-full">
-                {monthlyExpenseCount}
-              </span>
-            )}
-          </button>
-          <button 
-            onClick={() => setView('advisor')}
-            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-semibold border text-base ${
-              view === 'advisor' 
-              ? 'bg-surface-2 text-app border-gold/30 shadow-card-soft' 
-              : 'border-transparent text-soft hover:text-app hover:bg-surface-2'
-            }`}
-          >
-            <Sparkles size={22} className={view === 'advisor' ? 'text-gold' : ''} />
-            AI Advisor
-          </button>
-          <button 
-            onClick={() => setView('reports')}
-            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-semibold border text-base ${
-              view === 'reports' 
-              ? 'bg-surface-2 text-app border-gold/30 shadow-card-soft' 
-              : 'border-transparent text-soft hover:text-app hover:bg-surface-2'
-            }`}
-          >
-            <BarChart2 size={22} className={view === 'reports' ? 'text-gold' : ''} />
-            Reports
-          </button>
-          <button 
-            onClick={handleOpenCustomization}
-            className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-semibold border border-dashed border-gold/30 text-soft hover:text-app hover:bg-surface-2 text-base"
-          >
-            <SlidersHorizontal size={22} className="text-gold" />
-            Customize Dashboard
+        <nav className="flex-1 px-3 space-y-1 py-4 overflow-y-auto hidden md:block">
+          {[
+            { key: 'dashboard', icon: LayoutDashboard, label: 'Dashboard', color: 'text-brand' },
+            { key: 'expenses', icon: Receipt, label: 'Expenses', color: 'text-brand', badge: monthlyExpenseCount },
+            { key: 'advisor', icon: Sparkles, label: 'AI Advisor', color: 'text-gold' },
+            { key: 'reports', icon: BarChart2, label: 'Reports', color: 'text-gold' },
+          ].map(item => (
+            <button key={item.key} onClick={() => setView(item.key as ViewMode)}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold text-sm border ${
+                view === item.key ? 'bg-surface-2 text-app border-gold/20' : 'border-transparent text-soft hover:text-app hover:bg-surface-2'
+              }`}>
+              <item.icon size={18} className={view === item.key ? item.color : ''} />
+              {item.label}
+              {'badge' in item && item.badge! > 0 && (
+                <span className="ml-auto text-[10px] font-bold bg-brand/15 text-brand px-2 py-0.5 rounded-full">{item.badge}</span>
+              )}
+            </button>
+          ))}
+          <button onClick={handleOpenCustomization}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold text-sm border border-dashed border-gold/20 text-soft hover:text-app hover:bg-surface-2 mt-2">
+            <SlidersHorizontal size={18} className="text-gold" /> Customize
           </button>
         </nav>
 
         {/* Mobile Navigation Bar (Bottom) */}
-        <div className="md:hidden fixed bottom-0 left-0 w-full bg-surface border-t border-app p-2 grid grid-cols-5 gap-1 z-50 shadow-card-soft">
-           <button onClick={() => setView('dashboard')} className={`flex flex-col items-center justify-center p-2 rounded-xl ${view === 'dashboard' ? 'text-brand bg-surface-2' : 'text-faint'}`}>
-              <LayoutDashboard size={20} />
-              <span className="text-[10px] font-medium mt-1">Home</span>
+        <div className="md:hidden fixed bottom-0 left-0 w-full bg-surface border-t border-app p-2 grid grid-cols-5 gap-1 z-50">
+           <button onClick={() => setView('dashboard')} className={`flex flex-col items-center justify-center p-2 rounded-lg ${view === 'dashboard' ? 'text-brand bg-surface-2' : 'text-faint'}`}>
+              <LayoutDashboard size={18} /><span className="text-[9px] font-medium mt-0.5">Home</span>
            </button>
-           <button onClick={() => setView('expenses')} className={`relative flex flex-col items-center justify-center p-2 rounded-xl ${view === 'expenses' ? 'text-brand bg-surface-2' : 'text-faint'}`}>
-              <Receipt size={20} />
-              <span className="text-[10px] font-medium mt-1">Expenses</span>
-              {monthlyExpenseCount > 0 && (
-                <span className="absolute -top-1 -right-1 text-[8px] font-bold bg-brand text-white w-4 h-4 rounded-full flex items-center justify-center">
-                  {monthlyExpenseCount > 99 ? '99+' : monthlyExpenseCount}
-                </span>
-              )}
+           <button onClick={() => setView('expenses')} className={`relative flex flex-col items-center justify-center p-2 rounded-lg ${view === 'expenses' ? 'text-brand bg-surface-2' : 'text-faint'}`}>
+              <Receipt size={18} /><span className="text-[9px] font-medium mt-0.5">Expenses</span>
+              {monthlyExpenseCount > 0 && <span className="absolute -top-0.5 -right-0.5 text-[7px] font-bold bg-brand text-white w-3.5 h-3.5 rounded-full flex items-center justify-center">{monthlyExpenseCount > 99 ? '99+' : monthlyExpenseCount}</span>}
            </button>
-           <button onClick={() => setView('advisor')} className={`flex flex-col items-center justify-center p-2 rounded-xl ${view === 'advisor' ? 'text-gold bg-surface-2' : 'text-faint'}`}>
-              <Sparkles size={20} />
-              <span className="text-[10px] font-medium mt-1">AI</span>
+           <button onClick={() => setView('advisor')} className={`flex flex-col items-center justify-center p-2 rounded-lg ${view === 'advisor' ? 'text-gold bg-surface-2' : 'text-faint'}`}>
+              <Sparkles size={18} /><span className="text-[9px] font-medium mt-0.5">AI</span>
            </button>
-           <button onClick={() => setView('reports')} className={`flex flex-col items-center justify-center p-2 rounded-xl ${view === 'reports' ? 'text-gold bg-surface-2' : 'text-faint'}`}>
-              <BarChart2 size={20} />
-              <span className="text-[10px] font-medium mt-1">Reports</span>
+           <button onClick={() => setView('reports')} className={`flex flex-col items-center justify-center p-2 rounded-lg ${view === 'reports' ? 'text-gold bg-surface-2' : 'text-faint'}`}>
+              <BarChart2 size={18} /><span className="text-[9px] font-medium mt-0.5">Reports</span>
            </button>
-           <button onClick={() => setIsModalOpen(true)} className="flex flex-col items-center justify-center p-2 rounded-xl text-white bg-gradient-to-br from-brand-deep to-brand shadow-card-soft">
-              <Plus size={20} />
-              <span className="text-[10px] font-medium mt-1">Add</span>
+           <button onClick={() => setIsModalOpen(true)} className="flex flex-col items-center justify-center p-2 rounded-lg text-white bg-gradient-to-br from-brand-deep to-brand">
+              <Plus size={18} /><span className="text-[9px] font-medium mt-0.5">Add</span>
            </button>
         </div>
 
-        <div className="p-6 border-t border-app space-y-4 hidden md:block bg-surface-2 relative z-10">
-           <button 
-             onClick={() => setIsModalOpen(true)}
-             className="w-full btn-premium flex items-center justify-center gap-2 text-lg py-4"
-           >
-             <Plus size={20} />
-             Add Transaction
+        {/* Sidebar Footer */}
+        <div className="p-4 border-t border-app space-y-2.5 hidden md:block bg-surface-2 relative z-10">
+           <button onClick={() => setIsModalOpen(true)} className="w-full btn-gold flex items-center justify-center gap-2 text-sm py-3 rounded-xl">
+             <Plus size={18} /> Add Transaction
            </button>
-           <button 
-             onClick={() => setIsSmsModalOpen(true)}
-             className="w-full mt-2 bg-surface hover:bg-surface-3 text-soft font-bold py-3 rounded-2xl transition-all flex items-center justify-center gap-2 border border-app"
-           >
-             Import SMS
-           </button>
-           <button 
-            onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 text-faint hover:text-danger py-2 text-sm transition-colors font-medium tracking-wide"
-           >
-             <LogOut size={16} /> LOGOUT
+           <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 text-faint hover:text-danger py-2 text-xs transition-colors font-medium tracking-wide">
+             <LogOut size={14} /> LOGOUT
            </button>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 h-[calc(100vh-80px)] md:h-screen overflow-y-auto bg-app p-4 md:p-8 lg:p-12 relative custom-scrollbar pb-24 md:pb-10">
+      <main className="flex-1 h-[calc(100vh-60px)] md:h-screen overflow-y-auto bg-app p-4 md:p-8 lg:p-10 relative pb-24 md:pb-8">
         
-        {/* Header - Only Show on Desktop (Mobile uses internal headers) */}
-        <div className="hidden md:flex justify-between items-end mb-10 animate-fade-in">
+        {/* Desktop Header */}
+        <div className="hidden md:flex justify-between items-end mb-8 animate-fade-in">
            <div>
-               <h1 className="heading-serif text-4xl md:text-5xl font-bold mb-3 tracking-tight">
-                 {view === 'dashboard' && 'Dashboard Overview'}
-                 {view === 'expenses' && 'Manage Expenses'}
-                 {view === 'advisor' && 'Financial Assistant'}
-                 {view === 'reports' && 'Spending Reports'}
+               <h1 className="heading-serif text-3xl md:text-4xl font-bold mb-1">
+                 {view === 'dashboard' && 'Dashboard'}
+                 {view === 'expenses' && 'Expenses'}
+                 {view === 'advisor' && 'AI Advisor'}
+                 {view === 'reports' && 'Reports'}
                </h1>
-               <p className="text-soft text-lg font-light">
+               <p className="text-soft text-sm">
                  {view === 'dashboard' && `Welcome back, ${user?.name}`}
-                 {view === 'expenses' && 'Detailed breakdown of your transactions.'}
-                 {view === 'advisor' && 'AI-powered financial insights.'}
-                 {view === 'reports' && 'High-level summaries and exportable statements.'}
+                 {view === 'expenses' && 'Manage your transactions'}
+                 {view === 'advisor' && 'AI-powered insights'}
+                 {view === 'reports' && 'Spending summaries'}
                </p>
            </div>
-           <div className="flex items-center gap-4">
-              <div className="text-right">
-                <p className="text-xs text-faint font-bold uppercase tracking-wider mb-1">Current Date</p>
-                <p className="font-mono text-gold text-lg font-semibold">
-                  {new Date().toLocaleDateString('en-IN', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
-                </p>
-              </div>
+           <div className="text-right">
+             <p className="text-[10px] text-faint font-bold uppercase tracking-wider mb-0.5">Today</p>
+             <p className="font-mono text-gold text-sm font-semibold">
+               {new Date().toLocaleDateString('en-IN', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
+             </p>
            </div>
         </div>
 
-        {/* Mobile Header for Logout */}
-        <div className="md:hidden flex justify-between items-center mb-6">
-           <span className="heading-serif text-2xl font-black text-glow-gold">SpendSmart</span>
+        {/* Mobile Header */}
+        <div className="md:hidden flex justify-between items-center mb-4">
+           <span className="heading-serif text-xl font-black">SpendSmart</span>
            <div className="flex items-center gap-2">
               <ThemeToggle />
-              <button onClick={handleLogout} className="p-2.5 bg-surface border border-app rounded-xl text-faint hover:text-danger transition-colors">
-                  <LogOut size={18} />
+              <button onClick={handleLogout} className="p-2 bg-surface border border-app rounded-lg text-faint hover:text-danger transition-colors">
+                  <LogOut size={16} />
               </button>
            </div>
         </div>
