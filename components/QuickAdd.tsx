@@ -9,7 +9,7 @@ const QuickAdd: React.FC<QuickAddProps> = ({ onQuickAdd }) => {
   return (
     <button
       onClick={onQuickAdd}
-      className="md:hidden fixed bottom-20 right-4 z-50 bg-gradient-to-br from-brand-deep to-brand text-white p-5 rounded-full shadow-brand-glow flex items-center justify-center hover:scale-110 transition-transform active:scale-95"
+      className="md:hidden fixed bottom-20 right-4 z-50 btn-gold p-5 rounded-full flex items-center justify-center hover:scale-110 transition-transform active:scale-95"
       aria-label="Quick add transaction"
     >
       <Plus size={24} strokeWidth={3} />

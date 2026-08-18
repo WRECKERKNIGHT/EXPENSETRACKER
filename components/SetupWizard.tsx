@@ -82,7 +82,7 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
         {step === 1 && (
           <div className="animate-fade-in">
              <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-brand-deep to-brand rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-card-soft transform rotate-3">
+                <div className="w-16 h-16 bg-surface-2 rounded-2xl mx-auto mb-4 flex items-center justify-center border border-app transform rotate-3">
                    <Home size={28} className="text-white" />
                 </div>
                 <h2 className="heading-serif text-2xl font-bold mb-2">Fixed Monthly Expenses</h2>
@@ -186,7 +186,7 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
         <button 
           onClick={handleNext}
           disabled={isLoading}
-          className="w-full bg-gradient-to-br from-brand-deep to-brand hover:brightness-110 disabled:opacity-60 text-white font-bold py-4 rounded-2xl transition-all shadow-card flex items-center justify-center gap-2 tracking-wide"
+          className="w-full btn-gold py-4 rounded-2xl flex items-center justify-center gap-2 tracking-wide"
         >
           {isLoading ? 'Saving...' : step === 1 ? 'Next: Add EMIs' : 'Finish Setup'} {!isLoading && <ArrowRight size={20} />}
         </button>

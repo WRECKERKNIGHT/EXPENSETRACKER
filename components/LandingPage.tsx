@@ -373,7 +373,7 @@ const Navigation: React.FC<{
           <button onClick={() => onNavigate('login')} className="hidden md:flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold border border-app bg-surface/50 hover:border-gold-soft transition-all duration-300">
             Sign In
           </button>
-          <button onClick={() => onNavigate('signup')} className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold bg-gradient-to-r from-gold-soft to-gold text-white hover:brightness-110 transition-all shadow-card-soft duration-300">
+          <button onClick={() => onNavigate('signup')} className="btn-gold flex items-center gap-2 px-5 py-2.5 rounded-full text-sm">
             Get Started <ArrowRight size={14} />
           </button>
         </div>
@@ -462,7 +462,7 @@ const HeroSection: React.FC<{
 
           {/* CTA */}
           <div className="relative w-full max-w-md h-[10vh] flex items-center justify-center gap-4 px-4 pointer-events-auto" style={{ opacity: t4, transform: `translateY(${(1 - t4) * 20}px)` }}>
-            <button onClick={() => onNavigate('signup')} className="group w-full sm:w-auto px-9 py-4 rounded-full font-bold text-white bg-gradient-to-r from-gold-soft to-gold hover:brightness-110 transition-all shadow-card flex items-center justify-center gap-2 text-sm sm:text-base">
+            <button onClick={() => onNavigate('signup')} className="group btn-gold w-full sm:w-auto px-9 py-4 rounded-full text-sm flex items-center justify-center gap-2">
               Start Free <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </button>
             <button onClick={() => onNavigate('login')} className="w-full sm:w-auto px-9 py-4 rounded-full font-bold border border-app bg-surface/50 hover:border-gold-soft transition-all text-sm sm:text-base backdrop-blur-sm">
@@ -591,7 +591,7 @@ const FeaturesSection: React.FC = () => (
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {FEATURES.map((f, i) => (
           <Reveal key={f.title} delay={(['d1', 'd2', 'd3', 'd4'] as const)[i % 4]}>
-            <div className="card-2d h-full p-7 flex flex-col group cursor-default">
+            <div className="card-3d h-full p-7 flex flex-col group cursor-default">
               <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110" style={{ background: f.accent }}>
                 <f.icon size={20} className="text-white" />
               </div>
@@ -691,7 +691,7 @@ const HowItWorksSection: React.FC = () => (
       <div className="grid md:grid-cols-3 gap-8">
         {STEPS.map((s, i) => (
           <Reveal key={s.num} delay={(['d1', 'd2', 'd3'] as const)[i % 3]}>
-            <div className="card-2d relative h-full p-9">
+            <div className="card-3d relative h-full p-9">
               <span className="font-display font-black text-7xl text-gold/[0.08] absolute top-3 right-5">{s.num}</span>
               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-gold-soft to-gold flex items-center justify-center mb-7 shadow-card-soft">
                 <s.icon size={24} className="text-white" />
@@ -734,7 +734,7 @@ const TestimonialSection: React.FC = () => (
     </div>
     <div className="max-w-4xl mx-auto px-6 relative z-10">
       <Reveal>
-        <div className="card-2d p-12 md:p-16 relative overflow-hidden">
+        <div className="card-3d p-12 md:p-16 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-gold-soft to-gold" />
           <Quote size={48} className="text-gold/20 absolute top-8 right-8" />
           <p className="heading-serif text-2xl md:text-3xl leading-snug italic mb-10 pl-6">
@@ -801,7 +801,7 @@ const FinaleSection: React.FC<{
               Join SpendSmart and turn every coin into a story that ends in savings.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button onClick={() => onNavigate('signup')} className="group w-full sm:w-auto px-10 py-4 rounded-full font-bold text-white bg-gradient-to-r from-gold-soft to-gold hover:brightness-110 transition-all shadow-card flex items-center justify-center gap-2">
+              <button onClick={() => onNavigate('signup')} className="group btn-gold w-full sm:w-auto px-10 py-4 rounded-full flex items-center justify-center gap-2">
                 Start Free <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </button>
               <button onClick={() => onNavigate('login')} className="w-full sm:w-auto px-10 py-4 rounded-full font-bold border border-app bg-surface/50 hover:border-gold-soft transition-all backdrop-blur-sm">

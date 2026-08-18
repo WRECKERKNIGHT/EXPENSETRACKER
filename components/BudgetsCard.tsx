@@ -117,7 +117,7 @@ const BudgetsCard: React.FC<BudgetsCardProps> = ({ expenses, currency }) => {
       </div>
       <div className="flex items-center justify-between mb-5 relative z-10">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-brand/15 rounded-xl text-brand-ink border border-brand/30 shadow-brand-glow">
+              <div className="p-3 bg-brand/10 rounded-xl text-brand-ink border border-brand/20">
             <Wallet size={22} />
           </div>
           <div>

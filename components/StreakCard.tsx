@@ -33,7 +33,7 @@ const StreakCard: React.FC<StreakCardProps> = ({ expenses, prefs, monthlyIncome 
         <Flame size={80} strokeWidth={1} />
       </div>
       <div className="flex items-center gap-3 mb-5 relative z-10">
-        <div className="p-3 bg-danger/15 rounded-xl text-gold border border-gold/30 shadow-gold-glow">
+        <div className="p-3 bg-gold/10 rounded-xl text-gold border border-gold/20">
           <Flame size={22} className={streak.current > 0 ? 'text-gold' : 'text-faint'} />
         </div>
         <div>

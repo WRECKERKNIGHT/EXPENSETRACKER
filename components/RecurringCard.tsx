@@ -123,7 +123,7 @@ const RecurringCard: React.FC<RecurringCardProps> = ({ expenses, currency }) => 
       </div>
       <div className="flex items-center justify-between mb-5 relative z-10">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gold/15 rounded-xl text-gold border border-gold/30 shadow-gold-glow">
+          <div className="p-3 bg-gold/10 rounded-xl text-gold border border-gold/20">
             <Bell size={20} />
           </div>
           <div>
@@ -212,7 +212,7 @@ const RecurringCard: React.FC<RecurringCardProps> = ({ expenses, currency }) => 
         <button
           type="submit"
           disabled={loading || !name || !amount}
-          className="w-full mt-1 inline-flex items-center justify-center gap-2 text-sm font-semibold rounded-2xl py-3 bg-gradient-to-r from-gold-soft to-gold text-white shadow-gold-glow hover:brightness-110 disabled:opacity-60 transition-all"
+          className="w-full mt-1 inline-flex items-center justify-center gap-2 text-sm font-semibold rounded-2xl py-3 btn-gold hover:brightness-110 disabled:opacity-60 transition-all"
         >
           <Plus size={16} />
           Add Recurring

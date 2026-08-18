@@ -28,7 +28,7 @@ const DailyAllowanceCard: React.FC<DailyAllowanceCardProps> = ({ expenses, prefs
         <Wallet size={80} strokeWidth={1} />
       </div>
       <div className="flex items-center gap-3 mb-5 relative z-10">
-        <div className="p-3 bg-gold/15 rounded-xl text-gold border border-gold/30 shadow-gold-glow">
+        <div className="p-3 bg-gold/10 rounded-xl text-gold border border-gold/20">
           <Wallet size={22} />
         </div>
         <div>

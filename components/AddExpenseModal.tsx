@@ -186,11 +186,11 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
         
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b border-app/50 bg-surface-2 relative">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-deep via-gold to-brand"></div>
-          <div className="flex items-center gap-3">
-             <div className="bg-gradient-to-br from-brand-deep to-brand p-2.5 rounded-xl shadow-brand-glow">
-               <ScanLine size={22} className="text-white" />
-             </div>
+           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gold-soft via-gold to-gold-soft"></div>
+           <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-gold/10 border border-gold/20 shadow-gold-glow">
+                <ScanLine size={22} className="text-gold" />
+              </div>
              <h2 className="heading-serif text-2xl font-bold text-app tracking-tight">Add Transaction</h2>
           </div>
           <button onClick={onClose} className="text-faint hover:text-app transition-colors bg-surface-3 p-2.5 rounded-xl hover:bg-surface-2">
@@ -277,7 +277,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                     </button>
                     <button
                         onClick={confirmDetectedTransactions}
-                        className="flex-[2] bg-brand-deep hover:brightness-110 text-white font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-card-soft hover:shadow-card tracking-wide"
+                        className="flex-[2] btn-gold py-4 rounded-2xl flex items-center justify-center gap-2 tracking-wide"
                     >
                         <Check size={20} />
                         Save Items
@@ -353,8 +353,8 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                 {/* Import Tab */}
                 {activeTab === 'import' && (
                     <div className="space-y-6 flex flex-col items-center justify-center h-full text-center">
-                         <div className="w-20 h-20 bg-brand/15 rounded-2xl flex items-center justify-center mb-4 border border-brand/20 shadow-brand-glow">
-                            <UploadCloud size={36} className="text-brand-ink" />
+                         <div className="w-20 h-20 bg-gold/10 rounded-2xl flex items-center justify-center mb-4 border border-gold/20">
+                            <UploadCloud size={36} className="text-gold" />
                          </div>
                          <h3 className="heading-serif text-2xl font-bold text-app">Import Bank Statement</h3>
                          <p className="text-soft text-base max-w-xs">Upload a CSV or Excel file extracted from your net banking portal (HDFC, SBI, ICICI, etc.)</p>

@@ -129,14 +129,14 @@ const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ monthlyIncome, currency
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute bottom-0 right-0 w-[50%] h-[50%] bg-gold/10 rounded-full blur-[130px]" />
         <div className="absolute top-0 left-0 w-[45%] h-[45%] bg-brand/10 rounded-full blur-[130px]" />
-        <div className="absolute top-1/3 left-1/2 w-40 h-40 rounded-full border border-gold/20 animate-coin-spin" style={{ transform: 'translateX(-50%)' }} />
+        <div className="absolute top-1/3 left-1/2 w-40 h-40 rounded-full border border-gold/20 animate-spin-slow" style={{ transform: 'translateX(-50%)' }} />
       </div>
 
       <div className="relative z-10 w-full max-w-2xl">
         {/* Top bar */}
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
-            <div className="bg-gradient-to-br from-brand-deep to-brand p-2.5 rounded-2xl shadow-card-soft">
+            <div className="p-2.5 rounded-2xl bg-gold/10 border border-gold/20">
               <Sparkles size={20} className="text-white" />
             </div>
             <div>
@@ -411,14 +411,14 @@ const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ monthlyIncome, currency
               <button
                 onClick={() => canContinue && setStep(s => s + 1)}
                 disabled={!canContinue}
-                className="flex-1 bg-gradient-to-br from-brand-deep to-brand hover:brightness-110 disabled:opacity-40 text-white font-bold py-3.5 rounded-2xl transition-all shadow-card flex items-center justify-center gap-2 text-sm sm:text-base"
+                className="flex-1 btn-gold py-3.5 rounded-2xl flex items-center justify-center gap-2 text-sm sm:text-base"
               >
                 Continue <ChevronRight size={18} />
               </button>
             ) : (
               <button
                 onClick={finish}
-                className="flex-1 bg-gradient-to-br from-brand-deep to-brand hover:brightness-110 text-white font-bold py-3.5 rounded-2xl transition-all shadow-card flex items-center justify-center gap-2 text-sm sm:text-base"
+                className="flex-1 btn-gold py-3.5 rounded-2xl flex items-center justify-center gap-2 text-sm sm:text-base"
               >
                 <Sparkles size={18} /> Build my dashboard <ArrowRight size={18} />
               </button>

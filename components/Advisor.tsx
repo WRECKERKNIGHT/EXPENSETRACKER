@@ -72,7 +72,7 @@ const Advisor: React.FC<AdvisorProps> = ({ expenses }) => {
   return (
     <div className="flex flex-col h-[650px] card-3d overflow-hidden animate-fade-in font-sans">
       <div className="bg-surface-2 p-6 border-b border-app flex items-center gap-3 relative z-10">
-        <div className="p-2.5 bg-gold/15 rounded-xl border border-gold/20 shadow-gold-glow">
+        <div className="p-2.5 bg-gold/10 rounded-xl border border-gold/20">
             <Sparkles className="w-6 h-6 text-gold" />
         </div>
         <h3 className="heading-serif font-bold text-xl text-app">Financial Advisor</h3>
@@ -82,12 +82,12 @@ const Advisor: React.FC<AdvisorProps> = ({ expenses }) => {
         {messages.map((msg) => (
           <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}>
             <div className={`flex gap-4 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-              <div className={`w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 ${msg.role === 'user' ? 'bg-brand-deep shadow-brand-glow' : 'bg-surface-3 border border-app'}`}>
-                {msg.role === 'user' ? <User size={20} className="text-white" /> : <Bot size={20} className="text-gold" />}
+              <div className={`w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 ${msg.role === 'user' ? 'bg-gold/15 border border-gold/30' : 'bg-surface-3 border border-app'}`}>
+                {msg.role === 'user' ? <User size={20} className="text-gold" /> : <Bot size={20} className="text-gold" />}
               </div>
               <div className={`p-5 rounded-2xl text-base leading-relaxed shadow-md ${
                 msg.role === 'user' 
-                  ? 'bg-brand-deep text-white rounded-tr-none shadow-card-soft' 
+                  ? 'bg-gold/10 text-app rounded-tr-none border border-gold/20' 
                   : 'bg-surface-3 text-app rounded-tl-none border border-app'
               }`}>
                 {msg.text}
