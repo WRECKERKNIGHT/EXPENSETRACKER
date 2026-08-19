@@ -660,7 +660,8 @@ const App: React.FC = () => {
       <AddExpenseModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
-        onAdd={handleAddExpenses} 
+        onAdd={handleAddExpenses}
+        existingExpenses={expenses}
       />
 
       <SmsImportModal isOpen={isSmsModalOpen} onClose={() => setIsSmsModalOpen(false)} onImported={() => loadExpenses(user!)} />

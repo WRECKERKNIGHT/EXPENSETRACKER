@@ -1,25 +1,27 @@
 ﻿
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Category, Expense, TransactionType } from '../types';
 import { parseTransactionsFromText, parseTransactionFromImage } from '../services/geminiService';
 import { parseCSVStatement } from '../services/importService';
-import { X, Sparkles, Loader2, Check, ArrowDownCircle, ArrowUpCircle, ScanLine, Smartphone, UploadCloud, Image as ImageIcon, Clipboard, FileText, AlertCircle } from 'lucide-react';
+import { suggestCategory, detectDuplicates, extractMerchant, DuplicateMatch, CATEGORY_COLORS } from '../services/detectionService';
+import { X, Sparkles, Loader2, Check, ArrowDownCircle, ArrowUpCircle, ScanLine, Smartphone, UploadCloud, Image as ImageIcon, Clipboard, FileText, AlertCircle, AlertTriangle, Zap, RefreshCw } from 'lucide-react';
 
 interface AddExpenseModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAdd: (expenses: Omit<Expense, 'id' | 'createdAt'>[]) => void;
+  existingExpenses: Expense[];
   initialText?: string;
   initialMode?: 'auto' | 'manual' | 'import';
 }
 
-const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAdd, initialText, initialMode = 'auto' }) => {
+const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAdd, existingExpenses, initialText, initialMode = 'auto' }) => {
   const [activeTab, setActiveTab] = useState<'auto' | 'manual' | 'import'>('auto');
-  
+
   // AI / Auto State
   const [aiInput, setAiInput] = useState('');
   const [isParsing, setIsParsing] = useState(false);
-  const [scanStatus, setScanStatus] = useState(''); // 'scanning', 'success', 'error'
+  const [scanStatus, setScanStatus] = useState('');
   const [aiError, setAiError] = useState('');
   const [detectedTransactions, setDetectedTransactions] = useState<Partial<Expense>[] | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -31,17 +33,28 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState<Category>(Category.FOOD);
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [autoSuggested, setAutoSuggested] = useState(false);
+
+  // Duplicate Detection
+  const [duplicateMatches, setDuplicateMatches] = useState<DuplicateMatch[]>([]);
+  const [showDuplicateWarning, setShowDuplicateWarning] = useState(false);
+  const [pendingSubmit, setPendingSubmit] = useState<Omit<Expense, 'id' | 'createdAt'>[] | null>(null);
+
+  // Smart category suggestion when description changes
+  const suggestedCategory = useMemo(() => {
+    if (!description.trim() || description.length < 3) return null;
+    const suggested = suggestCategory(description, existingExpenses);
+    return suggested !== category ? suggested : null;
+  }, [description, existingExpenses, category]);
 
   useEffect(() => {
     if (isOpen) {
       resetForm();
       if (initialText) {
-          setAiInput(initialText);
-          handleTextParse(initialText);
+        setAiInput(initialText);
+        handleTextParse(initialText);
       }
-      if (initialMode) {
-          setActiveTab(initialMode);
-      }
+      if (initialMode) setActiveTab(initialMode);
     }
   }, [isOpen, initialText, initialMode]);
 
@@ -55,34 +68,68 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
     setAiError('');
     setScanStatus('');
     setDetectedTransactions(null);
-    setActiveTab('auto'); 
+    setActiveTab('auto');
+    setAutoSuggested(false);
+    setDuplicateMatches([]);
+    setShowDuplicateWarning(false);
+    setPendingSubmit(null);
+  };
+
+  const checkForDuplicates = (expenses: Omit<Expense, 'id' | 'createdAt'>[]): DuplicateMatch[] => {
+    for (const exp of expenses) {
+      const matches = detectDuplicates(exp, existingExpenses, 0.7);
+      if (matches.length > 0) return matches;
+    }
+    return [];
   };
 
   const handleManualSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onAdd([{
+    const newExpense = {
       amount: parseFloat(amount),
       description,
       category,
       date,
-      type
-    }]);
+      type,
+    };
+
+    const matches = detectDuplicates(newExpense, existingExpenses, 0.7);
+    if (matches.length > 0) {
+      setDuplicateMatches(matches);
+      setPendingSubmit([newExpense]);
+      setShowDuplicateWarning(true);
+      return;
+    }
+    onAdd([newExpense]);
     onClose();
+  };
+
+  const confirmSubmitDespiteDuplicate = () => {
+    if (pendingSubmit) {
+      onAdd(pendingSubmit);
+      onClose();
+    }
+    setShowDuplicateWarning(false);
+    setPendingSubmit(null);
+  };
+
+  const cancelDuplicateSubmit = () => {
+    setShowDuplicateWarning(false);
+    setPendingSubmit(null);
+    setDuplicateMatches([]);
   };
 
   const handleTextParse = async (textOverride?: string) => {
     const textToParse = textOverride || aiInput;
     if (!textToParse.trim()) return;
-    
+
     setIsParsing(true);
     setScanStatus('scanning');
     setAiError('');
     setDetectedTransactions(null);
 
     try {
-      // 1. Attempt scan (Gemini or Local Fallback)
       const results = await parseTransactionsFromText(textToParse);
-      
       if (results && results.length > 0) {
         setDetectedTransactions(results);
         setScanStatus('success');
@@ -91,7 +138,6 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
         setScanStatus('error');
       }
     } catch (e) {
-      // Should rarely happen due to local fallback
       setAiError("Parsing failed. Please try again.");
       setScanStatus('error');
     } finally {
@@ -106,7 +152,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
     setIsParsing(true);
     setScanStatus('scanning');
     setAiError('');
-    
+
     try {
       const results = await parseTransactionFromImage(file);
       if (results && results.length > 0) {
@@ -133,62 +179,82 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
     setAiError('');
 
     try {
-        const results = await parseCSVStatement(file);
-        if (results && results.length > 0) {
-            setDetectedTransactions(results);
-            setScanStatus('success');
-        } else {
-             setAiError("No valid transactions found in CSV. Ensure columns: Date, Description, Debit/Credit.");
-             setScanStatus('error');
-        }
-    } catch (error: any) {
-        setAiError(error.message || "Failed to parse CSV.");
+      const results = await parseCSVStatement(file);
+      if (results && results.length > 0) {
+        setDetectedTransactions(results);
+        setScanStatus('success');
+      } else {
+        setAiError("No valid transactions found in CSV. Ensure columns: Date, Description, Debit/Credit.");
         setScanStatus('error');
+      }
+    } catch (error: any) {
+      setAiError(error.message || "Failed to parse CSV.");
+      setScanStatus('error');
     } finally {
-        setIsParsing(false);
+      setIsParsing(false);
     }
   };
 
   const handleClipboardRead = async () => {
-      try {
-          const text = await navigator.clipboard.readText();
-          if (text) {
-              setAiInput(text);
-              handleTextParse(text);
-          } else {
-              setAiError("Clipboard is empty.");
-          }
-      } catch (err) {
-          setAiError("Browser blocked clipboard access. Please Paste manually below.");
+    try {
+      const text = await navigator.clipboard.readText();
+      if (text) {
+        setAiInput(text);
+        handleTextParse(text);
+      } else {
+        setAiError("Clipboard is empty.");
       }
+    } catch (err) {
+      setAiError("Browser blocked clipboard access. Please Paste manually below.");
+    }
   };
 
   const confirmDetectedTransactions = () => {
     if (!detectedTransactions) return;
-    
+
     const validExpenses = detectedTransactions.map(t => ({
       amount: t.amount || 0,
       description: t.description || 'Unknown Transaction',
       category: (t.category as Category) || Category.OTHER,
       date: t.date || new Date().toISOString().split('T')[0],
-      type: (t.type as TransactionType) || 'expense'
+      type: (t.type as TransactionType) || 'expense',
     }));
+
+    const matches = checkForDuplicates(validExpenses);
+    if (matches.length > 0) {
+      setDuplicateMatches(matches);
+      setPendingSubmit(validExpenses);
+      setShowDuplicateWarning(true);
+      return;
+    }
 
     onAdd(validExpenses);
     onClose();
   };
+
+  const applySuggestedCategory = () => {
+    if (suggestedCategory) {
+      setCategory(suggestedCategory);
+      setAutoSuggested(true);
+    }
+  };
+
+  const detectedMerchant = useMemo(() => {
+    if (!description.trim()) return null;
+    return extractMerchant(description);
+  }, [description]);
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-fade-in font-sans">
       <div className="card-3d w-full max-w-2xl overflow-hidden transform transition-all flex flex-col max-h-[90vh]">
-        
+
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b border-app/50 bg-surface-2 relative">
            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gold-soft via-gold to-gold-soft"></div>
            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-gold/10 border border-gold/20 shadow-gold-glow">
+              <div className="p-2.5 rounded-xl bg-gold/10 border border-gold/20">
                 <ScanLine size={22} className="text-gold" />
               </div>
              <h2 className="heading-serif text-2xl font-bold text-app tracking-tight">Add Transaction</h2>
@@ -204,8 +270,8 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                 <button
                     onClick={() => setActiveTab('auto')}
                     className={`flex-1 py-3.5 text-sm font-bold rounded-lg flex items-center justify-center gap-2 transition-all ${
-                    activeTab === 'auto' 
-                        ? 'bg-surface-3 text-app shadow-inner ring-1 ring-gold/30' 
+                    activeTab === 'auto'
+                        ? 'bg-surface-3 text-app shadow-inner ring-1 ring-gold/30'
                         : 'text-faint hover:text-soft'
                     }`}
                 >
@@ -214,8 +280,8 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                 <button
                     onClick={() => setActiveTab('import')}
                     className={`flex-1 py-3.5 text-sm font-bold rounded-lg flex items-center justify-center gap-2 transition-all ${
-                    activeTab === 'import' 
-                        ? 'bg-surface-3 text-app shadow-inner ring-1 ring-gold/30' 
+                    activeTab === 'import'
+                        ? 'bg-surface-3 text-app shadow-inner ring-1 ring-gold/30'
                         : 'text-faint hover:text-soft'
                     }`}
                 >
@@ -224,8 +290,8 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                 <button
                     onClick={() => setActiveTab('manual')}
                     className={`flex-1 py-3.5 text-sm font-bold rounded-lg transition-all ${
-                    activeTab === 'manual' 
-                        ? 'bg-surface-3 text-app shadow-inner ring-1 ring-gold/30' 
+                    activeTab === 'manual'
+                        ? 'bg-surface-3 text-app shadow-inner ring-1 ring-gold/30'
                         : 'text-faint hover:text-soft'
                     }`}
                 >
@@ -235,37 +301,81 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
         </div>
 
         <div className="p-6 overflow-y-auto custom-scrollbar flex-1">
-          
+
+          {/* DUPLICATE WARNING OVERLAY */}
+          {showDuplicateWarning && (
+            <div className="mb-4 p-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl animate-fade-in">
+              <div className="flex items-center gap-2 mb-3">
+                <AlertTriangle size={20} className="text-amber-400" />
+                <span className="font-bold text-amber-400 text-sm">Possible Duplicate Detected</span>
+              </div>
+              {duplicateMatches.map((match, idx) => (
+                <div key={idx} className="bg-surface-2 border border-app rounded-xl p-3 mb-2 last:mb-0">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-app font-medium text-sm">{match.existing.description}</p>
+                      <p className="text-xs text-faint mt-0.5">{match.reason} • {match.existing.date}</p>
+                    </div>
+                    <span className="font-mono text-sm font-bold text-app">₹{match.existing.amount.toLocaleString('en-IN')}</span>
+                  </div>
+                  <div className="mt-2">
+                    <div className="w-full bg-amber-500/20 rounded-full h-1.5">
+                      <div className="bg-amber-400 h-full rounded-full transition-all" style={{ width: `${match.confidence * 100}%` }} />
+                    </div>
+                    <p className="text-[10px] text-faint mt-1 text-right">{Math.round(match.confidence * 100)}% match confidence</p>
+                  </div>
+                </div>
+              ))}
+              <div className="flex gap-3 mt-3">
+                <button
+                  onClick={cancelDuplicateSubmit}
+                  className="flex-1 bg-surface-3 hover:bg-surface-2 text-soft font-bold py-3 rounded-xl transition-all text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmSubmitDespiteDuplicate}
+                  className="flex-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 font-bold py-3 rounded-xl transition-all text-sm border border-amber-500/30"
+                >
+                  Save Anyway
+                </button>
+              </div>
+            </div>
+          )}
+
           {detectedTransactions ? (
              <div className="space-y-4 animate-fade-in">
-                  <div className="flex items-center justify-between bg-brand/10 border border-brand/20 p-3 rounded-xl">
-                      <div className="flex items-center gap-2 text-brand-ink">
+                  <div className="flex items-center justify-between bg-gold/10 border border-gold/20 p-3 rounded-xl">
+                      <div className="flex items-center gap-2 text-gold">
                           <Check size={18} />
                           <span className="text-sm font-bold">Success! Review Items</span>
                       </div>
-                      <span className="text-xs text-brand-ink/70 font-mono">Found {detectedTransactions.length} items</span>
+                      <span className="text-xs text-gold/70 font-mono">Found {detectedTransactions.length} items</span>
                   </div>
-                  
+
                   <div className="space-y-3 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
-                      {detectedTransactions.map((tx, idx) => (
+                      {detectedTransactions.map((tx, idx) => {
+                          const catColor = CATEGORY_COLORS[(tx.category as Category) || Category.OTHER];
+                          return (
                           <div key={idx} className="bg-surface-2 border border-app p-4 rounded-xl flex items-center justify-between gap-4">
                               <div className="flex items-center gap-3">
-                                  <div className={`p-2 rounded-lg ${tx.type === 'income' ? 'bg-brand/20 text-brand-ink' : 'bg-red-500/20 text-red-400'}`}>
+                                  <div className={`p-2 rounded-lg ${tx.type === 'income' ? 'bg-gold/10 text-gold' : 'bg-red-500/10 text-red-400'}`}>
                                       {tx.type === 'income' ? <ArrowUpCircle size={18} /> : <ArrowDownCircle size={18} />}
                                   </div>
                                   <div>
                                       <p className="text-app font-medium text-sm">{tx.description}</p>
                                       <div className="flex gap-2 text-xs text-faint mt-1">
-                                          <span className="bg-surface-3 px-2 py-0.5 rounded border border-app">{tx.category}</span>
+                                          <span className={`${catColor?.bg || 'bg-surface-3'} ${catColor?.text || 'text-soft'} px-2 py-0.5 rounded border ${catColor?.border || 'border-app'} font-bold`}>{tx.category}</span>
                                           <span>{tx.date}</span>
                                       </div>
                                   </div>
                               </div>
-                              <p className={`font-mono font-bold whitespace-nowrap ${tx.type === 'income' ? 'text-brand-ink' : 'text-app'}`}>
-                                  {tx.type === 'income' ? '+' : '-'} ₹{tx.amount}
+                              <p className={`font-mono font-bold whitespace-nowrap ${tx.type === 'income' ? 'text-gold' : 'text-app'}`}>
+                                  {tx.type === 'income' ? '+' : '-'} ₹{tx.amount?.toLocaleString('en-IN')}
                               </p>
                           </div>
-                      ))}
+                          );
+                      })}
                   </div>
 
                   <div className="flex gap-3 pt-2">
@@ -290,14 +400,14 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                 {activeTab === 'auto' && (
                     <div className="space-y-6">
                         <div className="grid grid-cols-2 gap-4">
-                            <button 
+                            <button
                                 onClick={handleClipboardRead}
                                 disabled={isParsing}
                                 className="bg-surface-2 border border-app hover:border-gold-soft hover:bg-surface-3 p-6 rounded-2xl flex flex-col items-center gap-3 transition-all group relative overflow-hidden"
                             >
-                                <div className="absolute inset-0 bg-brand/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                <div className="w-14 h-14 rounded-2xl bg-surface-3 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg relative z-10 border border-brand/20">
-                                    <Clipboard className="text-brand-ink" size={26} />
+                                <div className="absolute inset-0 bg-gold/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                <div className="w-14 h-14 rounded-2xl bg-surface-3 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg relative z-10 border border-gold/20">
+                                    <Clipboard className="text-gold" size={26} />
                                 </div>
                                 <div className="text-center relative z-10">
                                     <p className="text-app font-bold text-base">Scan Clipboard</p>
@@ -305,14 +415,14 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                                 </div>
                             </button>
 
-                            <div 
+                            <div
                                 onClick={() => fileInputRef.current?.click()}
                                 className="bg-surface-2 border border-app hover:border-gold-soft hover:bg-surface-3 p-6 rounded-2xl flex flex-col items-center gap-3 transition-all group cursor-pointer"
                             >
-                                <input 
-                                    type="file" 
-                                    ref={fileInputRef} 
-                                    className="hidden" 
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    className="hidden"
                                     accept="image/*"
                                     onChange={handleImageUpload}
                                     disabled={isParsing}
@@ -358,23 +468,23 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                          </div>
                          <h3 className="heading-serif text-2xl font-bold text-app">Import Bank Statement</h3>
                          <p className="text-soft text-base max-w-xs">Upload a CSV or Excel file extracted from your net banking portal (HDFC, SBI, ICICI, etc.)</p>
-                         
-                         <button 
+
+                         <button
                             onClick={() => csvInputRef.current?.click()}
                             className="btn-gold px-8 py-4 rounded-2xl flex items-center gap-2 text-lg"
                          >
                             {isParsing ? <Loader2 className="animate-spin" /> : <FileText size={22} />}
                             Select CSV File
                          </button>
-                         <input 
-                            type="file" 
-                            ref={csvInputRef} 
-                            className="hidden" 
+                         <input
+                            type="file"
+                            ref={csvInputRef}
+                            className="hidden"
                             accept=".csv, .txt"
                             onChange={handleCSVUpload}
                             disabled={isParsing}
                          />
-                         
+
                          <div className="mt-6 bg-surface-2 p-5 rounded-2xl border border-app text-left w-full">
                             <h4 className="text-sm font-bold text-faint uppercase mb-3 flex items-center gap-2">
                                 <AlertCircle size={14} /> Instructions
@@ -398,8 +508,8 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                             type="button"
                             onClick={() => setType('expense')}
                             className={`flex items-center justify-center gap-2 py-4 rounded-2xl border transition-all font-semibold ${
-                                type === 'expense' 
-                                ? 'bg-red-500/10 border-red-500/50 text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.2)]' 
+                                type === 'expense'
+                                ? 'bg-red-500/10 border-red-500/50 text-red-400'
                                 : 'bg-surface-2 border-app text-faint hover:bg-surface-3'
                             }`}
                             >
@@ -409,8 +519,8 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                             type="button"
                             onClick={() => setType('income')}
                             className={`flex items-center justify-center gap-2 py-4 rounded-2xl border transition-all font-semibold ${
-                                type === 'income' 
-                                ? 'bg-brand/10 border-gold-soft text-brand-ink shadow-card-soft' 
+                                type === 'income'
+                                ? 'bg-gold/10 border-gold/40 text-gold'
                                 : 'bg-surface-2 border-app text-faint hover:bg-surface-3'
                             }`}
                             >
@@ -428,7 +538,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                                 required
                                 value={amount}
                                 onChange={(e) => setAmount(e.target.value)}
-                                className="w-full bg-app-soft border border-app rounded-2xl pl-12 pr-5 py-4 text-app focus:outline-none focus:ring-2 focus:ring-brand/40 transition-all font-mono text-xl shadow-inner"
+                                className="w-full bg-app-soft border border-app rounded-2xl pl-12 pr-5 py-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all font-mono text-xl shadow-inner"
                                 placeholder="0"
                             />
                             </div>
@@ -436,14 +546,33 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
 
                         <div>
                             <label className="block text-sm text-soft mb-2 ml-1 font-medium tracking-wide">DESCRIPTION</label>
+                            <div className="relative">
                             <input
                             type="text"
                             required
                             value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            className="w-full bg-app-soft border border-app rounded-2xl px-5 py-4 text-app focus:outline-none focus:ring-2 focus:ring-brand/40 transition-all shadow-inner"
+                            onChange={(e) => { setDescription(e.target.value); setAutoSuggested(false); }}
+                            className="w-full bg-app-soft border border-app rounded-2xl px-5 py-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all shadow-inner pr-20"
                             placeholder="What was it?"
                             />
+                            {detectedMerchant && (
+                              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-gold/10 px-2 py-1 rounded-lg border border-gold/20">
+                                <Zap size={12} className="text-gold" />
+                                <span className="text-[10px] font-bold text-gold uppercase tracking-wide">{detectedMerchant}</span>
+                              </div>
+                            )}
+                            </div>
+                            {/* Smart Category Suggestion */}
+                            {suggestedCategory && !autoSuggested && (
+                              <button
+                                type="button"
+                                onClick={applySuggestedCategory}
+                                className="mt-2 w-full flex items-center justify-center gap-2 py-2 bg-gold/10 border border-gold/20 rounded-xl text-gold text-xs font-bold hover:bg-gold/15 transition-all animate-fade-in"
+                              >
+                                <RefreshCw size={12} />
+                                Suggested: {suggestedCategory} — click to apply
+                              </button>
+                            )}
                         </div>
 
                         <div className="grid grid-cols-2 gap-5">
@@ -451,8 +580,8 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                             <label className="block text-sm text-soft mb-2 ml-1 font-medium tracking-wide">CATEGORY</label>
                             <select
                                 value={category}
-                                onChange={(e) => setCategory(e.target.value as Category)}
-                                className="w-full bg-app-soft border border-app rounded-2xl px-4 py-4 text-app focus:outline-none focus:ring-2 focus:ring-brand/40 transition-all appearance-none shadow-inner"
+                                onChange={(e) => { setCategory(e.target.value as Category); setAutoSuggested(false); }}
+                                className="w-full bg-app-soft border border-app rounded-2xl px-4 py-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all appearance-none shadow-inner"
                             >
                                 {Object.values(Category).map((cat) => (
                                 <option key={cat} value={cat}>{cat}</option>
@@ -466,7 +595,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                                 required
                                 value={date}
                                 onChange={(e) => setDate(e.target.value)}
-                                className="w-full bg-app-soft border border-app rounded-2xl px-4 py-4 text-app focus:outline-none focus:ring-2 focus:ring-brand/40 transition-all shadow-inner"
+                                className="w-full bg-app-soft border border-app rounded-2xl px-4 py-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all shadow-inner"
                             />
                             </div>
                         </div>

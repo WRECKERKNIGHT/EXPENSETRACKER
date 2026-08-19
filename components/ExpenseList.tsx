@@ -1,11 +1,13 @@
-﻿import React from 'react';
+﻿import React, { useMemo } from 'react';
 import { Expense, Category } from '../types';
-import { 
+import { detectAnomalies, detectRecurringPatterns, CATEGORY_COLORS, extractMerchant } from '../services/detectionService';
+import {
   Trash2, Search, ArrowUpRight, ArrowDownRight, Edit3, CalendarDays,
-  Utensils, ShoppingBasket, Bus, Fuel, Home, Zap, 
-  Landmark, Film, Stethoscope, ShoppingBag, Plane, 
+  Utensils, ShoppingBasket, Bus, Fuel, Home, Zap,
+  Landmark, Film, Stethoscope, ShoppingBag, Plane,
   GraduationCap, TrendingUp, Banknote, Briefcase, MoreHorizontal,
-  Calendar, Gift, Shield, FileText, Smile, Repeat, PawPrint, Wrench, DollarSign
+  Calendar, Gift, Shield, FileText, Smile, Repeat, PawPrint, Wrench, DollarSign,
+  AlertTriangle, Repeat as RepeatIcon
 } from 'lucide-react';
 
 interface ExpenseListProps {
@@ -48,10 +50,26 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
   const [dateFrom, setDateFrom] = React.useState('');
   const [dateTo, setDateTo] = React.useState('');
 
+  const anomalies = useMemo(() => detectAnomalies(expenses), [expenses]);
+  const recurring = useMemo(() => detectRecurringPatterns(expenses), [expenses]);
+
+  const anomalyMap = useMemo(() => {
+    const map = new Map<string, typeof anomalies[0]>();
+    for (const a of anomalies) map.set(a.expense.id, a);
+    return map;
+  }, [anomalies]);
+
+  const recurringMerchants = useMemo(() => {
+    const set = new Set<string>();
+    for (const r of recurring) set.add(r.normalizedMerchant);
+    return set;
+  }, [recurring]);
+
   const filteredExpenses = expenses
-    .filter(e => 
-      e.description.toLowerCase().includes(filter.toLowerCase()) || 
-      e.category.toLowerCase().includes(filter.toLowerCase())
+    .filter(e =>
+      e.description.toLowerCase().includes(filter.toLowerCase()) ||
+      e.category.toLowerCase().includes(filter.toLowerCase()) ||
+      extractMerchant(e.description).toLowerCase().includes(filter.toLowerCase())
     )
     .filter(e => {
       if (dateFrom && e.date < dateFrom) return false;
@@ -76,19 +94,19 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
         <div className="absolute top-4 right-6 text-gold/[0.04] pointer-events-none">
           <DollarSign size={120} strokeWidth={1} />
         </div>
-        
+
         <div className="relative">
            <h3 className="heading-serif text-2xl font-bold text-app tracking-tight">Transactions</h3>
-           <p className="text-faint text-sm font-medium">History & details</p>
+           <p className="text-faint text-sm font-medium">{filteredExpenses.length} transactions</p>
         </div>
 
         <div className="relative w-full md:w-96 group">
           <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
             <Search className="text-faint group-focus-within:text-gold transition-colors" size={20} />
           </div>
-          <input 
-            type="text" 
-            placeholder="Search transactions..."
+          <input
+            type="text"
+            placeholder="Search by name, category, or merchant..."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             className="w-full bg-app-soft border-2 border-app rounded-2xl pl-12 pr-4 py-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition-all shadow-inner text-sm font-medium"
@@ -122,7 +140,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
           )}
         </div>
       </div>
-      
+
       {/* Content */}
       <div className="card-3d bg-surface border border-gold/15 rounded-[2.5rem] overflow-hidden shadow-2xl min-h-[400px]">
         {filteredExpenses.length === 0 ? (
@@ -150,28 +168,49 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gold/10">
-                  {filteredExpenses.map((expense) => (
+                  {filteredExpenses.map((expense) => {
+                    const catColor = CATEGORY_COLORS[expense.category] || CATEGORY_COLORS[Category.OTHER];
+                    const anomaly = anomalyMap.get(expense.id);
+                    const merchant = extractMerchant(expense.description);
+                    const isRecurring = recurringMerchants.has(merchant.toLowerCase().replace(/[^a-z0-9]/g, ''));
+                    return (
                     <tr key={expense.id} className="group hover:bg-gold/[0.03] transition-all duration-300">
                       <td className="px-8 py-5">
                         <div className="flex items-center gap-4">
                           <div className={`p-3 rounded-2xl flex-shrink-0 transition-transform group-hover:scale-110 ${
-                            expense.type === 'income' 
-                            ? 'bg-gold/10 text-gold shadow-gold-glow ring-1 ring-gold/30' 
-                            : 'bg-red-500/10 text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.15)] ring-1 ring-red-500/20'
+                            expense.type === 'income'
+                            ? `${catColor.bg} ${catColor.text} ring-1 ${catColor.border}`
+                            : 'bg-red-500/10 text-red-400 ring-1 ring-red-500/20'
                           }`}>
                             {expense.type === 'income' ? <ArrowUpRight size={20} /> : <ArrowDownRight size={20} />}
                           </div>
                           <div>
-                             <p className="font-bold text-app text-base group-hover:text-app transition-colors">{expense.description}</p>
-                             <p className="text-xs text-faint font-mono mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity">ID: {expense.id.slice(-4)}</p>
+                             <div className="flex items-center gap-2">
+                               <p className="font-bold text-app text-base group-hover:text-app transition-colors">{expense.description}</p>
+                               {anomaly && (
+                                 <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                                   anomaly.severity === 'severe' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+                                   anomaly.severity === 'moderate' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
+                                   'bg-orange-500/15 text-orange-400 border border-orange-500/30'
+                                 }`}>
+                                   <AlertTriangle size={10} />
+                                   {anomaly.deviationPercent}% high
+                                 </span>
+                               )}
+                               {isRecurring && expense.type === 'expense' && (
+                                 <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-500/15 text-blue-400 border border-blue-500/30">
+                                   <RepeatIcon size={10} />
+                                   recurring
+                                 </span>
+                               )}
+                             </div>
+                             <p className="text-xs text-faint font-mono mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity">{merchant}</p>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-5">
                         <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold border tracking-wide uppercase transition-colors ${
-                             expense.type === 'income' 
-                             ? 'bg-gold/10 text-gold border-gold/20 group-hover:border-gold-soft' 
-                             : 'bg-surface-3 text-soft border-app group-hover:border-gold/20'
+                             `${catColor.bg} ${catColor.text} ${catColor.border} group-hover:brightness-110`
                         }`}>
                           {getCategoryIcon(expense.category)}
                           {expense.category}
@@ -186,8 +225,8 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
                       </td>
                       <td className="px-8 py-5 text-right">
                          <span className={`font-display text-lg font-bold tracking-tight ${
-                             expense.type === 'income' 
-                             ? 'text-gold drop-shadow-[0_0_8px_rgba(212,175,55,0.3)]' 
+                             expense.type === 'income'
+                             ? 'text-gold'
                              : 'text-app group-hover:text-app'
                          }`}>
                            {expense.type === 'income' ? '+' : '-'} {formatCurrency(expense.amount)}
@@ -196,7 +235,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
                       <td className="px-6 py-5 text-center">
                         <div className="flex items-center justify-center gap-1">
                           {onEdit && (
-                            <button 
+                            <button
                               onClick={() => onEdit(expense)}
                               className="text-faint hover:text-gold hover:bg-gold/10 p-2.5 rounded-xl transition-all opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0"
                               title="Edit Transaction"
@@ -204,7 +243,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
                               <Edit3 size={16} />
                             </button>
                           )}
-                          <button 
+                          <button
                             onClick={() => onDelete(expense.id)}
                             className="text-faint hover:text-red-400 hover:bg-red-500/10 p-2.5 rounded-xl transition-all opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0"
                             title="Delete Transaction"
@@ -214,41 +253,66 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
                         </div>
                       </td>
                     </tr>
-                  ))}
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
 
             {/* Mobile Card View */}
             <div className="md:hidden flex flex-col p-4 gap-3">
-              {filteredExpenses.map((expense) => (
+              {filteredExpenses.map((expense) => {
+                const catColor = CATEGORY_COLORS[expense.category] || CATEGORY_COLORS[Category.OTHER];
+                const anomaly = anomalyMap.get(expense.id);
+                const merchant = extractMerchant(expense.description);
+                const isRecurring = recurringMerchants.has(merchant.toLowerCase().replace(/[^a-z0-9]/g, ''));
+                return (
                 <div key={expense.id} className="card-3d bg-surface-2 border border-gold/15 rounded-2xl p-4 flex flex-col gap-4 shadow-lg active:scale-[0.98] transition-transform">
                    <div className="flex justify-between items-start">
                       <div className="flex items-center gap-3">
                         <div className={`p-3 rounded-2xl ${
-                              expense.type === 'income' 
-                              ? 'bg-gold/10 text-gold ring-1 ring-gold/30 shadow-gold-glow' 
+                              expense.type === 'income'
+                              ? `${catColor.bg} ${catColor.text} ring-1 ${catColor.border}`
                               : 'bg-surface-3 text-soft ring-1 ring-app'
                             }`}>
                               {getCategoryIcon(expense.category)}
                         </div>
                         <div>
-                          <p className="font-bold text-app text-lg leading-tight">{expense.description}</p>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <p className="font-bold text-app text-lg leading-tight">{expense.description}</p>
+                            {anomaly && (
+                              <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                                anomaly.severity === 'severe' ? 'bg-red-500/20 text-red-400' :
+                                anomaly.severity === 'moderate' ? 'bg-amber-500/20 text-amber-400' :
+                                'bg-orange-500/15 text-orange-400'
+                              }`}>
+                                <AlertTriangle size={10} />
+                                {anomaly.deviationPercent}% high
+                              </span>
+                            )}
+                            {isRecurring && expense.type === 'expense' && (
+                              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-500/15 text-blue-400">
+                                <RepeatIcon size={10} />
+                                recurring
+                              </span>
+                            )}
+                          </div>
                           <div className="flex items-center gap-2 mt-1">
-                             <span className="text-xs font-bold text-faint uppercase tracking-wider bg-surface-3 px-2 py-0.5 rounded border border-gold/15">{expense.category}</span>
+                             <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${catColor.bg} ${catColor.text} ${catColor.border}`}>{expense.category}</span>
+                             <span className="text-[10px] text-faint">{merchant}</span>
                           </div>
                         </div>
                       </div>
                       <div className="flex items-center gap-1">
                         {onEdit && (
-                          <button 
+                          <button
                             onClick={() => onEdit(expense)}
                             className="text-faint hover:text-gold p-2"
                           >
                             <Edit3 size={18} />
                           </button>
                         )}
-                        <button 
+                        <button
                             onClick={() => onDelete(expense.id)}
                             className="text-faint hover:text-red-400 p-2"
                         >
@@ -256,7 +320,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
                         </button>
                       </div>
                    </div>
-                   
+
                    <div className="flex items-end justify-between border-t border-gold/15 pt-3">
                       <div className="text-faint text-xs font-medium flex items-center gap-1.5">
                         <Calendar size={14} />
@@ -269,7 +333,8 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
                       </div>
                    </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </>
         )}

@@ -15,6 +15,7 @@ import RunwayCard from './RunwayCard';
 import StreakCard from './StreakCard';
 import AlertStrip from './AlertStrip';
 import SpendingInsightsCard from './SpendingInsightsCard';
+import SmartInsights from './SmartInsights';
 
 declare global {
   interface Window { gsap: any; ScrollTrigger: any; THREE: any; }
@@ -340,6 +341,9 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
 
       {/* ━━━ INSIGHTS ━━━ */}
       <div className="gsap-section"><SpendingInsightsCard expenses={expenses} monthlyIncome={monthlyIncome} currency={currency} /></div>
+
+      {/* ━━━ SMART AUTO-DETECTED INSIGHTS ━━━ */}
+      <div className="gsap-section"><SmartInsights expenses={expenses} /></div>
 
       {/* ━━━ WIDGETS ━━━ */}
       {preferences && widgetOrder.length > 0 && (
