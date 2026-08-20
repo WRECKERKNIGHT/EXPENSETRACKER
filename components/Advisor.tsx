@@ -70,25 +70,26 @@ const Advisor: React.FC<AdvisorProps> = ({ expenses }) => {
   };
 
   return (
-    <div className="flex flex-col h-[650px] card-3d overflow-hidden animate-fade-in font-sans">
-      <div className="bg-surface-2 p-6 border-b border-app flex items-center gap-3 relative z-10">
+    <div className="flex flex-col h-[650px] card-3d overflow-hidden space-y-6 animate-fade-in font-sans">
+      <div className="gold-shimmer p-5 border-b border-app flex items-center gap-3 relative overflow-hidden z-10">
+        <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-gold/10 blur-3xl pointer-events-none" />
         <div className="p-2.5 bg-gold/10 rounded-xl border border-gold/20">
             <Sparkles className="w-6 h-6 text-gold" />
         </div>
         <h3 className="heading-serif font-bold text-xl text-app">Financial Advisor</h3>
       </div>
       
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+      <div className="flex-1 overflow-y-auto bg-surface/50 backdrop-blur-sm border border-gold/10 rounded-2xl p-4 space-y-6">
         {messages.map((msg) => (
           <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}>
             <div className={`flex gap-4 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-              <div className={`w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 ${msg.role === 'user' ? 'bg-gold/15 border border-gold/30' : 'bg-surface-3 border border-app'}`}>
+              <div className={`w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 ${msg.role === 'user' ? 'bg-gold/15 border border-gold/30' : 'ring-2 ring-gold/30 bg-surface-3 border border-app'}`}>
                 {msg.role === 'user' ? <User size={20} className="text-gold" /> : <Bot size={20} className="text-gold" />}
               </div>
-              <div className={`p-5 rounded-2xl text-base leading-relaxed shadow-md ${
+              <div className={`p-5 text-base leading-relaxed shadow-md ${
                 msg.role === 'user' 
-                  ? 'bg-gold/10 text-app rounded-tr-none border border-gold/20' 
-                  : 'bg-surface-3 text-app rounded-tl-none border border-app'
+                  ? 'bg-gold/15 backdrop-blur-sm border border-gold/20 rounded-2xl rounded-tr-sm text-app' 
+                  : 'bg-surface-2/80 backdrop-blur-sm border border-gold/10 rounded-2xl rounded-tl-sm text-app'
               }`}>
                 {msg.text}
               </div>
@@ -98,10 +99,10 @@ const Advisor: React.FC<AdvisorProps> = ({ expenses }) => {
         {loading && (
           <div className="flex justify-start animate-fade-in">
              <div className="flex gap-4 max-w-[85%]">
-              <div className="w-11 h-11 rounded-full bg-surface-3 border border-app flex items-center justify-center">
+              <div className="w-11 h-11 rounded-full ring-2 ring-gold/30 bg-surface-3 border border-app flex items-center justify-center">
                 <Bot size={20} className="text-gold" />
               </div>
-              <div className="bg-surface-3 p-5 rounded-2xl rounded-tl-none border border-app flex items-center gap-2">
+              <div className="bg-surface-2/80 backdrop-blur-sm border border-gold/10 p-5 rounded-2xl rounded-tl-sm flex items-center gap-2">
                 <span className="w-2.5 h-2.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
                 <span className="w-2.5 h-2.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
                 <span className="w-2.5 h-2.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
@@ -120,7 +121,7 @@ const Advisor: React.FC<AdvisorProps> = ({ expenses }) => {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Ask about your spending..."
-            className="flex-1 bg-app-soft text-app rounded-2xl px-6 py-4 text-base focus:outline-none focus:ring-2 focus:ring-gold/40 border border-app shadow-inner placeholder:text-faint"
+            className="input-glass flex-1 bg-app-soft text-app rounded-2xl px-6 py-4 text-base focus:outline-none focus:ring-2 focus:ring-gold/40 border border-app shadow-inner placeholder:text-faint"
             disabled={loading}
           />
           <button

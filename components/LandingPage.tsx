@@ -355,7 +355,7 @@ const Navigation: React.FC<{
   }, []);
 
   return (
-    <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${solid ? 'bg-app/80 backdrop-blur-2xl border-b border-app/50' : 'bg-transparent'}`}>
+    <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${solid ? 'bg-surface/60 backdrop-blur-2xl border-b border-gold/10' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-6 md:px-10 h-16 md:h-20 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold to-gold-soft flex items-center justify-center shadow-card-soft">
@@ -408,6 +408,11 @@ const HeroSection: React.FC<{
           <div className="absolute top-[15%] left-[10%] w-[500px] h-[500px] rounded-full opacity-[0.06]" style={{ background: `radial-gradient(circle, var(--gold) 0%, transparent 65%)` }} />
           <div className="absolute bottom-[10%] right-[8%] w-[400px] h-[400px] rounded-full opacity-[0.04]" style={{ background: `radial-gradient(circle, var(--brand) 0%, transparent 65%)` }} />
         </div>
+
+        <div className="particle-field"><span style={{left:'5%',bottom:'-5%',animationDelay:'0s',animationDuration:'18s'}} /><span style={{left:'25%',bottom:'-5%',animationDelay:'4s',animationDuration:'22s'}} /><span style={{left:'50%',bottom:'-5%',animationDelay:'8s',animationDuration:'20s'}} /><span style={{left:'75%',bottom:'-5%',animationDelay:'2s',animationDuration:'25s'}} /><span style={{left:'90%',bottom:'-5%',animationDelay:'6s',animationDuration:'19s'}} /></div>
+
+        <div className="mesh-blob w-72 h-72 bg-gold/15 -top-32 -left-32" />
+        <div className="mesh-blob w-48 h-48 bg-brand/10 bottom-0 right-10" />
 
         <div className="absolute inset-0 z-10">
           <CoinScene progress={heroP} velocity={velocity} />
@@ -462,7 +467,7 @@ const HeroSection: React.FC<{
 
           {/* CTA */}
           <div className="relative w-full max-w-md h-[10vh] flex items-center justify-center gap-4 px-4 pointer-events-auto" style={{ opacity: t4, transform: `translateY(${(1 - t4) * 20}px)` }}>
-            <button onClick={() => onNavigate('signup')} className="group btn-gold w-full sm:w-auto px-9 py-4 rounded-full text-sm flex items-center justify-center gap-2">
+              <button onClick={() => onNavigate('signup')} className="group btn-gold w-full sm:w-auto px-9 py-4 rounded-full text-sm flex items-center justify-center gap-2 animate-[pulse_2s_ease-in-out_infinite]">
               Start Free <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </button>
             <button onClick={() => onNavigate('login')} className="w-full sm:w-auto px-9 py-4 rounded-full font-bold border border-app bg-surface/50 hover:border-gold-soft transition-all text-sm sm:text-base backdrop-blur-sm">
@@ -591,7 +596,7 @@ const FeaturesSection: React.FC = () => (
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {FEATURES.map((f, i) => (
           <Reveal key={f.title} delay={(['d1', 'd2', 'd3', 'd4'] as const)[i % 4]}>
-            <div className="card-3d h-full p-7 flex flex-col group cursor-default">
+            <div className="card-3d gold-shimmer h-full p-7 flex flex-col group cursor-default">
               <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110" style={{ background: f.accent }}>
                 <f.icon size={20} className="text-white" />
               </div>
@@ -714,7 +719,7 @@ const StatsSection: React.FC = () => (
     <div className="max-w-7xl mx-auto px-6 md:px-10 grid grid-cols-2 md:grid-cols-4 gap-10">
       {STATS.map((st, i) => (
         <Reveal key={st.label} delay={(['d1', 'd2', 'd3', 'd4'] as const)[i % 4]} className="text-center">
-          <p className="heading-serif text-5xl md:text-6xl font-black text-gold">
+          <p className="heading-serif text-5xl md:text-6xl font-black text-gold text-glow-gold">
             <CountUp to={st.value} suffix={st.suffix} />
           </p>
           <p className="mt-4 text-xs uppercase tracking-[0.22em] text-soft font-bold">{st.label}</p>

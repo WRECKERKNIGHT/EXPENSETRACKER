@@ -113,8 +113,9 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
   const net = totalIncome - totalExpense;
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="card-3d gold-line-top p-5 md:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 relative overflow-hidden">
+    <div className="space-y-6 animate-fade-in font-sans">
+      <div className="card-3d gold-shimmer p-5 md:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 relative overflow-hidden">
+        <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-gold/10 blur-3xl pointer-events-none" />
         <div className="flex items-center gap-3 relative z-10">
           <div className="p-2.5 rounded-xl bg-gold/10 text-gold border border-gold/20">
             <BarChart2 size={20} />
@@ -127,7 +128,7 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <div className="inline-flex bg-surface-2 rounded-lg p-0.5 border border-app">
+          <div className="input-glass inline-flex rounded-lg p-0.5">
             {(['day', 'week', 'month'] as Range[]).map(r => (
               <button key={r} onClick={() => setRange(r)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${range === r ? 'bg-gold text-[#0a0f0a]' : 'text-soft hover:text-app'}`}>
@@ -136,24 +137,27 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
             ))}
           </div>
           <button onClick={handleDownloadCsv}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-2 text-app text-xs font-bold border border-app hover:border-gold/40 transition-all">
+            className="btn-gold inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold">
             <Download size={14} /> Export
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
-        <div className="card-3d p-6 relative overflow-hidden">
+        <div className="card-3d gold-shimmer p-5 tilt-hover relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
           <div className="absolute inset-x-0 -top-8 h-16 bg-gradient-to-b from-brand/20 to-transparent pointer-events-none" />
           <p className="text-sm font-semibold text-soft uppercase tracking-[0.18em] mb-2">Income</p>
           <p className="text-3xl font-bold text-brand-ink font-display">{fmt(totalIncome)}</p>
         </div>
-        <div className="card-3d p-6 relative overflow-hidden">
+        <div className="card-3d gold-shimmer p-5 tilt-hover relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
           <div className="absolute inset-x-0 -top-8 h-16 bg-gradient-to-b from-red-500/25 to-transparent pointer-events-none" />
           <p className="text-sm font-semibold text-soft uppercase tracking-[0.18em] mb-2">Expenses</p>
           <p className="text-3xl font-bold text-red-400 font-display">{fmt(totalExpense)}</p>
         </div>
-        <div className="card-3d p-6 relative overflow-hidden">
+        <div className="card-3d gold-shimmer p-5 tilt-hover relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
           <div className="absolute inset-x-0 -top-8 h-16 bg-gradient-to-b from-gold/20 to-transparent pointer-events-none" />
           <p className="text-sm font-semibold text-soft uppercase tracking-[0.18em] mb-2">Net</p>
           <p className={`text-3xl font-bold font-display ${net >= 0 ? 'text-brand-ink' : 'text-red-300'}`}>{fmt(net)}</p>
@@ -177,7 +181,7 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
               return (
                 <div
                   key={c.name}
-                  className="bg-surface-2 border border-app rounded-2xl px-4 py-3 space-y-2 hover:border-gold-soft transition-all"
+                  className="bg-surface-2/80 backdrop-blur-sm border border-gold/10 rounded-2xl px-4 py-3 hover:border-gold/30 transition-all"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
