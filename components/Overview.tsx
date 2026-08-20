@@ -299,7 +299,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
       </div>
 
       {/* ━━━ QUICK ACTIONS ━━━ */}
-      <div className="flex flex-col sm:flex-row gap-4 gsap-section">
+      <div className="flex flex-col sm:flex-row gap-4 gsap-section" style={{ animationDelay: '0.1s' }}>
         <button onClick={onAddTx} className="flex-1 btn-gold flex items-center justify-center gap-3 text-base font-bold py-4 rounded-xl transition-all hover:scale-[1.02]">
           <Plus size={20} strokeWidth={2.5} /> Quick Add
         </button>
@@ -309,7 +309,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
       </div>
 
       {/* ━━━ IMPORT BAR ━━━ */}
-      <div className="card-3d px-5 py-3 flex flex-wrap items-center gap-3 gsap-section">
+      <div className="card-3d px-5 py-3 flex flex-wrap items-center gap-3 gsap-section" style={{ animationDelay: '0.2s' }}>
         <span className="text-xs font-bold text-faint uppercase tracking-wider">Import</span>
         <div className="flex-1" />
         <button onClick={handleConnectBank} disabled={isBankConnecting || isBankConnected}
@@ -328,7 +328,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
 
       {/* ━━━ CUSTOMIZE PROMPT ━━━ */}
       {showCustomizePrompt && !preferences && (
-        <div className="card-3d gold-shimmer p-6 gsap-section relative overflow-hidden">
+        <div className="card-3d gold-shimmer p-6 gsap-section relative overflow-hidden" style={{ animationDelay: '0.3s' }}>
           <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: 'linear-gradient(90deg, var(--gold), var(--brand), var(--gold))' }} />
           <button onClick={onDismissCustomize} className="absolute top-4 right-4 p-1 rounded-full text-faint hover:text-app transition-colors" aria-label="Dismiss"><X size={16} /></button>
           <div className="flex flex-col md:flex-row items-start md:items-center gap-5">
@@ -343,17 +343,17 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
       )}
 
       {/* ━━━ ALERTS ━━━ */}
-      <div className="gsap-section"><AlertStrip expenses={expenses} currency={currency} /></div>
+      <div className="gsap-section" style={{ animationDelay: '0.4s' }}><AlertStrip expenses={expenses} currency={currency} /></div>
 
       {/* ━━━ INSIGHTS ━━━ */}
-      <div className="gsap-section"><SpendingInsightsCard expenses={expenses} monthlyIncome={monthlyIncome} currency={currency} /></div>
+      <div className="gsap-section" style={{ animationDelay: '0.5s' }}><SpendingInsightsCard expenses={expenses} monthlyIncome={monthlyIncome} currency={currency} /></div>
 
       {/* ━━━ SMART AUTO-DETECTED INSIGHTS ━━━ */}
-      <div className="gsap-section"><SmartInsights expenses={expenses} /></div>
+      <div className="gsap-section animate-fade-in" style={{ animationDelay: '0.6s' }}><SmartInsights expenses={expenses} /></div>
 
       {/* ━━━ WIDGETS ━━━ */}
       {preferences && widgetOrder.length > 0 && (
-        <div className="gsap-section">
+        <div className="gsap-section" style={{ animationDelay: '0.7s' }}>
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <Sparkles size={18} className="text-gold" />
@@ -372,14 +372,14 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           KPI CARDS
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <div className="gsap-section">
+      <div className="gsap-section" style={{ animationDelay: '0.8s' }}>
         <div className="flex items-center gap-2 mb-4">
           <Gauge size={18} className="text-gold" />
           <h3 className="heading-serif text-xl font-bold">Overview</h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Balance */}
-          <div className="card-3d gold-shimmer p-6 tilt-hover relative overflow-hidden">
+          <div className="card-3d gold-shimmer p-6 tilt-hover relative overflow-hidden transition-all duration-500 hover:scale-[1.02]">
             <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: 'linear-gradient(90deg, transparent, var(--gold), transparent)' }} />
             <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-gold/10 blur-3xl pointer-events-none" />
             <div className="flex items-center gap-2.5 mb-3">
@@ -391,7 +391,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
             <div className="progress-bar mt-3"><div className="progress-bar-fill shimmer-fill" style={{ width: `${monthlyIncome > 0 ? Math.min((calculations.balance / monthlyIncome) * 100, 100) : 0}%` }} /></div>
           </div>
           {/* Spent */}
-          <div className="card-3d gold-shimmer p-6 tilt-hover relative overflow-hidden">
+          <div className="card-3d gold-shimmer p-6 tilt-hover relative overflow-hidden transition-all duration-500 hover:scale-[1.02]">
             <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: 'linear-gradient(90deg, transparent, var(--gold), transparent)' }} />
             <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-red-500/10 blur-3xl pointer-events-none" />
             <div className="flex items-center gap-2.5 mb-3">
@@ -403,7 +403,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
             <div className="progress-bar mt-3"><div className="progress-bar-fill shimmer-fill" style={{ width: `${monthlyIncome > 0 ? Math.min((calculations.totalExpense / monthlyIncome) * 100, 100) : 0}%`, background: 'linear-gradient(90deg, #e07a5f, #e74c3c)' }} /></div>
           </div>
           {/* Income */}
-          <div className="card-3d gold-shimmer p-6 tilt-hover relative overflow-hidden">
+          <div className="card-3d gold-shimmer p-6 tilt-hover relative overflow-hidden transition-all duration-500 hover:scale-[1.02]">
             <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: 'linear-gradient(90deg, transparent, var(--gold), transparent)' }} />
             <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-brand/10 blur-3xl pointer-events-none" />
             <div className="flex items-center gap-2.5 mb-3">
@@ -419,7 +419,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
 
       {/* ━━━ CSV FEEDBACK ━━━ */}
       {csvMessage && (
-        <div className={`p-4 rounded-xl text-sm font-bold border gsap-section ${csvMessage.type === 'success' ? 'bg-gold/10 text-gold border-gold/30' : 'bg-danger/10 text-danger border-danger/30'}`}>
+        <div className={`p-4 rounded-xl text-sm font-bold border gsap-section ${csvMessage.type === 'success' ? 'bg-gold/10 text-gold border-gold/30' : 'bg-danger/10 text-danger border-danger/30'}`} style={{ animationDelay: '0.9s' }}>
           {csvMessage.text}
         </div>
       )}
@@ -427,7 +427,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           SPENDING VELOCITY
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <div className="card-3d gold-line-top p-6 gsap-section">
+      <div className="card-3d gold-line-top p-6 gsap-section animate-fade-in-up" style={{ animationDelay: '1.0s' }}>
         <div className="flex items-center gap-2.5 mb-6">
           <div className="p-2 rounded-lg bg-gold/10 text-gold border border-gold/20"><Gauge size={18} /></div>
           <h3 className="heading-serif text-xl font-bold">Spending Velocity</h3>
@@ -459,9 +459,9 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           CHARTS
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 gsap-section">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 gsap-section" style={{ animationDelay: '1.1s' }}>
         {/* Health */}
-        <div className="card-3d p-6 relative overflow-hidden min-h-[340px]">
+        <div className="card-3d p-6 relative overflow-hidden min-h-[340px] animate-fade-in-up-d1">
           <h3 className="heading-serif text-lg font-bold mb-5 flex items-center gap-2.5">
             <Activity size={18} className="text-gold" /> Financial Health
           </h3>
@@ -479,7 +479,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
         </div>
 
         {/* Categories */}
-        <div className="card-3d p-6 relative overflow-hidden min-h-[340px]">
+        <div className="card-3d p-6 relative overflow-hidden min-h-[340px] animate-fade-in-up-d2">
           <h3 className="heading-serif text-lg font-bold mb-5 flex items-center gap-2.5">
             <PieChartIcon size={18} className="text-gold" /> Categories
           </h3>
@@ -515,12 +515,12 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           BUDGETS + RECURRING + CASH FLOW
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <div className="grid grid-cols-1 2xl:grid-cols-3 gap-5 gsap-section">
-        <div className="space-y-4 2xl:col-span-1">
+      <div className="grid grid-cols-1 2xl:grid-cols-3 gap-5 gsap-section" style={{ animationDelay: '1.2s' }}>
+        <div className="space-y-4 2xl:col-span-1 animate-fade-in-up-d3">
           <BudgetsCard expenses={expenses} currency={currency} />
           <RecurringCard expenses={expenses} currency={currency} />
         </div>
-        <div className="2xl:col-span-2 card-3d gold-line-top p-6 relative overflow-hidden">
+        <div className="2xl:col-span-2 card-3d gold-line-top p-6 relative overflow-hidden animate-fade-in-up-d4">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-3">
             <h3 className="heading-serif text-lg font-bold flex items-center gap-2.5">
               <TrendingUp size={18} className="text-gold" /> Cash Flow

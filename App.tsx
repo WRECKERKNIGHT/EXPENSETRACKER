@@ -356,21 +356,23 @@ const App: React.FC = () => {
 
   if (screen === 'login') {
     return (
-      <div className="min-h-screen bg-app text-app flex items-center justify-center p-6 relative font-sans overflow-hidden">
-        <MoneyBackground />
-        <div className="absolute top-0 left-0 w-full h-full hero-gradient-dark opacity-60 pointer-events-none"></div>
+      <div className="min-h-screen bg-app text-app flex items-center justify-center p-6 relative font-sans overflow-hidden hero-gradient-dark">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-gold/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 w-full max-w-md perspective-1000">
-          <div className="card-3d gold-shimmer p-8 md:p-10 animate-fade-in-up">
+        <div className="relative z-10 w-full max-w-md mx-auto">
+          <div className="relative bg-surface/80 backdrop-blur-xl border border-gold/15 rounded-3xl p-8 max-w-md w-full mx-auto shadow-[0_25px_80px_rgba(0,0,0,0.5)] animate-fade-in-up">
+            <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-gold/10 blur-3xl pointer-events-none" />
+
             <div className="text-center mb-8">
-              <div className="w-16 h-16 bg-gradient-to-br from-gold-soft to-gold rounded-2xl mx-auto mb-5 flex items-center justify-center tilt-hover cursor-pointer">
-                 <User size={28} className="text-[#0a0f0a]" />
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-yellow-400 via-amber-500 to-yellow-600 flex items-center justify-center mx-auto mb-6 shadow-neon-gold animate-[pulse_3s_ease-in-out_infinite]">
+                <Wallet size={28} className="text-white" />
               </div>
-              <h2 className="heading-serif text-3xl md:text-4xl font-bold mb-2">Welcome Back</h2>
-              <p className="text-soft">Sign in to your account</p>
+              <h2 className="heading-serif text-3xl font-black text-app text-center mb-2">Welcome Back</h2>
+              <p className="text-soft text-center text-sm mb-8">Sign in to your account</p>
             </div>
-            
-            <button 
+
+            <button
               onClick={handleGoogleAuth}
               className="w-full btn-gold flex items-center justify-center gap-3 mb-6 py-4 rounded-xl text-base"
             >
@@ -388,26 +390,29 @@ const App: React.FC = () => {
               <div>
                 <label className="block text-xs font-bold text-soft mb-1.5 ml-1 tracking-wider uppercase">Email</label>
                 <input type="email" required value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)}
-                  className="w-full bg-app-soft border border-app rounded-xl px-4 py-3.5 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition-all placeholder:text-faint"
+                  className="input-glass"
                   placeholder="you@example.com" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-soft mb-1.5 ml-1 tracking-wider uppercase">Password</label>
                 <input type="password" required value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)}
-                  className="w-full bg-app-soft border border-app rounded-xl px-4 py-3.5 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition-all placeholder:text-faint"
+                  className="input-glass"
                   placeholder="••••••••" />
               </div>
               {authError && <p className="text-danger text-sm font-medium">{authError}</p>}
-              <button type="submit" disabled={isLoading} className="w-full btn-gold py-3.5 rounded-xl text-base font-bold disabled:opacity-60">
+              <button type="submit" disabled={isLoading} className="btn-gold w-full py-4 rounded-2xl text-lg font-bold disabled:opacity-60">
                 {isLoading ? 'Signing in...' : 'Sign In'}
               </button>
             </form>
+
             <div className="mt-6 text-center">
               <button onClick={() => setScreen('signup')} className="text-sm text-faint hover:text-gold transition-colors">
-                Don't have an account? <span className="font-bold">Sign up</span>
+                Don't have an account? <span className="text-gold hover:text-gold-ink transition-colors font-bold">Sign up</span>
               </button>
             </div>
             <button onClick={() => setScreen('landing')} className="w-full mt-4 text-faint text-sm hover:text-app transition-colors">← Back to Home</button>
+
+            <p className="text-center text-[10px] text-faint uppercase tracking-[0.3em] mt-8">SpendSmart AI</p>
           </div>
         </div>
       </div>
@@ -416,21 +421,25 @@ const App: React.FC = () => {
 
   if (screen === 'signup') {
     return (
-      <div className="min-h-screen bg-app text-app flex items-center justify-center p-6 relative font-sans overflow-hidden">
-        <MoneyBackground />
-        <div className="absolute top-0 left-0 w-full h-full hero-gradient-dark opacity-60 pointer-events-none"></div>
+      <div className="min-h-screen bg-app text-app flex items-center justify-center p-6 relative font-sans overflow-hidden hero-gradient-dark">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-gold/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 w-full max-w-lg perspective-1000">
-          <div className="card-3d gold-shimmer p-8 md:p-10 animate-fade-in-up max-h-[90vh] overflow-y-auto custom-scrollbar">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-deep via-gold to-brand"></div>
-            <div className="text-center mb-6">
-              <h2 className="heading-serif text-4xl md:text-5xl font-bold mb-3 tracking-tight">Create Account</h2>
-              <p className="text-soft font-light text-lg">Join SpendSmart and take control.</p>
+        <div className="relative z-10 w-full max-w-md mx-auto">
+          <div className="relative bg-surface/80 backdrop-blur-xl border border-gold/15 rounded-3xl p-8 max-w-md w-full mx-auto shadow-[0_25px_80px_rgba(0,0,0,0.5)] animate-fade-in-up max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-gold/10 blur-3xl pointer-events-none" />
+
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-yellow-400 via-amber-500 to-yellow-600 flex items-center justify-center mx-auto mb-6 shadow-neon-gold animate-[pulse_3s_ease-in-out_infinite]">
+                <Wallet size={28} className="text-white" />
+              </div>
+              <h2 className="heading-serif text-3xl font-black text-app text-center mb-2">Create Account</h2>
+              <p className="text-soft text-center text-sm mb-8">Join SpendSmart and take control.</p>
             </div>
-            
-            <button 
+
+            <button
               onClick={handleGoogleAuth}
-              className="w-full bg-gold hover:brightness-110 text-white font-bold py-4 rounded-2xl transition-all shadow-gold-glow flex items-center justify-center gap-3 mb-6 text-lg"
+              className="w-full btn-gold flex items-center justify-center gap-3 mb-6 py-4 rounded-xl text-base"
             >
               <GoogleIcon />
               Continue with Google
@@ -443,88 +452,96 @@ const App: React.FC = () => {
             </div>
 
             <form onSubmit={handleSignup} className="space-y-4">
-              
+
               {/* Personal Info */}
               <div>
-                <label className="block text-sm font-bold text-soft mb-2 ml-1 tracking-wider uppercase">Full Name</label>
+                <label className="block text-xs font-bold text-soft mb-1.5 ml-1 tracking-wider uppercase">Full Name</label>
                 <input
                   type="text"
                   required
                   value={nameInput}
                   onChange={(e) => setNameInput(e.target.value)}
-                  className="w-full bg-app-soft border border-app rounded-2xl px-5 py-4 text-app text-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold-soft transition-all placeholder:text-faint"
+                  className="input-glass"
                   placeholder="Rahul Sharma"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-soft mb-2 ml-1 tracking-wider uppercase">Email Address</label>
+                <label className="block text-xs font-bold text-soft mb-1.5 ml-1 tracking-wider uppercase">Email Address</label>
                 <input
                   type="email"
                   required
                   value={emailInput}
                   onChange={(e) => setEmailInput(e.target.value)}
-                  className="w-full bg-app-soft border border-app rounded-2xl px-5 py-4 text-app text-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold-soft transition-all placeholder:text-faint"
+                  className="input-glass"
                   placeholder="rahul@example.com"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-soft mb-2 ml-1 tracking-wider uppercase">Password</label>
+                <label className="block text-xs font-bold text-soft mb-1.5 ml-1 tracking-wider uppercase">Password</label>
                 <input
                   type="password"
                   required
                   minLength={6}
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
-                  className="w-full bg-app-soft border border-app rounded-2xl px-5 py-4 text-app text-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold-soft transition-all placeholder:text-faint"
+                  className="input-glass"
                   placeholder="••••••••"
                 />
               </div>
-              
+
               {/* Financial Info */}
               <div className="pt-4 border-t border-app">
                   <p className="text-base font-semibold text-gold mb-4 uppercase tracking-wider flex items-center gap-2">
-                    <DollarSign size={18} /> Financial Setup
+                    Financial Setup
                   </p>
                   <div className="grid grid-cols-2 gap-4">
                       <div>
-                      <label className="block text-sm font-bold text-soft mb-2 ml-1 tracking-wider uppercase">Current Balance (₹)</label>
+                      <label className="block text-xs font-bold text-soft mb-1.5 ml-1 tracking-wider uppercase">Current Balance (₹)</label>
                       <input
                           type="number"
                           required
                           value={balanceInput}
                           onChange={(e) => setBalanceInput(e.target.value)}
-                          className="w-full bg-app-soft border border-app rounded-2xl px-4 py-4 text-app text-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold-soft transition-all placeholder:text-faint font-mono"
+                          className="input-glass font-mono"
                           placeholder="0"
                       />
                       </div>
 
                       <div>
-                      <label className="block text-sm font-bold text-soft mb-2 ml-1 tracking-wider uppercase">Monthly Salary (₹)</label>
+                      <label className="block text-xs font-bold text-soft mb-1.5 ml-1 tracking-wider uppercase">Monthly Salary (₹)</label>
                       <input
                           type="number"
                           required
                           value={incomeInput}
                           onChange={(e) => setIncomeInput(e.target.value)}
-                          className="w-full bg-app-soft border border-app rounded-2xl px-4 py-4 text-app text-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold-soft transition-all placeholder:text-faint font-mono"
+                          className="input-glass font-mono"
                           placeholder="0"
                       />
                       </div>
                   </div>
               </div>
 
-              <button 
+              {authError && <p className="text-danger text-sm font-medium">{authError}</p>}
+
+              <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full btn-gold disabled:opacity-60 text-base py-3.5 rounded-xl"
+                className="btn-gold w-full py-4 rounded-2xl text-lg font-bold disabled:opacity-60"
               >
                 {isLoading ? 'Setting Up...' : 'Continue Setup'}
               </button>
             </form>
-            <button onClick={() => setScreen('landing')} className="w-full mt-6 text-faint text-sm hover:text-app transition-colors">
-              Back to Home
-            </button>
+
+            <div className="mt-6 text-center">
+              <button onClick={() => setScreen('login')} className="text-sm text-faint hover:text-gold transition-colors">
+                Already have an account? <span className="text-gold hover:text-gold-ink transition-colors font-bold">Sign in</span>
+              </button>
+            </div>
+            <button onClick={() => setScreen('landing')} className="w-full mt-4 text-faint text-sm hover:text-app transition-colors">← Back to Home</button>
+
+            <p className="text-center text-[10px] text-faint uppercase tracking-[0.3em] mt-8">SpendSmart AI</p>
           </div>
         </div>
       </div>

@@ -41,14 +41,15 @@ const EditExpenseModal: React.FC<EditExpenseModalProps> = ({ isOpen, onClose, on
   if (!isOpen || !expense) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-fade-in font-sans">
-      <div className="card-3d bg-surface border border-gold/20 rounded-[2rem] w-full max-w-lg shadow-2xl overflow-hidden transform transition-all flex flex-col max-h-[90vh] perspective-1000">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-2xl animate-fade-in font-sans">
+      <div className="bg-surface/90 backdrop-blur-xl border border-gold/15 rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.5)] animate-slide-in-up w-full max-w-lg overflow-hidden transform transition-all flex flex-col max-h-[90vh]">
         
         <div className="flex justify-between items-center p-6 border-b border-gold/20 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-gold/5 to-transparent" />
+          <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: 'linear-gradient(90deg, transparent, var(--gold), transparent)' }} />
+          <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-gold/10 blur-3xl pointer-events-none" />
           <div className="relative flex items-center gap-3">
-            <div className="bg-gradient-to-br from-gold-soft to-gold p-2.5 rounded-2xl shadow-card-soft">
-              <Pencil size={20} className="text-white" />
+            <div className="p-2.5 rounded-xl bg-gold/10 border border-gold/20">
+              <Pencil size={20} className="text-gold" />
             </div>
             <h2 className="heading-serif text-xl font-bold text-app tracking-tight">Edit Transaction</h2>
           </div>
@@ -93,7 +94,7 @@ const EditExpenseModal: React.FC<EditExpenseModalProps> = ({ isOpen, onClose, on
                 required
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="w-full bg-app-soft border-2 border-app rounded-2xl pl-12 pr-5 py-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition-all font-display font-bold text-xl shadow-inner"
+                className="input-glass w-full pl-12 pr-5 py-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition-all font-display font-bold text-xl"
                 placeholder="0"
               />
             </div>
@@ -106,7 +107,7 @@ const EditExpenseModal: React.FC<EditExpenseModalProps> = ({ isOpen, onClose, on
               required
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-app-soft border-2 border-app rounded-2xl px-5 py-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition-all shadow-inner"
+              className="input-glass w-full px-5 py-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition-all"
               placeholder="What was it?"
             />
           </div>
@@ -117,7 +118,7 @@ const EditExpenseModal: React.FC<EditExpenseModalProps> = ({ isOpen, onClose, on
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as Category)}
-                className="w-full bg-app-soft border-2 border-app rounded-2xl px-4 py-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition-all appearance-none shadow-inner font-medium"
+                className="input-glass w-full px-4 py-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition-all appearance-none font-medium"
               >
                 {Object.values(Category).map((cat) => (
                   <option key={cat} value={cat}>{cat}</option>
@@ -131,7 +132,7 @@ const EditExpenseModal: React.FC<EditExpenseModalProps> = ({ isOpen, onClose, on
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full bg-app-soft border-2 border-app rounded-2xl px-4 py-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition-all shadow-inner font-medium"
+                className="input-glass w-full px-4 py-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition-all font-medium"
               />
             </div>
           </div>
@@ -140,13 +141,13 @@ const EditExpenseModal: React.FC<EditExpenseModalProps> = ({ isOpen, onClose, on
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 bg-surface-3 hover:bg-surface-2 text-soft font-bold py-4 rounded-2xl transition-all border border-app hover:border-gold/20"
+              className="flex-1 bg-surface-3/80 hover:bg-surface-2 text-soft font-bold py-4 rounded-2xl transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-[2] btn-gold text-white font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-2"
+              className="flex-[2] btn-gold py-4 rounded-2xl w-full flex items-center justify-center gap-2"
             >
               <Check size={18} /> Save Changes
             </button>
