@@ -247,12 +247,13 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-fade-in font-sans">
-      <div className="card-3d w-full max-w-2xl overflow-hidden transform transition-all flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-2xl animate-fade-in font-sans">
+      <div className="w-full max-w-2xl overflow-hidden transform transition-all flex flex-col max-h-[90vh] bg-surface/90 backdrop-blur-xl border border-gold/15 rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.5)] animate-slide-in-up">
 
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b border-app/50 bg-surface-2 relative">
            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gold-soft via-gold to-gold-soft"></div>
+           <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-gold/10 blur-3xl pointer-events-none" />
            <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-gold/10 border border-gold/20">
                 <ScanLine size={22} className="text-gold" />
@@ -266,12 +267,12 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
 
         {/* Mode Toggle */}
         <div className="px-6 pt-6">
-             <div className="flex p-1 gap-1 bg-surface-2 rounded-xl border border-app">
+             <div className="flex p-1 gap-1 bg-surface-2 rounded-xl border border-app input-glass">
                 <button
                     onClick={() => setActiveTab('auto')}
                     className={`flex-1 py-3.5 text-sm font-bold rounded-lg flex items-center justify-center gap-2 transition-all ${
                     activeTab === 'auto'
-                        ? 'bg-surface-3 text-app shadow-inner ring-1 ring-gold/30'
+                        ? 'bg-gold/15 text-gold border border-gold/30 shadow-[0_0_15px_rgba(212,175,55,0.15)]'
                         : 'text-faint hover:text-soft'
                     }`}
                 >
@@ -281,7 +282,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                     onClick={() => setActiveTab('import')}
                     className={`flex-1 py-3.5 text-sm font-bold rounded-lg flex items-center justify-center gap-2 transition-all ${
                     activeTab === 'import'
-                        ? 'bg-surface-3 text-app shadow-inner ring-1 ring-gold/30'
+                        ? 'bg-gold/15 text-gold border border-gold/30 shadow-[0_0_15px_rgba(212,175,55,0.15)]'
                         : 'text-faint hover:text-soft'
                     }`}
                 >
@@ -291,7 +292,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                     onClick={() => setActiveTab('manual')}
                     className={`flex-1 py-3.5 text-sm font-bold rounded-lg transition-all ${
                     activeTab === 'manual'
-                        ? 'bg-surface-3 text-app shadow-inner ring-1 ring-gold/30'
+                        ? 'bg-gold/15 text-gold border border-gold/30 shadow-[0_0_15px_rgba(212,175,55,0.15)]'
                         : 'text-faint hover:text-soft'
                     }`}
                 >
@@ -403,7 +404,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                             <button
                                 onClick={handleClipboardRead}
                                 disabled={isParsing}
-                                className="bg-surface-2 border border-app hover:border-gold-soft hover:bg-surface-3 p-6 rounded-2xl flex flex-col items-center gap-3 transition-all group relative overflow-hidden"
+                                className="bg-surface-2/80 backdrop-blur-sm border border-gold/10 hover:border-gold/30 hover:bg-surface-3/80 p-6 rounded-2xl flex flex-col items-center gap-3 transition-all group relative overflow-hidden"
                             >
                                 <div className="absolute inset-0 bg-gold/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                 <div className="w-14 h-14 rounded-2xl bg-surface-3 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg relative z-10 border border-gold/20">
@@ -417,7 +418,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
 
                             <div
                                 onClick={() => fileInputRef.current?.click()}
-                                className="bg-surface-2 border border-app hover:border-gold-soft hover:bg-surface-3 p-6 rounded-2xl flex flex-col items-center gap-3 transition-all group cursor-pointer"
+                                className="bg-surface-2/80 backdrop-blur-sm border border-gold/10 hover:border-gold/30 hover:bg-surface-3/80 p-6 rounded-2xl flex flex-col items-center gap-3 transition-all group cursor-pointer"
                             >
                                 <input
                                     type="file"
@@ -447,7 +448,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
                                 value={aiInput}
                                 onChange={(e) => setAiInput(e.target.value)}
                                 placeholder={`Paste SMS or text here...\n"Sent Rs 250 to Starbucks on 12th March"`}
-                                className="w-full h-24 bg-app-soft border border-app rounded-2xl p-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 resize-none placeholder:text-faint text-sm font-mono"
+                                className="input-glass w-full h-24 bg-app-soft border border-app rounded-2xl p-4 text-app focus:outline-none focus:ring-2 focus:ring-gold/40 resize-none placeholder:text-faint text-sm font-mono"
                             />
                             <button
                                 onClick={() => handleTextParse()}

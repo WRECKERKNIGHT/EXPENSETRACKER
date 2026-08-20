@@ -15,7 +15,8 @@ import SetupWizard from './components/SetupWizard';
 import LandingPage from './components/LandingPage';
 import ThemeToggle from './components/ThemeToggle';
 import OnboardingQuiz from './components/OnboardingQuiz';
-import { initTheme, applyTheme } from './services/theme';
+import CommandPalette from './components/CommandPalette';
+import { initTheme, applyTheme, toggleTheme as toggleThemeFn } from './services/theme';
 import { LayoutDashboard, Receipt, Sparkles, Plus, Wallet, LogOut, User, Mail, Key, BarChart2, SlidersHorizontal } from 'lucide-react';
 
 // Google Icon Component
@@ -45,6 +46,7 @@ const App: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSmsModalOpen, setIsSmsModalOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+  const [cmdOpen, setCmdOpen] = useState(false);
 
   // Auth Forms State
   const [nameInput, setNameInput] = useState('');
@@ -112,6 +114,17 @@ const App: React.FC = () => {
     }
     return cleanupKeys;
   }, [screen]);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setCmdOpen(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -577,24 +590,28 @@ const App: React.FC = () => {
         </nav>
 
         {/* Mobile Navigation Bar (Bottom) */}
-        <div className="md:hidden fixed bottom-0 left-0 w-full bg-surface border-t border-app p-2 grid grid-cols-5 gap-1 z-50">
-           <button onClick={() => setView('dashboard')} className={`flex flex-col items-center justify-center p-2 rounded-lg ${view === 'dashboard' ? 'text-brand bg-surface-2' : 'text-faint'}`}>
-              <LayoutDashboard size={18} /><span className="text-[9px] font-medium mt-0.5">Home</span>
+        <nav className="md:hidden fixed bottom-0 left-0 w-full bg-surface/80 backdrop-blur-xl border-t border-gold/10 p-2 grid grid-cols-5 gap-1 z-50">
+           <button onClick={() => setView('dashboard')} className={`flex flex-col items-center gap-1 py-2 px-3 rounded-xl transition-all duration-300 relative ${view === 'dashboard' ? 'text-gold' : 'text-faint hover:text-soft'}`}>
+              {view === 'dashboard' && <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-5 h-1 rounded-full bg-gold" />}
+              <LayoutDashboard size={20} /><span className="text-[10px] font-bold uppercase tracking-wider">Home</span>
            </button>
-           <button onClick={() => setView('expenses')} className={`relative flex flex-col items-center justify-center p-2 rounded-lg ${view === 'expenses' ? 'text-brand bg-surface-2' : 'text-faint'}`}>
-              <Receipt size={18} /><span className="text-[9px] font-medium mt-0.5">Expenses</span>
+           <button onClick={() => setView('expenses')} className={`flex flex-col items-center gap-1 py-2 px-3 rounded-xl transition-all duration-300 relative ${view === 'expenses' ? 'text-gold' : 'text-faint hover:text-soft'}`}>
+              {view === 'expenses' && <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-5 h-1 rounded-full bg-gold" />}
+              <Receipt size={20} /><span className="text-[10px] font-bold uppercase tracking-wider">Expenses</span>
               {monthlyExpenseCount > 0 && <span className="absolute -top-0.5 -right-0.5 text-[7px] font-bold bg-brand text-white w-3.5 h-3.5 rounded-full flex items-center justify-center">{monthlyExpenseCount > 99 ? '99+' : monthlyExpenseCount}</span>}
            </button>
-           <button onClick={() => setView('advisor')} className={`flex flex-col items-center justify-center p-2 rounded-lg ${view === 'advisor' ? 'text-gold bg-surface-2' : 'text-faint'}`}>
-              <Sparkles size={18} /><span className="text-[9px] font-medium mt-0.5">AI</span>
+           <button onClick={() => setIsModalOpen(true)} className="flex flex-col items-center justify-center btn-gold rounded-full p-4 -mt-4 shadow-neon-gold animate-[pulse_2s_ease-in-out_infinite] relative">
+              <Plus size={20} /><span className="text-[10px] font-bold uppercase tracking-wider text-white">Add</span>
            </button>
-           <button onClick={() => setView('reports')} className={`flex flex-col items-center justify-center p-2 rounded-lg ${view === 'reports' ? 'text-gold bg-surface-2' : 'text-faint'}`}>
-              <BarChart2 size={18} /><span className="text-[9px] font-medium mt-0.5">Reports</span>
+           <button onClick={() => setView('advisor')} className={`flex flex-col items-center gap-1 py-2 px-3 rounded-xl transition-all duration-300 relative ${view === 'advisor' ? 'text-gold' : 'text-faint hover:text-soft'}`}>
+              {view === 'advisor' && <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-5 h-1 rounded-full bg-gold" />}
+              <Sparkles size={20} /><span className="text-[10px] font-bold uppercase tracking-wider">AI</span>
            </button>
-           <button onClick={() => setIsModalOpen(true)} className="flex flex-col items-center justify-center p-2 rounded-lg text-white bg-gradient-to-br from-brand-deep to-brand">
-              <Plus size={18} /><span className="text-[9px] font-medium mt-0.5">Add</span>
+           <button onClick={() => setView('reports')} className={`flex flex-col items-center gap-1 py-2 px-3 rounded-xl transition-all duration-300 relative ${view === 'reports' ? 'text-gold' : 'text-faint hover:text-soft'}`}>
+              {view === 'reports' && <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-5 h-1 rounded-full bg-gold" />}
+              <BarChart2 size={20} /><span className="text-[10px] font-bold uppercase tracking-wider">Reports</span>
            </button>
-        </div>
+        </nav>
 
         {/* Sidebar Footer */}
         <div className="p-4 border-t border-gold/10 space-y-2.5 hidden md:block relative z-10">
@@ -685,6 +702,14 @@ const App: React.FC = () => {
         onClose={() => setEditingExpense(null)}
         onSave={handleEditExpense}
         expense={editingExpense}
+      />
+
+      <CommandPalette 
+        isOpen={cmdOpen} 
+        onClose={() => setCmdOpen(false)} 
+        onNavigate={(view) => { setView(view as any); setCmdOpen(false); }}
+        onToggleTheme={() => { toggleThemeFn(); }}
+        onAddTransaction={() => { setIsModalOpen(true); setCmdOpen(false); }}
       />
 
     </div>
