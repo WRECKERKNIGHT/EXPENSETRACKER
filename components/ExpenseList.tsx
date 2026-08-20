@@ -160,6 +160,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
               <table className="w-full text-left">
                 <thead className="bg-surface-2 text-faint uppercase text-[11px] font-bold tracking-widest border-b border-gold/15">
                   <tr>
+                    <th className="w-1 p-0"></th>
                     <th className="px-8 py-6">Description</th>
                     <th className="px-6 py-6">Category</th>
                     <th className="px-6 py-6">Date</th>
@@ -167,14 +168,15 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
                     <th className="px-6 py-6 text-center"></th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gold/10">
+                <tbody>
                   {filteredExpenses.map((expense) => {
                     const catColor = CATEGORY_COLORS[expense.category] || CATEGORY_COLORS[Category.OTHER];
                     const anomaly = anomalyMap.get(expense.id);
                     const merchant = extractMerchant(expense.description);
                     const isRecurring = recurringMerchants.has(merchant.toLowerCase().replace(/[^a-z0-9]/g, ''));
                     return (
-                    <tr key={expense.id} className="group hover:bg-gold/[0.03] transition-all duration-300">
+                    <tr key={expense.id} className="hover:bg-gold/[0.04] transition-all duration-300 group border-b border-gold/5 last:border-0">
+                      <td className="w-1 p-0"><div className={`h-full w-0.5 rounded-full ${expense.type === 'income' ? 'bg-gold' : 'bg-red-500/40'} opacity-0 group-hover:opacity-100 transition-opacity`} /></td>
                       <td className="px-8 py-5">
                         <div className="flex items-center gap-4">
                           <div className={`p-3 rounded-2xl flex-shrink-0 transition-transform group-hover:scale-110 ${
@@ -186,7 +188,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
                           </div>
                           <div>
                              <div className="flex items-center gap-2">
-                               <p className="font-bold text-app text-base group-hover:text-app transition-colors">{expense.description}</p>
+                               <p className="font-bold text-app text-[15px] group-hover:text-app transition-colors">{expense.description}</p>
                                {anomaly && (
                                  <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
                                    anomaly.severity === 'severe' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
@@ -204,12 +206,12 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
                                  </span>
                                )}
                              </div>
-                             <p className="text-xs text-faint font-mono mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity">{merchant}</p>
+                             <p className="text-[11px] text-faint font-mono mt-0.5">{merchant}</p>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-5">
-                        <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold border tracking-wide uppercase transition-colors ${
+                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border uppercase tracking-wider ${
                              `${catColor.bg} ${catColor.text} ${catColor.border} group-hover:brightness-110`
                         }`}>
                           {getCategoryIcon(expense.category)}
@@ -224,20 +226,20 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
                          </div>
                       </td>
                       <td className="px-8 py-5 text-right">
-                         <span className={`font-display text-lg font-bold tracking-tight ${
+                         <span className={`font-display text-lg font-black ${
                              expense.type === 'income'
                              ? 'text-gold'
-                             : 'text-app group-hover:text-app'
+                             : 'text-red-400'
                          }`}>
                            {expense.type === 'income' ? '+' : '-'} {formatCurrency(expense.amount)}
                          </span>
                       </td>
                       <td className="px-6 py-5 text-center">
-                        <div className="flex items-center justify-center gap-1">
+                        <div className="flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           {onEdit && (
                             <button
                               onClick={() => onEdit(expense)}
-                              className="text-faint hover:text-gold hover:bg-gold/10 p-2.5 rounded-xl transition-all opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0"
+                              className="text-faint hover:text-gold hover:bg-gold/10 p-2.5 rounded-xl transition-all"
                               title="Edit Transaction"
                             >
                               <Edit3 size={16} />
@@ -245,7 +247,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit })
                           )}
                           <button
                             onClick={() => onDelete(expense.id)}
-                            className="text-faint hover:text-red-400 hover:bg-red-500/10 p-2.5 rounded-xl transition-all opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0"
+                            className="text-faint hover:text-red-400 hover:bg-red-500/10 p-2.5 rounded-xl transition-all"
                             title="Delete Transaction"
                           >
                             <Trash2 size={18} />
