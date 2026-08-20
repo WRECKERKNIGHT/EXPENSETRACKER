@@ -124,7 +124,7 @@ const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ monthlyIncome, currency
   };
 
   return (
-    <div className="min-h-screen bg-app text-app flex items-center justify-center p-4 sm:p-6 font-sans relative overflow-hidden">
+    <div className="min-h-screen bg-black/70 backdrop-blur-2xl text-app flex items-center justify-center p-4 sm:p-6 font-sans relative overflow-hidden">
       {/* Ambient background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute bottom-0 right-0 w-[50%] h-[50%] bg-gold/10 rounded-full blur-[130px]" />
@@ -158,19 +158,19 @@ const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ monthlyIncome, currency
             <div
               key={i}
               className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${
-                i <= step ? 'bg-gradient-to-r from-brand-deep to-gold' : 'bg-surface-3'
+                i <= step ? 'bg-gradient-to-r from-gold via-gold/80 to-gold shadow-[0_0_8px_rgba(212,175,55,0.4)]' : 'bg-surface-3'
               }`}
             />
           ))}
         </div>
 
-        <div className="bg-surface border border-app rounded-[2rem] shadow-card p-6 sm:p-8 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-deep via-brand to-gold opacity-70" />
+        <div className="bg-surface/80 backdrop-blur-xl border border-gold/15 rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.5)] animate-slide-in-up p-6 sm:p-8 relative overflow-hidden">
+          <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-gold/10 blur-3xl pointer-events-none" />
 
           {/* STEP 0 — Goal */}
           {step === 0 && (
             <div className="animate-fade-in">
-              <h2 className="heading-serif text-2xl sm:text-3xl font-bold mb-2">What matters most right now?</h2>
+              <h2 className="heading-serif text-2xl sm:text-3xl font-bold mb-2 text-glow-gold">What matters most right now?</h2>
               <p className="text-soft mb-6">We'll shape your dashboard around it.</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {GOAL_OPTIONS.map(opt => (
@@ -179,8 +179,8 @@ const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ monthlyIncome, currency
                     onClick={() => setGoal(opt.id)}
                     className={`text-left p-4 rounded-2xl border transition-all flex items-start gap-3 ${
                       goal === opt.id
-                        ? 'border-gold bg-gold/10 shadow-card-soft'
-                        : 'border-app bg-surface-2 hover:border-gold-soft'
+                        ? 'border-gold bg-gold/10 shadow-neon-gold'
+                        : 'bg-surface-2/80 backdrop-blur-sm border-gold/10 hover:border-gold-soft'
                     }`}
                   >
                     <div className={`p-2.5 rounded-xl ${goal === opt.id ? 'bg-gold/20 text-gold' : 'bg-surface-3 text-soft'}`}>{opt.icon}</div>
@@ -198,7 +198,7 @@ const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ monthlyIncome, currency
           {/* STEP 1 — Savings goal */}
           {step === 1 && (
             <div className="animate-fade-in">
-              <h2 className="heading-serif text-2xl sm:text-3xl font-bold mb-2">Pick a savings goal</h2>
+              <h2 className="heading-serif text-2xl sm:text-3xl font-bold mb-2 text-glow-gold">Pick a savings goal</h2>
               <p className="text-soft mb-6">One target to aim at first. You can change it anytime.</p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
                 {GOAL_PRESETS.map(p => (
@@ -207,8 +207,8 @@ const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ monthlyIncome, currency
                     onClick={() => pickPreset(p.name, p.amount)}
                     className={`p-4 rounded-2xl border transition-all text-left ${
                       goalName === p.name
-                        ? 'border-gold bg-gold/10 shadow-card-soft'
-                        : 'border-app bg-surface-2 hover:border-gold-soft'
+                        ? 'border-gold bg-gold/10 shadow-neon-gold'
+                        : 'bg-surface-2/80 backdrop-blur-sm border-gold/10 hover:border-gold-soft'
                     }`}
                   >
                     <div className={`mb-3 ${goalName === p.name ? 'text-gold' : 'text-soft'}`}>{p.icon}</div>
@@ -246,7 +246,7 @@ const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ monthlyIncome, currency
           {/* STEP 2 — Spending style */}
           {step === 2 && (
             <div className="animate-fade-in">
-              <h2 className="heading-serif text-2xl sm:text-3xl font-bold mb-2">How do you like to spend?</h2>
+              <h2 className="heading-serif text-2xl sm:text-3xl font-bold mb-2 text-glow-gold">How do you like to spend?</h2>
               <p className="text-soft mb-6">This tunes how tight your daily allowance is.</p>
               <div className="space-y-3">
                 {STYLE_OPTIONS.map(opt => (
@@ -255,8 +255,8 @@ const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ monthlyIncome, currency
                     onClick={() => setStyle(opt.id)}
                     className={`w-full text-left p-4 rounded-2xl border transition-all flex items-center gap-3 ${
                       style === opt.id
-                        ? 'border-gold bg-gold/10 shadow-card-soft'
-                        : 'border-app bg-surface-2 hover:border-gold-soft'
+                        ? 'border-gold bg-gold/10 shadow-neon-gold'
+                        : 'bg-surface-2/80 backdrop-blur-sm border-gold/10 hover:border-gold-soft'
                     }`}
                   >
                     <span className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full border ${
@@ -276,7 +276,7 @@ const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ monthlyIncome, currency
           {/* STEP 3 — Reminders */}
           {step === 3 && (
             <div className="animate-fade-in">
-              <h2 className="heading-serif text-2xl sm:text-3xl font-bold mb-2">Want gentle nudges?</h2>
+              <h2 className="heading-serif text-2xl sm:text-3xl font-bold mb-2 text-glow-gold">Want gentle nudges?</h2>
               <p className="text-soft mb-6">Pick how often we remind you to stay on plan.</p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {REMINDER_OPTIONS.map(opt => (
@@ -285,8 +285,8 @@ const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ monthlyIncome, currency
                     onClick={() => setReminder(opt.id)}
                     className={`p-5 rounded-2xl border transition-all text-left ${
                       reminder === opt.id
-                        ? 'border-gold bg-gold/10 shadow-card-soft'
-                        : 'border-app bg-surface-2 hover:border-gold-soft'
+                        ? 'border-gold bg-gold/10 shadow-neon-gold'
+                        : 'bg-surface-2/80 backdrop-blur-sm border-gold/10 hover:border-gold-soft'
                     }`}
                   >
                     <div className={`mb-3 ${reminder === opt.id ? 'text-gold' : 'text-soft'}`}>{opt.icon}</div>
@@ -341,8 +341,8 @@ const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ monthlyIncome, currency
                       onClick={() => toggleWidget(w.id)}
                       className={`flex items-center gap-2 px-4 py-2.5 rounded-full border text-sm font-semibold transition-all ${
                         active
-                          ? 'border-gold bg-gold/10 text-app shadow-card-soft'
-                          : 'border-app bg-surface-2 text-faint hover:text-app'
+                          ? 'border-gold bg-gold/10 text-app shadow-neon-gold'
+                          : 'bg-surface-2/80 backdrop-blur-sm border-gold/10 text-faint hover:text-app'
                       }`}
                     >
                       <span className={active ? 'text-gold' : 'text-faint'}>{w.icon}</span>

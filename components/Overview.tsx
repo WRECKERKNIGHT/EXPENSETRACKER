@@ -270,7 +270,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
   }, [expenses]);
 
   return (
-    <div ref={mainRef} className="space-y-6 animate-fade-in font-sans">
+    <div ref={mainRef} className="space-y-6 py-2 animate-fade-in font-sans">
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           HERO — 3D COIN + GREETING
@@ -299,7 +299,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
       </div>
 
       {/* ━━━ QUICK ACTIONS ━━━ */}
-      <div className="flex flex-col sm:flex-row gap-4 gsap-section" style={{ animationDelay: '0.1s' }}>
+      <div className="flex flex-col sm:flex-row gap-4 gsap-section animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
         <button onClick={onAddTx} className="flex-1 btn-gold flex items-center justify-center gap-3 text-base font-bold py-4 rounded-xl transition-all hover:scale-[1.02]">
           <Plus size={20} strokeWidth={2.5} /> Quick Add
         </button>
@@ -309,7 +309,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
       </div>
 
       {/* ━━━ IMPORT BAR ━━━ */}
-      <div className="card-3d px-5 py-3 flex flex-wrap items-center gap-3 gsap-section" style={{ animationDelay: '0.2s' }}>
+      <div className="card-3d px-5 py-3 flex flex-wrap items-center gap-3 gsap-section animate-fade-in-up-d1" style={{ animationDelay: '0.2s' }}>
         <span className="text-xs font-bold text-faint uppercase tracking-wider">Import</span>
         <div className="flex-1" />
         <button onClick={handleConnectBank} disabled={isBankConnecting || isBankConnected}
@@ -363,7 +363,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
               <SlidersHorizontal size={12} /> Edit
             </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
             {widgetOrder.map(key => <div key={key}>{renderWidget(key)}</div>)}
           </div>
         </div>
@@ -377,7 +377,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
           <Gauge size={18} className="text-gold" />
           <h3 className="heading-serif text-xl font-bold">Overview</h3>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {/* Balance */}
           <div className="card-3d gold-shimmer p-6 tilt-hover relative overflow-hidden transition-all duration-500 hover:scale-[1.02]">
             <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: 'linear-gradient(90deg, transparent, var(--gold), transparent)' }} />
@@ -459,7 +459,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           CHARTS
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 gsap-section" style={{ animationDelay: '1.1s' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 gsap-section" style={{ animationDelay: '1.1s' }}>
         {/* Health */}
         <div className="card-3d p-6 relative overflow-hidden min-h-[340px] animate-fade-in-up-d1">
           <h3 className="heading-serif text-lg font-bold mb-5 flex items-center gap-2.5">
@@ -515,7 +515,7 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           BUDGETS + RECURRING + CASH FLOW
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <div className="grid grid-cols-1 2xl:grid-cols-3 gap-5 gsap-section" style={{ animationDelay: '1.2s' }}>
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 gsap-section" style={{ animationDelay: '1.2s' }}>
         <div className="space-y-4 2xl:col-span-1 animate-fade-in-up-d3">
           <BudgetsCard expenses={expenses} currency={currency} />
           <RecurringCard expenses={expenses} currency={currency} />

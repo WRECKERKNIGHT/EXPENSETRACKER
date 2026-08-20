@@ -28,7 +28,8 @@ const StreakCard: React.FC<StreakCardProps> = ({ expenses, prefs, monthlyIncome 
   const { streak, insights, onTrack } = data;
 
   return (
-    <div className="card-3d gold-line-top p-6 relative overflow-hidden group tilt-hover">
+    <div className="card-3d gold-shimmer p-5 tilt-hover relative overflow-hidden">
+      <div className="absolute -bottom-6 -right-6 w-20 h-20 rounded-full bg-gold/10 blur-2xl pointer-events-none" />
       <div className="absolute -bottom-4 -right-4 text-danger/5 pointer-events-none select-none">
         <Flame size={80} strokeWidth={1} />
       </div>

@@ -23,7 +23,8 @@ const DailyAllowanceCard: React.FC<DailyAllowanceCardProps> = ({ expenses, prefs
   const onTrack = plan.onTrack;
 
   return (
-    <div className="card-3d gold-line-top p-6 relative overflow-hidden group tilt-hover">
+    <div className="card-3d gold-shimmer p-5 tilt-hover relative overflow-hidden">
+      <div className="absolute -bottom-6 -left-6 w-20 h-20 rounded-full bg-gold/10 blur-2xl pointer-events-none" />
       <div className="absolute -bottom-4 -right-4 text-gold/5 pointer-events-none select-none">
         <Wallet size={80} strokeWidth={1} />
       </div>

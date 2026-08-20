@@ -111,7 +111,8 @@ const BudgetsCard: React.FC<BudgetsCardProps> = ({ expenses, currency }) => {
   };
 
   return (
-    <div className="card-3d p-6 md:p-7 relative overflow-hidden">
+    <div className="card-3d gold-shimmer p-5 relative overflow-hidden">
+      <div className="absolute -bottom-6 -left-6 w-20 h-20 rounded-full bg-brand/10 blur-2xl pointer-events-none" />
       <div className="absolute -bottom-4 -right-4 text-brand/5 pointer-events-none select-none">
         <Wallet size={80} strokeWidth={1} />
       </div>

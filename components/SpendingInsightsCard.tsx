@@ -99,7 +99,8 @@ const SpendingInsightsCard: React.FC<SpendingInsightsCardProps> = ({ expenses, m
   ];
 
   return (
-    <div className="card-3d gold-line-top p-5 md:p-6">
+    <div className="card-3d gold-shimmer p-5 relative overflow-hidden">
+      <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-gold/10 blur-2xl pointer-events-none" />
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-gold/10 rounded-lg text-gold border border-gold/20">
