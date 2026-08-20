@@ -275,21 +275,27 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           HERO — 3D COIN + GREETING
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <div className="relative rounded-2xl overflow-hidden" style={{ background: 'linear-gradient(135deg, #0a1a10 0%, #112b1f 50%, #071510 100%)' }}>
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 60% 50% at 70% 50%, rgba(212,175,55,0.08) 0%, transparent 70%)' }} />
+      <div className="relative overflow-hidden rounded-2xl border-b border-gold/10" style={{ background: 'linear-gradient(135deg, rgba(8,13,26,0.9) 0%, rgba(17,24,39,0.8) 50%, rgba(8,13,26,0.95) 100%)' }}>
+        <div className="mesh-blob bg-gold/20 w-64 h-64 absolute -top-20 -left-20" />
+        <div className="mesh-blob bg-brand/15 w-48 h-48 absolute -bottom-10 right-10" />
+        <div className="particle-field">
+          <span style={{left:'10%',bottom:'-5%',animationDelay:'0s',animationDuration:'18s'}} />
+          <span style={{left:'30%',bottom:'-5%',animationDelay:'3s',animationDuration:'22s'}} />
+          <span style={{left:'60%',bottom:'-5%',animationDelay:'7s',animationDuration:'20s'}} />
+          <span style={{left:'85%',bottom:'-5%',animationDelay:'2s',animationDuration:'25s'}} />
+        </div>
         <div className="relative flex flex-col md:flex-row items-center gap-8 px-8 py-12 md:py-16 min-h-[280px]">
           <div className="flex-1 relative z-10">
             <p className="text-gold text-xs font-bold uppercase tracking-[0.25em] mb-3">Dashboard</p>
             <h1 className="heading-serif text-3xl md:text-5xl font-black text-app leading-tight mb-3">
-              Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 18 ? 'afternoon' : 'evening'}, <span className="text-gold">{userName || 'there'}</span>
+              Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 18 ? 'afternoon' : 'evening'}, <span className="text-gold text-glow-gold">{userName || 'there'}</span>
             </h1>
-            <p className="text-soft text-base md:text-lg max-w-lg">Here's your financial overview. Track every dollar with clarity.</p>
+            <p className="text-soft text-base md:text-lg max-w-lg">Track every rupee. Every transaction. Every insight.</p>
           </div>
           <div className="relative w-40 h-40 md:w-52 md:h-52 flex-shrink-0">
             <CoinScene containerId="hero-coin" />
           </div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, var(--gold), transparent)', opacity: 0.3 }} />
       </div>
 
       {/* ━━━ QUICK ACTIONS ━━━ */}
@@ -373,34 +379,40 @@ const Overview: React.FC<OverviewProps> = ({ expenses, monthlyIncome, currency, 
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Balance */}
-          <div className="card-3d dollar-watermark p-5 tilt-hover">
+          <div className="card-3d gold-shimmer p-6 tilt-hover relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: 'linear-gradient(90deg, transparent, var(--gold), transparent)' }} />
+            <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-gold/10 blur-3xl pointer-events-none" />
             <div className="flex items-center gap-2.5 mb-3">
-              <div className="p-2 rounded-lg bg-gold/10 text-gold border border-gold/20"><Wallet size={18} /></div>
+              <div className="p-2.5 rounded-xl bg-gold/10 border border-gold/20 text-gold"><Wallet size={18} /></div>
               <span className="text-xs font-bold uppercase tracking-wider text-faint">Balance</span>
             </div>
-            <p className="heading-serif text-3xl md:text-4xl font-black text-glow-gold text-gold mb-1">{formatCurrency(calculations.balance, currency)}</p>
+            <p className="heading-serif text-4xl font-black text-glow-gold text-gold mb-1">{formatCurrency(calculations.balance, currency)}</p>
             <p className="text-xs text-faint">Available Funds</p>
-            <div className="progress-bar mt-3"><div className="progress-bar-fill" style={{ width: `${monthlyIncome > 0 ? Math.min((calculations.balance / monthlyIncome) * 100, 100) : 0}%` }} /></div>
+            <div className="progress-bar mt-3"><div className="progress-bar-fill shimmer-fill" style={{ width: `${monthlyIncome > 0 ? Math.min((calculations.balance / monthlyIncome) * 100, 100) : 0}%` }} /></div>
           </div>
           {/* Spent */}
-          <div className="card-3d p-5 tilt-hover">
+          <div className="card-3d gold-shimmer p-6 tilt-hover relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: 'linear-gradient(90deg, transparent, var(--gold), transparent)' }} />
+            <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-red-500/10 blur-3xl pointer-events-none" />
             <div className="flex items-center gap-2.5 mb-3">
-              <div className="p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20"><TrendingDown size={18} /></div>
+              <div className="p-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400"><TrendingDown size={18} /></div>
               <span className="text-xs font-bold uppercase tracking-wider text-faint">Spent</span>
             </div>
-            <p className="heading-serif text-3xl md:text-4xl font-black text-glow-danger text-red-400 mb-1">{formatCurrency(calculations.totalExpense, currency)}</p>
+            <p className="heading-serif text-4xl font-black text-glow-danger text-red-400 mb-1">{formatCurrency(calculations.totalExpense, currency)}</p>
             <p className="text-xs text-faint">Total Outflow</p>
-            <div className="progress-bar mt-3"><div className="progress-bar-fill" style={{ width: `${monthlyIncome > 0 ? Math.min((calculations.totalExpense / monthlyIncome) * 100, 100) : 0}%`, background: 'linear-gradient(90deg, #e07a5f, #e74c3c)' }} /></div>
+            <div className="progress-bar mt-3"><div className="progress-bar-fill shimmer-fill" style={{ width: `${monthlyIncome > 0 ? Math.min((calculations.totalExpense / monthlyIncome) * 100, 100) : 0}%`, background: 'linear-gradient(90deg, #e07a5f, #e74c3c)' }} /></div>
           </div>
           {/* Income */}
-          <div className="card-3d p-5 tilt-hover">
+          <div className="card-3d gold-shimmer p-6 tilt-hover relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: 'linear-gradient(90deg, transparent, var(--gold), transparent)' }} />
+            <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-brand/10 blur-3xl pointer-events-none" />
             <div className="flex items-center gap-2.5 mb-3">
-              <div className="p-2 rounded-lg bg-brand/10 text-brand border border-brand/20"><TrendingUp size={18} /></div>
+              <div className="p-2.5 rounded-xl bg-brand/10 border border-brand/20 text-brand"><TrendingUp size={18} /></div>
               <span className="text-xs font-bold uppercase tracking-wider text-faint">Income</span>
             </div>
-            <p className="heading-serif text-3xl md:text-4xl font-black text-glow-success text-brand mb-1">{formatCurrency(monthlyIncome, currency)}</p>
+            <p className="heading-serif text-4xl font-black text-glow-success text-brand mb-1">{formatCurrency(monthlyIncome, currency)}</p>
             <p className="text-xs text-faint">Monthly Salary</p>
-            <div className="progress-bar mt-3"><div className="progress-bar-fill" style={{ width: '100%', background: 'linear-gradient(90deg, #27ae60, #2ecc71)' }} /></div>
+            <div className="progress-bar mt-3"><div className="progress-bar-fill shimmer-fill" style={{ width: '100%', background: 'linear-gradient(90deg, #27ae60, #2ecc71)' }} /></div>
           </div>
         </div>
       </div>

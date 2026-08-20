@@ -524,11 +524,14 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-app text-app flex flex-col md:flex-row overflow-hidden font-sans">
       
       {/* Sidebar Navigation */}
-      <aside className="w-full md:w-72 bg-surface border-r border-app flex-shrink-0 flex flex-col h-auto md:h-screen sticky top-0 z-20 relative overflow-hidden">
-        <div className="p-5 flex items-center justify-between gap-3 relative z-10 border-b border-app">
+      <aside className="w-full md:w-72 bg-surface/70 backdrop-blur-xl border-r border-gold/10 flex-shrink-0 flex flex-col h-auto md:h-screen sticky top-0 z-20 relative overflow-hidden">
+
+        {/* Logo Area */}
+        <div className="p-5 flex items-center justify-between gap-3 relative z-10 border-b border-gold/10">
           <div className="flex items-center gap-3">
-            <div className="bg-gradient-to-br from-gold-soft to-gold p-2.5 rounded-xl tilt-hover cursor-pointer">
-              <Wallet className="w-5 h-5 text-[#0a0f0a]" />
+            <div className="relative w-10 h-10 bg-gradient-to-br from-yellow-400 via-amber-500 to-yellow-600 rounded-full flex items-center justify-center shadow-lg shadow-gold/20 animate-[pulse_3s_ease-in-out_infinite]">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-yellow-300 to-amber-500 opacity-50 animate-[ping_3s_ease-in-out_infinite]"></div>
+              <Wallet className="w-5 h-5 text-[#0a0f0a] relative z-10" />
             </div>
             <div>
               <span className="heading-serif text-lg font-black tracking-tight block">SpendSmart</span>
@@ -543,25 +546,33 @@ const App: React.FC = () => {
         {/* Desktop Navigation */}
         <nav className="flex-1 px-3 space-y-1 py-4 overflow-y-auto hidden md:block">
           {[
-            { key: 'dashboard', icon: LayoutDashboard, label: 'Dashboard', color: 'text-brand' },
-            { key: 'expenses', icon: Receipt, label: 'Expenses', color: 'text-brand', badge: monthlyExpenseCount },
-            { key: 'advisor', icon: Sparkles, label: 'AI Advisor', color: 'text-gold' },
-            { key: 'reports', icon: BarChart2, label: 'Reports', color: 'text-gold' },
+            { key: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+            { key: 'expenses', icon: Receipt, label: 'Expenses', badge: monthlyExpenseCount },
+            { key: 'advisor', icon: Sparkles, label: 'AI Advisor', isPro: true },
+            { key: 'reports', icon: BarChart2, label: 'Reports' },
           ].map(item => (
             <button key={item.key} onClick={() => setView(item.key as ViewMode)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold text-sm border ${
-                view === item.key ? 'bg-surface-2 text-app border-gold/20' : 'border-transparent text-soft hover:text-app hover:bg-surface-2'
+              className={`relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group ${
+                view === item.key
+                  ? 'bg-gold/10 text-gold border border-gold/20'
+                  : 'text-soft hover:text-app hover:bg-surface-2 border border-transparent'
               }`}>
-              <item.icon size={18} className={view === item.key ? item.color : ''} />
+              {view === item.key && (
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gold rounded-full"></span>
+              )}
+              <item.icon size={18} className={view === item.key ? 'text-gold' : 'group-hover:text-app'} />
               {item.label}
               {'badge' in item && item.badge! > 0 && (
                 <span className="ml-auto text-[10px] font-bold bg-brand/15 text-brand px-2 py-0.5 rounded-full">{item.badge}</span>
               )}
+              {'isPro' in item && (
+                <span className="ml-auto text-[9px] font-black px-1.5 py-0.5 rounded-full bg-gold/20 text-gold uppercase tracking-wider">AI</span>
+              )}
             </button>
           ))}
           <button onClick={handleOpenCustomization}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold text-sm border border-dashed border-gold/20 text-soft hover:text-app hover:bg-surface-2 mt-2">
-            <SlidersHorizontal size={18} className="text-gold" /> Customize
+            className="relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group text-soft hover:text-app hover:bg-surface-2 border border-dashed border-gold/20 mt-2">
+            <SlidersHorizontal size={18} className="group-hover:text-gold" /> Customize
           </button>
         </nav>
 
@@ -586,7 +597,7 @@ const App: React.FC = () => {
         </div>
 
         {/* Sidebar Footer */}
-        <div className="p-4 border-t border-app space-y-2.5 hidden md:block bg-surface-2 relative z-10">
+        <div className="p-4 border-t border-gold/10 space-y-2.5 hidden md:block relative z-10">
            <button onClick={() => setIsModalOpen(true)} className="w-full btn-gold flex items-center justify-center gap-2 text-sm py-3 rounded-xl">
              <Plus size={18} /> Add Transaction
            </button>
@@ -594,6 +605,9 @@ const App: React.FC = () => {
              <LogOut size={14} /> LOGOUT
            </button>
         </div>
+
+        {/* Animated Gradient Border Bottom */}
+        <div className="hidden md:block h-1 w-full bg-gradient-to-r from-transparent via-gold/40 to-transparent animate-[shimmer_4s_ease-in-out_infinite]"></div>
       </aside>
 
       {/* Main Content Area */}
