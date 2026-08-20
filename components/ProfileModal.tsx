@@ -21,8 +21,11 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in font-sans">
-      <div className="bg-surface border border-app rounded-[2rem] w-full max-w-md shadow-2xl overflow-hidden relative">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 backdrop-blur-2xl animate-fade-in font-sans">
+      <div className="bg-surface/90 backdrop-blur-xl border border-gold/15 rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.5)] w-full max-w-md overflow-hidden relative">
+        {/* Mesh blob */}
+        <div className="absolute -top-20 -right-20 w-60 h-60 bg-gold/10 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-brand/10 rounded-full blur-[100px] pointer-events-none"></div>
         
         {/* Header */}
         <div className="h-24 bg-gradient-to-r from-brand-deep to-brand relative">

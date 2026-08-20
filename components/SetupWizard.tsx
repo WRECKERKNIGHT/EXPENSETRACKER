@@ -61,7 +61,7 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
     }
   };
 
-  const inputCls = "bg-app-soft border border-app rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand/40 transition-all text-app placeholder:text-faint";
+  const inputCls = "input-glass bg-app-soft border border-app rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand/40 transition-all text-app placeholder:text-faint";
 
   return (
     <div className="min-h-screen bg-app text-app flex items-center justify-center p-6 font-sans relative">
@@ -71,7 +71,10 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
            <div className="absolute top-0 left-0 w-[40%] h-[40%] bg-brand/10 rounded-full blur-[120px]"></div>
       </div>
 
-      <div className="relative z-10 w-full max-w-2xl bg-surface border border-app p-8 rounded-[2rem] shadow-card animate-fade-in">
+      <div className="relative z-10 w-full max-w-2xl bg-surface/80 backdrop-blur-xl border border-gold/15 p-8 rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.5)] animate-slide-in-up">
+        {/* Mesh blobs */}
+        <div className="absolute -top-16 -right-16 w-48 h-48 bg-gold/10 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-brand/10 rounded-full blur-[100px] pointer-events-none"></div>
         
         {/* Progress */}
         <div className="flex items-center gap-2 mb-8">
@@ -115,7 +118,7 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
                      <option value={Category.EDUCATION}>Education</option>
                    </select>
                 </div>
-                <button onClick={addItem} className="w-full bg-surface-3 hover:bg-surface-2 text-app py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 border border-app transition-all">
+                <button onClick={addItem} className="w-full btn-gold py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all">
                   <Plus size={16} /> Add Expense
                 </button>
              </div>
@@ -155,7 +158,7 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
                      <option value={Category.EMI}>Loan / EMI</option>
                    </select>
                 </div>
-                <button onClick={addItem} className="w-full bg-surface-3 hover:bg-surface-2 text-app py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 border border-app transition-all">
+                <button onClick={addItem} className="w-full btn-gold py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all">
                   <Plus size={16} /> Add EMI
                 </button>
              </div>

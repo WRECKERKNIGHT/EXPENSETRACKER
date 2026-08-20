@@ -19,10 +19,10 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ variant = 'icon', className =
     return (
       <button
         onClick={handleToggle}
-        className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold transition-all border border-app bg-surface hover:border-gold-soft hover:bg-surface-2 ${className}`}
+        className={`relative overflow-hidden flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold transition-all border border-app bg-surface hover:border-gold-soft hover:bg-surface-2 ring-2 ${theme === 'dark' ? 'ring-gold/20 hover:ring-gold/40' : 'ring-brand/20 hover:ring-brand/40'} hover:scale-110 active:scale-95 transition-transform ${className}`}
         aria-label="Toggle theme"
       >
-        {theme === 'dark' ? <Sun size={16} className="text-gold" /> : <Moon size={16} className="text-brand" />}
+        {theme === 'dark' ? <Sun size={16} className="text-gold animate-spin" /> : <Moon size={16} className="text-brand animate-spin" />}
         <span className="text-app">{theme === 'dark' ? 'Light' : 'Dark'}</span>
       </button>
     );
@@ -31,10 +31,10 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ variant = 'icon', className =
   return (
     <button
       onClick={handleToggle}
-      className={`p-2.5 rounded-full transition-all border border-app bg-surface text-app hover:border-gold-soft hover:text-gold shadow-card-soft ${className}`}
+      className={`relative overflow-hidden p-2.5 rounded-full transition-all border border-app bg-surface text-app hover:border-gold-soft hover:text-gold shadow-card-soft ring-2 ${theme === 'dark' ? 'ring-gold/20 hover:ring-gold/40' : 'ring-brand/20 hover:ring-brand/40'} hover:scale-110 active:scale-95 transition-transform ${className}`}
       aria-label="Toggle theme"
     >
-      {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+      {theme === 'dark' ? <Sun size={18} className="animate-spin" /> : <Moon size={18} className="animate-spin" />}
     </button>
   );
 };

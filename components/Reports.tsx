@@ -128,10 +128,10 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <div className="input-glass inline-flex rounded-lg p-0.5">
+          <div className="bg-surface-2/80 backdrop-blur-sm border border-gold/10 rounded-xl p-1 inline-flex">
             {(['day', 'week', 'month'] as Range[]).map(r => (
               <button key={r} onClick={() => setRange(r)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${range === r ? 'bg-gold text-[#0a0f0a]' : 'text-soft hover:text-app'}`}>
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${range === r ? 'bg-gold/15 text-gold border border-gold/30 shadow-neon-gold' : 'text-faint hover:text-app'}`}>
                 {r === 'day' ? 'Day' : r === 'week' ? 'Week' : 'Month'}
               </button>
             ))}
@@ -168,6 +168,7 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
         <h3 className="heading-serif text-xl font-bold text-soft mb-5 flex items-center gap-3">
           <span className="w-2 h-2 rounded-full bg-gold" />
           Top Spending Categories
+          <span className="ml-2 text-[10px] font-black px-2 py-0.5 rounded-full bg-gold/20 text-gold">{byCategory.length}</span>
         </h3>
         {byCategory.length === 0 ? (
           <p className="text-sm text-faint">No expenses in this period.</p>
@@ -205,7 +206,8 @@ const Reports: React.FC<ReportsProps> = ({ expenses, currency }) => {
 
       {/* Monthly Comparison */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
-        <div className="md:col-span-2 card-3d gold-line-top p-6 md:p-8">
+        <div className="md:col-span-2 card-3d gold-line-top p-6 md:p-8 relative overflow-hidden">
+          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-brand/10 blur-3xl pointer-events-none" />
           <h3 className="heading-serif text-xl font-bold text-soft mb-6 flex items-center gap-3">
             <span className="w-2 h-2 rounded-full bg-brand" />
             Month-over-Month Comparison

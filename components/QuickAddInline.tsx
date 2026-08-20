@@ -89,7 +89,7 @@ const QuickAddInline: React.FC<QuickAddInlineProps> = ({ onCreated, onClose }) =
   };
 
   return (
-    <div className={`md:hidden fixed bottom-20 right-4 z-50 w-[92%] max-w-sm border rounded-2xl p-4 shadow-2xl ${isOffline ? 'bg-orange-900/40 border-orange-500/30' : 'bg-[#0b0b0d]/90 border-app'}`}>
+    <div className={`md:hidden fixed bottom-20 right-4 z-50 w-[92%] max-w-sm bg-surface/90 backdrop-blur-xl border border-gold/15 rounded-2xl p-4 shadow-[0_12px_40px_rgba(0,0,0,0.4)] ${isOffline ? 'bg-orange-900/40 border-orange-500/30' : ''}`}>
       <form onSubmit={handleSubmit} className="flex gap-2 items-center">
         <input
           className="flex-1 bg-transparent border border-app rounded-xl px-3 py-2 text-app placeholder:text-faint"
@@ -108,7 +108,7 @@ const QuickAddInline: React.FC<QuickAddInlineProps> = ({ onCreated, onClose }) =
         <button
           type="submit"
           disabled={isLoading}
-          className="bg-brand-deep text-white px-3 py-2 rounded-xl text-sm font-semibold hover:brightness-110 disabled:opacity-50"
+          className="btn-gold px-3 py-2 rounded-xl text-sm font-semibold disabled:opacity-50"
         >
           {isLoading ? '...' : isOffline ? '📱' : 'Add'}
         </button>

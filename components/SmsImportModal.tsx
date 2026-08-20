@@ -41,8 +41,8 @@ const SmsImportModal: React.FC<SmsImportModalProps> = ({ isOpen, onClose, onImpo
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="w-full max-w-2xl bg-[#0b0b0d] rounded-2xl p-6 border border-app shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-2xl p-4">
+      <div className="w-full max-w-2xl bg-surface/90 backdrop-blur-xl border border-gold/15 rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.5)] p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold">Import SMS Transactions</h3>
           <button onClick={onClose} className="text-soft hover:text-app">Close</button>
@@ -55,14 +55,14 @@ const SmsImportModal: React.FC<SmsImportModalProps> = ({ isOpen, onClose, onImpo
             placeholder="Sender (e.g., HDFCBNK)"
             value={sender}
             onChange={(e) => setSender(e.target.value)}
-            className="w-full bg-app-soft border border-app rounded-lg px-3 py-2 text-app mb-2"
+            className="input-glass w-full bg-app-soft border border-app rounded-lg px-3 py-2 text-app mb-2"
           />
           <textarea
             placeholder="Paste SMS content here..."
             value={text}
             onChange={(e) => setText(e.target.value)}
             rows={8}
-            className="w-full bg-app-soft border border-app rounded-lg px-3 py-2 text-app font-mono"
+            className="input-glass w-full bg-app-soft border border-app rounded-lg px-3 py-2 text-app font-mono"
           />
         </div>
 
