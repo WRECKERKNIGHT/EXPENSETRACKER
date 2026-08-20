@@ -635,8 +635,8 @@ const App: React.FC = () => {
            <button onClick={() => setIsModalOpen(true)} className="w-full btn-gold flex items-center justify-center gap-2 text-sm py-3 rounded-xl">
              <Plus size={18} /> Add Transaction
            </button>
-           <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 border border-transparent hover:border-red-500/20 transition-all text-sm font-bold">
-             <LogOut size={14} /> LOGOUT
+           <button onClick={handleLogout} className="group w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 border border-transparent hover:border-red-500/20 transition-all text-sm font-bold">
+             <LogOut size={14} className="group-hover:rotate-180 transition-transform duration-300" /> LOGOUT
            </button>
            <p className="text-center text-[9px] text-faint/50 mt-3 tracking-widest uppercase">v2.0</p>
         </div>
@@ -664,12 +664,15 @@ const App: React.FC = () => {
                  {view === 'reports' && 'Spending summaries'}
                </p>
            </div>
-           <div className="text-right">
-             <p className="text-[10px] text-faint font-bold uppercase tracking-wider mb-0.5">Today</p>
-             <p className="font-mono text-gold text-sm font-semibold">
-               {new Date().toLocaleDateString('en-IN', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
-             </p>
-           </div>
+            <div className="flex items-center gap-3">
+              <div className="text-right">
+                <p className="text-[10px] text-faint font-bold uppercase tracking-wider mb-0.5">Today</p>
+                <p className="font-mono text-gold text-sm font-semibold">
+                  {new Date().toLocaleDateString('en-IN', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
+                </p>
+              </div>
+              <button onClick={() => setCmdOpen(true)} className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-2/80 border border-gold/10 text-faint text-xs hover:text-app hover:border-gold/30 transition-all"><span className="font-mono">⌘K</span></button>
+            </div>
         </div>
 
         {/* Mobile Header */}
