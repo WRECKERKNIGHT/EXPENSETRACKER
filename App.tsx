@@ -631,13 +631,14 @@ const App: React.FC = () => {
         </nav>
 
         {/* Sidebar Footer */}
-        <div className="p-4 border-t border-gold/10 space-y-2.5 hidden md:block relative z-10">
+        <div className="p-4 border-t border-gold/10 pt-4 mt-auto space-y-2.5 hidden md:block relative z-10">
            <button onClick={() => setIsModalOpen(true)} className="w-full btn-gold flex items-center justify-center gap-2 text-sm py-3 rounded-xl">
              <Plus size={18} /> Add Transaction
            </button>
-           <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 text-faint hover:text-danger py-2 text-xs transition-colors font-medium tracking-wide">
+           <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 border border-transparent hover:border-red-500/20 transition-all text-sm font-bold">
              <LogOut size={14} /> LOGOUT
            </button>
+           <p className="text-center text-[9px] text-faint/50 mt-3 tracking-widest uppercase">v2.0</p>
         </div>
 
         {/* Animated Gradient Border Bottom */}
@@ -702,6 +703,26 @@ const App: React.FC = () => {
           {view === 'advisor' && <Advisor expenses={expenses} />}
           {view === 'reports' && user && <Reports expenses={expenses} currency={user.currency || 'INR'} />}
         </div>
+
+        {/* ━━━ FOOTER ━━━ */}
+        <footer className="mt-12 py-8 border-t border-gold/10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-faint text-xs">
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-gradient-to-br from-yellow-400 via-amber-500 to-yellow-600 flex items-center justify-center">
+                <span className="text-[8px] text-white font-bold">$</span>
+              </div>
+              <span className="font-bold text-soft">SpendSmart</span>
+              <span className="text-faint">AI — Track every rupee</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <span>Built with intelligence</span>
+              <span className="text-gold">•</span>
+              <span>Your data stays local</span>
+              <span className="text-gold">•</span>
+              <span>v2.0</span>
+            </div>
+          </div>
+        </footer>
 
       </main>
 
