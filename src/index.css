@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  font-family: 'TT Norms Pro', ui-sans-serif, system-ui, sans-serif;
+  box-sizing: border-box;
+}
+
+/* ── GSAP Scroll Reveal Base ── */
+.gsap-section {
+  opacity: 0;
+  transform: translateY(60px);
+}
+
+/* ── Marquee Keyframes ── */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes backers-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 22s linear infinite;
+}
+
+.backers-track {
+  display: flex;
+  width: max-content;
+  animation: backers-marquee 30s linear infinite;
+}
+
+/* ── Smooth scroll ── */
+html {
+  scroll-behavior: smooth;
+}
