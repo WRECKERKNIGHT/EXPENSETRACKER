@@ -38,7 +38,7 @@ const InfoSection: React.FC = () => (
       </div>
 
       {/* Row 2: 4-col card grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="gsap-card-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: image card, spans 2 cols */}
         <div
           className="gsap-card rounded-2xl overflow-hidden col-span-1 lg:col-span-2"

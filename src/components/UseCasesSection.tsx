@@ -19,13 +19,13 @@ const UseCasesSection: React.FC = () => (
       </div>
 
       {/* Right Column: Video Card */}
-      <div className="relative rounded-3xl overflow-hidden min-h-[720px]">
+      <div className="usecases-media relative rounded-3xl overflow-hidden min-h-[720px]">
         <video
           autoPlay
           muted
           loop
           playsInline
-          className="object-cover absolute inset-0 w-full h-full"
+          className="usecases-video object-cover absolute inset-0 w-full h-full"
           src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260423_183428_ab5e672a-f608-4dcb-b319-f3e040f02e2d.mp4"
         />
 
