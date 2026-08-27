@@ -14,10 +14,8 @@ html, body {
   box-sizing: border-box;
 }
 
-/* ── GSAP Scroll Reveal Base ── */
-.gsap-section {
-  opacity: 0;
-  transform: translateY(60px);
+html {
+  scroll-behavior: smooth;
 }
 
 /* ── Marquee Keyframes ── */
@@ -27,6 +25,11 @@ html, body {
 }
 
 @keyframes backers-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes ticker {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
@@ -43,7 +46,20 @@ html, body {
   animation: backers-marquee 30s linear infinite;
 }
 
-/* ── Smooth scroll ── */
-html {
-  scroll-behavior: smooth;
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker 30s linear infinite;
+}
+
+/* ── Ambient floating particles for dark sections ── */
+@keyframes floatUp {
+  0% { transform: translateY(0); opacity: 0; }
+  10% { opacity: 0.7; }
+  90% { opacity: 0.7; }
+  100% { transform: translateY(-45vh); opacity: 0; }
+}
+
+.particle-float {
+  animation: floatUp 24s linear infinite;
 }
