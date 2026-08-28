@@ -63,3 +63,79 @@ html {
 .particle-float {
   animation: floatUp 24s linear infinite;
 }
+
+/* ── Split-text reveal chars ── */
+.sc {
+  display: inline-block;
+  transform-origin: 0 100%;
+  will-change: transform, opacity;
+}
+
+.sw {
+  display: inline-block;
+  white-space: pre;
+  will-change: transform;
+}
+
+/* ── Velocity skew targets ── */
+.skew-target {
+  transform-origin: center;
+  will-change: transform;
+}
+
+/* ── Feature card 3D tilt ── */
+.tilt-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ── Stats shimmer sweep ── */
+@keyframes shimmer {
+  0% { transform: translateX(-150%) skewX(-15deg); }
+  100% { transform: translateX(260%) skewX(-15deg); }
+}
+
+.stat-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-shine::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+  animation: shimmer 3.2s ease-in-out infinite;
+}
+
+/* ── Switch (autopilot toggles) ── */
+.sswitch {
+  position: relative;
+  width: 46px;
+  height: 26px;
+  border-radius: 9999px;
+  background: #e3deee;
+  transition: background 0.25s ease;
+  cursor: pointer;
+}
+
+.sswitch[data-on='true'] {
+  background: linear-gradient(135deg, #f0c94d, #b8860b);
+}
+
+.sswitch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: transform 0.25s ease;
+}
+
+.sswitch[data-on='true']::after {
+  transform: translateX(20px);
+}
