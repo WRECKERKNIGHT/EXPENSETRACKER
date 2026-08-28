@@ -1,6 +1,7 @@
 import React from 'react';
 import { Lock } from 'lucide-react';
 import Coin3D from './Coin3D';
+import SplitHeading from './SplitHeading';
 
 const LINES = [
   'Rent gets locked in first. Always.',
@@ -62,13 +63,14 @@ const SafetyNetSection: React.FC = () => (
           <p className="safety-chapter text-xs uppercase tracking-[0.4em] text-[#d4af37] font-semibold mb-6">
             Chapter 02 — The Shield
           </p>
-          <h2
+          <SplitHeading
+            as="h2"
+            text="Your Safety\nNet."
+            highlight={['Net.']}
+            emClass="text-[#d4af37]"
             className="safety-heading text-white text-4xl md:text-6xl font-medium leading-[1.05] mb-12"
             style={{ letterSpacing: '-0.04em' }}
-          >
-            Your Safety<br />
-            <em className="text-[#d4af37]">Net.</em>
-          </h2>
+          />
           <div className="relative h-56">
             {LINES.map((line, i) => (
               <p

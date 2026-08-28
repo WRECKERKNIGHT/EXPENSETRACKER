@@ -9,6 +9,7 @@ import {
   Landmark,
   Fingerprint,
 } from 'lucide-react';
+import SplitHeading from './SplitHeading';
 
 const FEATURES = [
   {
@@ -58,12 +59,13 @@ const FeaturesGrid: React.FC = () => (
     <div className="max-w-[88rem] mx-auto">
       <div className="max-w-2xl mb-16">
         <p className="text-[#B8860B] text-sm mb-3">Chapter 03 — The Build</p>
-        <h2
-          className="text-black text-4xl md:text-6xl font-medium leading-[1.05]"
+        <SplitHeading
+          as="h2"
+          text="Built to save.\nBuilt to last."
+          highlight={['last.']}
+          className="split-title text-black text-4xl md:text-6xl font-medium leading-[1.05]"
           style={{ letterSpacing: '-0.04em' }}
-        >
-          Built to save.<br />Built to <em className="text-black">last.</em>
-        </h2>
+        />
       </div>
 
       <div className="features-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

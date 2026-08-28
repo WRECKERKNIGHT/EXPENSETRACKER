@@ -1,5 +1,6 @@
 import React from 'react';
 import Coin3D from './Coin3D';
+import SplitHeading from './SplitHeading';
 
 const LINES = [
   '₹180 a month on coffee runs — gone.',
@@ -30,13 +31,14 @@ const WasteSection: React.FC = () => (
           <p className="waste-chapter text-xs uppercase tracking-[0.4em] text-[#d4af37] font-semibold mb-6">
             Chapter 01 — The Leak
           </p>
-          <h2
+          <SplitHeading
+            as="h2"
+            text="Money doesn't vanish.\nIt drips."
+            highlight={['drips.']}
+            emClass="text-[#d4af37]"
             className="waste-heading text-white text-4xl md:text-6xl font-medium leading-[1.05] mb-12"
             style={{ letterSpacing: '-0.04em' }}
-          >
-            Money doesn't vanish.<br />
-            It <em className="text-[#d4af37]">drips.</em>
-          </h2>
+          />
           <div className="relative h-72">
             {LINES.map((line, i) => (
               <p

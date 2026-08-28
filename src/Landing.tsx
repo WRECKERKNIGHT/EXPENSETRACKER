@@ -106,6 +106,20 @@ const Landing: React.FC = () => {
       });
     });
 
+    /* ── 4b. Split-title char reveals on scroll ── */
+    root.querySelectorAll('.split-title').forEach((h) => {
+      const chars = h.querySelectorAll('.sc');
+      gsap.set(chars, { yPercent: 115, opacity: 0 });
+      gsap.to(chars, {
+        yPercent: 0,
+        opacity: 1,
+        duration: 0.6,
+        ease: 'power3.out',
+        stagger: 0.02,
+        scrollTrigger: { trigger: h, start: 'top 88%', toggleActions: 'play none none none' },
+      });
+    });
+
     /* ── 5. Info cards stagger ── */
     const icards = root.querySelectorAll('.gsap-card');
     gsap.set(icards, { opacity: 0, y: 50, scale: 0.96 });
@@ -132,6 +146,12 @@ const Landing: React.FC = () => {
       })
       .fromTo('.waste-chapter', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.05 }, 0)
       .fromTo('.waste-heading', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.05 }, 0.02)
+      .fromTo(
+        '.waste-heading .sc',
+        { yPercent: 110, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 0.05, stagger: 0.02 },
+        0.03
+      )
       .fromTo('.waste-line-0', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.06 }, 0.07)
       .fromTo('.waste-line-1', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.06 }, 0.14)
       .fromTo('.waste-line-2', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.06 }, 0.21)
@@ -279,6 +299,12 @@ const Landing: React.FC = () => {
       })
       .fromTo('.safety-chapter', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.05 }, 0)
       .fromTo('.safety-heading', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.05 }, 0.02)
+      .fromTo(
+        '.safety-heading .sc',
+        { yPercent: 110, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 0.05, stagger: 0.02 },
+        0.03
+      )
       .fromTo('.safety-coin-0', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 0.08 }, 0.1)
       .fromTo('.safety-coin-1', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 0.08 }, 0.17)
       .fromTo('.safety-coin-2', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 0.08 }, 0.24)
@@ -362,6 +388,12 @@ const Landing: React.FC = () => {
         0.02
       )
       .fromTo('.finale-content', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.1 }, 0.45)
+      .fromTo(
+        '.finale-title .sc',
+        { yPercent: 110, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 0.06, stagger: 0.015 },
+        0.5
+      )
       .to('.finale-stage', { opacity: 0, scale: 0.96, duration: 0.06 }, 0.95);
 
     return () => {

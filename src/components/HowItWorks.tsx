@@ -1,5 +1,6 @@
 import React from 'react';
 import { Smartphone, Sparkles, TrendingUp } from 'lucide-react';
+import SplitHeading from './SplitHeading';
 
 const STEPS = [
   {
@@ -29,12 +30,13 @@ const HowItWorks: React.FC = () => (
         <p className="text-[#B8860B] text-xs uppercase tracking-[0.4em] font-semibold mb-3">
           Chapter 04 — The Flow
         </p>
-        <h2
-          className="text-black text-4xl md:text-6xl font-medium leading-[1.05]"
+        <SplitHeading
+          as="h2"
+          text="Three moves.\nThat's it."
+          highlight={['it.']}
+          className="split-title text-black text-4xl md:text-6xl font-medium leading-[1.05]"
           style={{ letterSpacing: '-0.04em' }}
-        >
-          Three moves.<br />That's <em className="text-black">it.</em>
-        </h2>
+        />
       </div>
 
       <div className="steps-grid grid gap-4 md:grid-cols-3">

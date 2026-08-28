@@ -1,5 +1,6 @@
 import React from 'react';
 import { DiscoverButton } from './Marquee';
+import SplitHeading from './SplitHeading';
 
 const INFO_CARDS = [
   {
@@ -22,12 +23,12 @@ const InfoSection: React.FC = () => (
       {/* Row 1: 2-col grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16 items-start">
         <div>
-          <h2
-            className="text-black text-4xl md:text-5xl font-medium leading-tight mb-8"
+          <SplitHeading
+            as="h2"
+            text="Meet SpendSmart."
+            className="split-title text-black text-4xl md:text-5xl font-medium leading-tight mb-8"
             style={{ letterSpacing: '-0.03em' }}
-          >
-            Meet SpendSmart.
-          </h2>
+          />
           <DiscoverButton />
         </div>
         <p className="text-black/70 text-2xl md:text-3xl leading-relaxed">

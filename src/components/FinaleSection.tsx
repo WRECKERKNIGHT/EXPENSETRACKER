@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import Coin3D from './Coin3D';
+import SplitHeading from './SplitHeading';
 import { go, PATH } from '../lib/router';
 
 const FinaleSection: React.FC = () => (
@@ -30,13 +31,14 @@ const FinaleSection: React.FC = () => (
           <p className="text-[11px] uppercase tracking-[0.4em] text-[#d4af37] font-semibold mb-5">
             The Flip
           </p>
-          <h2
-            className="text-white text-4xl md:text-6xl font-medium leading-[1.05] mb-7"
+          <SplitHeading
+            as="h2"
+            text="Ready to make money\nwork?"
+            highlight={['work?']}
+            emClass="text-[#d4af37]"
+            className="finale-title text-white text-4xl md:text-6xl font-medium leading-[1.05] mb-7"
             style={{ letterSpacing: '-0.04em' }}
-          >
-            Ready to make money<br />
-            <em className="text-[#d4af37]">work?</em>
-          </h2>
+          />
           <p className="text-white/70 text-base md:text-lg max-w-md mx-auto mb-10 leading-relaxed">
             Join SpendSmart — free forever for the first 10,000 users. Turn every coin into a story
             that ends in savings.

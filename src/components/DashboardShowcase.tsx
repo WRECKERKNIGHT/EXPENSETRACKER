@@ -1,6 +1,7 @@
 import React from 'react';
-import { ArrowDownLeft, ArrowUpRight, CheckCircle2, Crown } from 'lucide-react';
+import { ArrowDownLeft, ArrowUpLeft, CheckCircle2, Crown } from 'lucide-react';
 import Coin3D from './Coin3D';
+import SplitHeading from './SplitHeading';
 
 const BULLETS = [
   {
@@ -36,12 +37,13 @@ const DashboardShowcase: React.FC = () => (
         <p className="text-[#B8860B] text-xs uppercase tracking-[0.4em] font-semibold mb-4">
           Your Dashboard
         </p>
-        <h2
-          className="text-black text-4xl md:text-6xl font-medium leading-[1.05] mb-8"
+        <SplitHeading
+          as="h2"
+          text="Your money,\ncentre stage."
+          highlight={['stage.']}
+          className="split-title text-black text-4xl md:text-6xl font-medium leading-[1.05] mb-8"
           style={{ letterSpacing: '-0.04em' }}
-        >
-          Your money,<br />centre <em className="text-black">stage.</em>
-        </h2>
+        />
         <div className="flex flex-col gap-6">
           {BULLETS.map((b) => (
             <div key={b.title} className="dash-bullet flex items-start gap-4">
