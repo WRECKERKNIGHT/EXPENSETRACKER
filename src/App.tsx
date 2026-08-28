@@ -2,12 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import InfoSection from './components/InfoSection';
-import BackedBySection from './components/BackedBySection';
-import UseCasesSection from './components/UseCasesSection';
 import FeatureTicker from './components/FeatureTicker';
-import RewardsSection from './components/RewardsSection';
+import WasteSection from './components/WasteSection';
+import DashboardShowcase from './components/DashboardShowcase';
 import FeaturesGrid from './components/FeaturesGrid';
-import PegSection from './components/PegSection';
+import SafetyNetSection from './components/SafetyNetSection';
 import HowItWorks from './components/HowItWorks';
 import StatsSection from './components/StatsSection';
 import TestimonialSection from './components/TestimonialSection';
@@ -30,6 +29,13 @@ const App: React.FC = () => {
     const ST = window.ScrollTrigger;
     gsap.registerPlugin(ST);
 
+    /* ── 0. Scroll progress bar ── */
+    gsap.to('.scroll-progress', {
+      width: '100%',
+      ease: 'none',
+      scrollTrigger: { trigger: document.body, start: 'top top', end: 'max', scrub: 0.3 },
+    });
+
     /* ── 1. Nav + hero entrance ── */
     gsap.fromTo(
       root.querySelector('nav'),
@@ -42,7 +48,17 @@ const App: React.FC = () => {
       { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.14, delay: 0.4 }
     );
 
-    /* ── 2. Hero parallax + fade on scroll away ── */
+    /* ── 2. Hero coin idle float ── */
+    gsap.to('.hero-coin', {
+      y: -16,
+      rotation: 10,
+      duration: 5,
+      ease: 'sine.inOut',
+      yoyo: true,
+      repeat: -1,
+    });
+
+    /* ── 3. Hero parallax + fade on scroll away ── */
     gsap.to(root.querySelector('.hero-video-el'), {
       scale: 1.14,
       ease: 'none',
@@ -65,7 +81,7 @@ const App: React.FC = () => {
       },
     });
 
-    /* ── 3. Standard section reveals ── */
+    /* ── 4. Standard section reveals ── */
     const reveals = root.querySelectorAll('.gsap-section');
     gsap.set(reveals, { opacity: 0, y: 60 });
     reveals.forEach((el) => {
@@ -78,7 +94,7 @@ const App: React.FC = () => {
       });
     });
 
-    /* ── 4. Info cards stagger ── */
+    /* ── 5. Info cards stagger ── */
     const icards = root.querySelectorAll('.gsap-card');
     gsap.set(icards, { opacity: 0, y: 50, scale: 0.96 });
     gsap.to(icards, {
@@ -91,87 +107,141 @@ const App: React.FC = () => {
       scrollTrigger: { trigger: root.querySelector('.gsap-card-grid'), start: 'top 85%' },
     });
 
-    /* ── 5. UseCases video parallax ── */
-    gsap.fromTo(
-      root.querySelector('.usecases-video'),
-      { scale: 1.12 },
-      {
-        scale: 1,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: root.querySelector('.usecases-media'),
-          start: 'top 95%',
-          end: 'top 15%',
-          scrub: 1,
-        },
-      }
-    );
-
-    /* ── 6. Rewards — pinned scroll story ── */
+    /* ── 6. Waste — pinned scroll story (The Leak) ── */
     gsap
       .timeline({
         scrollTrigger: {
-          trigger: root.querySelector('.rewards-section'),
+          trigger: root.querySelector('.waste-section'),
           start: 'top top',
           end: '+=380%',
           pin: true,
           scrub: 1,
         },
       })
-      .fromTo('.rewards-chapter', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.05 }, 0)
-      .fromTo('.rewards-heading', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.05 }, 0.02)
+      .fromTo('.waste-chapter', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.05 }, 0)
+      .fromTo('.waste-heading', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.05 }, 0.02)
+      .fromTo('.waste-line-0', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.06 }, 0.07)
+      .fromTo('.waste-line-1', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.06 }, 0.14)
+      .fromTo('.waste-line-2', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.06 }, 0.21)
+      .fromTo('.waste-line-3', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.06 }, 0.28)
       .fromTo(
-        '.rewards-line-0',
-        { opacity: 0, x: -30 },
-        { opacity: 1, x: 0, duration: 0.06 },
-        0.07
-      )
-      .fromTo(
-        '.rewards-line-1',
-        { opacity: 0, x: -30 },
-        { opacity: 1, x: 0, duration: 0.06 },
-        0.14
-      )
-      .fromTo(
-        '.rewards-line-2',
-        { opacity: 0, x: -30 },
-        { opacity: 1, x: 0, duration: 0.06 },
-        0.21
-      )
-      .fromTo(
-        '.rewards-line-3',
-        { opacity: 0, x: -30 },
-        { opacity: 1, x: 0, duration: 0.06 },
-        0.28
-      )
-      .fromTo(
-        '.rewards-coin-0',
+        '.waste-coin-0',
         { opacity: 0, y: -140, rotation: 0 },
         { opacity: 1, y: 220, rotation: 540, duration: 0.12 },
         0.08
       )
       .fromTo(
-        '.rewards-coin-1',
+        '.waste-coin-1',
         { opacity: 0, y: -180, rotation: 0 },
         { opacity: 1, y: 170, rotation: -540, duration: 0.12 },
         0.14
       )
       .fromTo(
-        '.rewards-coin-2',
+        '.waste-coin-2',
         { opacity: 0, y: -220, rotation: 0 },
         { opacity: 1, y: 120, rotation: 720, duration: 0.12 },
         0.2
       )
       .fromTo(
-        '.rewards-coin-3',
+        '.waste-coin-3',
         { opacity: 0, y: -260, rotation: 0 },
         { opacity: 1, y: 60, rotation: -720, duration: 0.12 },
         0.26
       )
-      .fromTo('.rewards-stat', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.06 }, 0.38)
-      .to('.rewards-stage', { opacity: 0, y: -50, duration: 0.08 }, 0.92);
+      .fromTo('.waste-stat', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.06 }, 0.38)
+      .to('.waste-stage', { opacity: 0, y: -50, duration: 0.08 }, 0.92);
 
-    /* ── 7. Features stagger ── */
+    /* ── 7. DashboardShowcase ── */
+    gsap.fromTo(
+      root.querySelector('.dash-phone'),
+      { opacity: 0, y: 60, rotationY: -8, transformPerspective: 900 },
+      {
+        opacity: 1,
+        y: 0,
+        rotationY: 0,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.dash-phone', start: 'top 80%', toggleActions: 'play none none none' },
+      }
+    );
+    root.querySelectorAll('.dash-bullet').forEach((el, i) => {
+      gsap.fromTo(
+        el,
+        { opacity: 0, x: -40 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.7,
+          delay: i * 0.12,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: '.dash-phone', start: 'top 78%' },
+        }
+      );
+    });
+
+    const goalFill = root.querySelector<SVGCircleElement>('.dash-goal-fill');
+    const goalText = root.querySelector<HTMLElement>('.dash-goal-text');
+    if (goalFill && goalText) {
+      const C = 276.46;
+      const target = 0.68;
+      const obj = { v: 0 };
+      const tt = { trigger: '.dash-phone', start: 'top 70%', toggleActions: 'play none none none' };
+      gsap.fromTo(
+        goalFill,
+        { strokeDashoffset: C },
+        { strokeDashoffset: C * (1 - target), duration: 1.8, ease: 'power2.inOut', scrollTrigger: tt }
+      );
+      gsap.to(obj, {
+        v: target,
+        duration: 1.8,
+        ease: 'power2.inOut',
+        scrollTrigger: tt,
+        onUpdate: () => {
+          goalText.textContent = Math.round(obj.v * 100) + '%';
+        },
+      });
+    }
+
+    const bars = root.querySelectorAll('.dash-bar');
+    gsap.to(bars, {
+      height: (i: number, el: any) => el.getAttribute('data-h') + '%',
+      duration: 0.6,
+      ease: 'power3.out',
+      stagger: 0.08,
+      scrollTrigger: { trigger: '.dash-phone', start: 'top 65%', toggleActions: 'play none none none' },
+    });
+    root.querySelectorAll('.dash-chip').forEach((el, i) => {
+      gsap.fromTo(
+        el,
+        { opacity: 0, scale: 0.92 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.5,
+          delay: i * 0.08,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: '.dash-phone', start: 'top 60%' },
+        }
+      );
+    });
+    root.querySelectorAll('.dash-tx').forEach((el, i) => {
+      gsap.fromTo(
+        el,
+        { opacity: 0, x: 40 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.5,
+          delay: i * 0.1,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: '.dash-phone', start: 'top 55%' },
+        }
+      );
+    });
+    gsap.to('.dash-coin-0', { y: -14, rotation: 10, duration: 4.5, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    gsap.to('.dash-coin-1', { y: -18, rotation: -12, duration: 6, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 0.5 });
+
+    /* ── 8. Features stagger ── */
     const fc = root.querySelectorAll('.feature-card');
     gsap.set(fc, { opacity: 0, y: 46, scale: 0.95 });
     gsap.to(fc, {
@@ -184,35 +254,35 @@ const App: React.FC = () => {
       scrollTrigger: { trigger: root.querySelector('.features-grid'), start: 'top 82%' },
     });
 
-    /* ── 8. Peg — pinned scroll story ── */
+    /* ── 9. SafetyNet — pinned scroll story ── */
     gsap
       .timeline({
         scrollTrigger: {
-          trigger: root.querySelector('.peg-section'),
+          trigger: root.querySelector('.safety-section'),
           start: 'top top',
           end: '+=340%',
           pin: true,
           scrub: 1,
         },
       })
-      .fromTo('.peg-chapter', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.05 }, 0)
-      .fromTo('.peg-heading', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.05 }, 0.02)
-      .fromTo('.peg-coin-0', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 0.08 }, 0.1)
-      .fromTo('.peg-coin-1', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 0.08 }, 0.17)
-      .fromTo('.peg-coin-2', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 0.08 }, 0.24)
-      .fromTo('.peg-coin-3', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 0.08 }, 0.31)
+      .fromTo('.safety-chapter', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.05 }, 0)
+      .fromTo('.safety-heading', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.05 }, 0.02)
+      .fromTo('.safety-coin-0', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 0.08 }, 0.1)
+      .fromTo('.safety-coin-1', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 0.08 }, 0.17)
+      .fromTo('.safety-coin-2', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 0.08 }, 0.24)
+      .fromTo('.safety-coin-3', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 0.08 }, 0.31)
       .fromTo(
-        '.peg-shield',
+        '.safety-shield',
         { opacity: 0, scale: 0.7 },
         { opacity: 1, scale: 1, duration: 0.08, ease: 'back.out(1.7)' },
         0.38
       )
-      .fromTo('.peg-line-0', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.05 }, 0.48)
-      .fromTo('.peg-line-1', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.05 }, 0.56)
-      .fromTo('.peg-line-2', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.05 }, 0.64)
-      .to('.peg-stage', { opacity: 0, y: -50, duration: 0.07 }, 0.94);
+      .fromTo('.safety-line-0', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.05 }, 0.48)
+      .fromTo('.safety-line-1', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.05 }, 0.56)
+      .fromTo('.safety-line-2', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.05 }, 0.64)
+      .to('.safety-stage', { opacity: 0, y: -50, duration: 0.07 }, 0.94);
 
-    /* ── 9. HowItWorks steps ── */
+    /* ── 10. HowItWorks steps ── */
     const steps = root.querySelectorAll('.step-card');
     steps.forEach((el, i) => gsap.set(el, { opacity: 0, x: i % 2 ? 70 : -70, y: 30 }));
     gsap.to(steps, {
@@ -225,7 +295,7 @@ const App: React.FC = () => {
       scrollTrigger: { trigger: root.querySelector('.steps-grid'), start: 'top 82%' },
     });
 
-    /* ── 10. Stats count-up ── */
+    /* ── 11. Stats count-up ── */
     root.querySelectorAll('.stat-count').forEach((el) => {
       const target = parseFloat(el.getAttribute('data-value') || '0');
       const decimals = parseInt(el.getAttribute('data-decimals') || '0', 10);
@@ -242,7 +312,7 @@ const App: React.FC = () => {
       });
     });
 
-    /* ── 11. Testimonial flip-in ── */
+    /* ── 12. Testimonial flip-in ── */
     gsap.fromTo(
       root.querySelector('.testimonial-card'),
       { opacity: 0, rotationY: -14, y: 50 },
@@ -256,7 +326,7 @@ const App: React.FC = () => {
       }
     );
 
-    /* ── 12. Finale — pinned coin flip ── */
+    /* ── 13. Finale — pinned coin flip ── */
     gsap
       .timeline({
         scrollTrigger: {
@@ -289,6 +359,12 @@ const App: React.FC = () => {
 
   return (
     <div ref={mainRef} className="flex flex-col bg-[#F5F5F5]">
+      {/* Scroll progress bar */}
+      <div
+        className="scroll-progress fixed top-0 left-0 z-[60] h-[3px] w-0"
+        style={{ background: 'linear-gradient(90deg, #f0c94d, #b8860b)' }}
+      />
+
       {/* Hero Wrapper */}
       <div className="h-screen flex flex-col overflow-hidden">
         <Navbar />
@@ -300,27 +376,23 @@ const App: React.FC = () => {
       </div>
 
       <div className="gsap-section">
-        <BackedBySection />
-      </div>
-
-      <div className="gsap-section">
         <FeatureTicker />
       </div>
 
-      <RewardsSection />
+      <WasteSection />
+
+      <div className="gsap-section">
+        <DashboardShowcase />
+      </div>
 
       <div className="gsap-section">
         <FeaturesGrid />
       </div>
 
-      <PegSection />
+      <SafetyNetSection />
 
       <div className="gsap-section">
         <HowItWorks />
-      </div>
-
-      <div className="gsap-section">
-        <UseCasesSection />
       </div>
 
       <div className="gsap-section">
@@ -335,9 +407,9 @@ const App: React.FC = () => {
 
       <footer className="bg-[#F5F5F5] px-6 py-12">
         <div className="max-w-[88rem] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-black/50">© {new Date().getFullYear()} USD Halo. Money, mastered.</p>
+          <p className="text-sm text-black/50">© {new Date().getFullYear()} SpendSmart. Money, mastered.</p>
           <div className="flex items-center gap-6 text-sm text-black/60 font-medium">
-            <span className="hover:text-black transition-colors duration-200 cursor-pointer">Docs</span>
+            <span className="hover:text-black transition-colors duration-200 cursor-pointer">Features</span>
             <span className="hover:text-black transition-colors duration-200 cursor-pointer">Privacy</span>
             <span className="hover:text-black transition-colors duration-200 cursor-pointer">Terms</span>
           </div>
