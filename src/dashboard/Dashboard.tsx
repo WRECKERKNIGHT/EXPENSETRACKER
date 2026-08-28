@@ -15,6 +15,7 @@ import { go, PATH } from '../lib/router';
 import GoalRing from './widgets/GoalRing';
 import AllowanceCard from './widgets/AllowanceCard';
 import Autopilot from './widgets/Autopilot';
+import Transactions from './widgets/Transactions';
 
 const seedTransactions = (cfg: ReturnType<typeof buildConfig>): Tx[] => {
   const daysAgo = (n: number) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
@@ -202,6 +203,15 @@ const Dashboard: React.FC = () => {
               }
             />
           </div>
+        </div>
+
+        <div className="mt-4">
+          <Transactions
+            tx={profile.tx}
+            onAdd={(t) => update((p) => ({ ...p, tx: [...p.tx, t] }))}
+            onDelete={(id) => update((p) => ({ ...p, tx: p.tx.filter((x) => x.id !== id) }))}
+            onResetDay={() => update((p) => ({ ...p, tx: p.tx.filter((x) => x.date !== today) }))}
+          />
         </div>
       </div>
     </div>
