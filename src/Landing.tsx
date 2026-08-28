@@ -120,6 +120,37 @@ const Landing: React.FC = () => {
       });
     });
 
+    /* ── 4c. Velocity-reactive skew on major sections ── */
+    root.querySelectorAll('.skew-target').forEach((el) => {
+      const quick = gsap.quickTo(el, 'skewY', { duration: 0.4, ease: 'power3' });
+      ST.create({
+        onUpdate: (self: any) => {
+          const v = gsap.utils.clamp(-6, 6, (self.getVelocity() || 0) / -90);
+          quick(v);
+        },
+      });
+    });
+
+    /* ── 4d. Floating coins parallax rise on scroll ── */
+    root.querySelectorAll('.float-coin').forEach((el) => {
+      const dist = parseFloat(el.getAttribute('data-dist') || '90');
+      gsap.fromTo(
+        el,
+        { y: dist, opacity: 0.15 },
+        {
+          y: -dist,
+          opacity: 0.9,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: (el as HTMLElement).closest('section') as Element,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        }
+      );
+    });
+
     /* ── 5. Info cards stagger ── */
     const icards = root.querySelectorAll('.gsap-card');
     gsap.set(icards, { opacity: 0, y: 50, scale: 0.96 });
@@ -425,7 +456,7 @@ const Landing: React.FC = () => {
 
       <WasteSection />
 
-      <div className="gsap-section">
+      <div className="gsap-section skew-target">
         <DashboardShowcase />
       </div>
 

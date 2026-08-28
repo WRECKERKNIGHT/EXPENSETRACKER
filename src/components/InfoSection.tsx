@@ -1,6 +1,7 @@
 import React from 'react';
 import { DiscoverButton } from './Marquee';
 import SplitHeading from './SplitHeading';
+import Coin3D from './Coin3D';
 
 const INFO_CARDS = [
   {
@@ -18,7 +19,10 @@ const INFO_CARDS = [
 ];
 
 const InfoSection: React.FC = () => (
-  <section id="about" className="bg-[#F5F5F5] px-6 py-24">
+  <section id="about" className="relative overflow-hidden bg-[#F5F5F5] px-6 py-24">
+    <div className="float-coin absolute hidden lg:block right-10 bottom-16" data-dist="70">
+      <Coin3D size={46} label="10" />
+    </div>
     <div className="max-w-[88rem] mx-auto">
       {/* Row 1: 2-col grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16 items-start">

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Smartphone, Sparkles, TrendingUp } from 'lucide-react';
 import SplitHeading from './SplitHeading';
+import Coin3D from './Coin3D';
 
 const STEPS = [
   {
@@ -24,7 +25,10 @@ const STEPS = [
 ];
 
 const HowItWorks: React.FC = () => (
-  <section id="how" className="bg-[#F5F5F5] px-6 pb-24">
+  <section id="how" className="relative overflow-hidden bg-[#F5F5F5] px-6 pb-24">
+    <div className="float-coin absolute hidden lg:block left-6 bottom-10" data-dist="80">
+      <Coin3D size={42} label="10" />
+    </div>
     <div className="max-w-[88rem] mx-auto">
       <div className="max-w-2xl mb-16">
         <p className="text-[#B8860B] text-xs uppercase tracking-[0.4em] font-semibold mb-3">

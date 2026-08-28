@@ -5,7 +5,7 @@ import SplitHeading from './SplitHeading';
 import { go, PATH } from '../lib/router';
 
 const FinaleSection: React.FC = () => (
-  <section className="finale-section relative bg-[#2B2644] overflow-hidden">
+  <section className="finale-section skew-target relative bg-[#2B2644] overflow-hidden">
     <div className="finale-stage min-h-screen flex items-center justify-center py-24 overflow-hidden">
       <div
         className="absolute inset-0 pointer-events-none"
