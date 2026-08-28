@@ -16,6 +16,7 @@ import GoalRing from './widgets/GoalRing';
 import AllowanceCard from './widgets/AllowanceCard';
 import Autopilot from './widgets/Autopilot';
 import Transactions from './widgets/Transactions';
+import Charts from './widgets/Charts';
 
 const seedTransactions = (cfg: ReturnType<typeof buildConfig>): Tx[] => {
   const daysAgo = (n: number) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
@@ -203,6 +204,10 @@ const Dashboard: React.FC = () => {
               }
             />
           </div>
+        </div>
+
+        <div className="mt-4">
+          <Charts tx={profile.tx} />
         </div>
 
         <div className="mt-4">
