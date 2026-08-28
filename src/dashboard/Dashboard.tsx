@@ -13,6 +13,7 @@ import {
 import { loadProfile, saveProfile, emptyToggles, nextId, Profile } from './storage';
 import { go, PATH } from '../lib/router';
 import GoalRing from './widgets/GoalRing';
+import AllowanceCard from './widgets/AllowanceCard';
 
 const seedTransactions = (cfg: ReturnType<typeof buildConfig>): Tx[] => {
   const daysAgo = (n: number) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
@@ -188,8 +189,11 @@ const Dashboard: React.FC = () => {
           <div className="lg:col-span-1">
             <GoalRing cfg={cfg} tx={profile.tx} toggles={profile.toggles} />
           </div>
-          <div className="lg:col-span-2 rounded-2xl border-2 border-dashed border-black/10 p-10 text-center text-black/35 text-sm">
-            Autopilot, charts, transactions & AI insights — arriving next commits
+          <div className="md:col-span-2 grid md:grid-cols-2 gap-4">
+            <AllowanceCard cfg={cfg} tx={profile.tx} />
+            <div className="rounded-2xl border-2 border-dashed border-black/10 p-10 text-center text-black/35 text-sm">
+              Autopilot, charts & AI insights — arriving next commits
+            </div>
           </div>
         </div>
       </div>
