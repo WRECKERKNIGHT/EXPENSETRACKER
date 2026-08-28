@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
-import { Wallet } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { ArrowLeft, Lock, Wallet } from 'lucide-react';
 import Onboarding from './Onboarding';
-import { buildConfig, DashboardConfig, OnboardInputs, SpendStyle, Tx, fmt } from './engine';
+import {
+  buildConfig,
+  OnboardInputs,
+  SpendStyle,
+  Tx,
+  fmt,
+  todayISO,
+  statusOfDay,
+} from './engine';
 import { loadProfile, saveProfile, emptyToggles, nextId, Profile } from './storage';
 import { go, PATH } from '../lib/router';
 
-const seedTransactions = (cfg: DashboardConfig, style: SpendStyle): Tx[] => {
+const seedTransactions = (cfg: ReturnType<typeof buildConfig>): Tx[] => {
   const daysAgo = (n: number) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
   const today = daysAgo(0);
   const daily = cfg.dailyAllowance;
@@ -23,12 +31,19 @@ const seedTransactions = (cfg: DashboardConfig, style: SpendStyle): Tx[] => {
 
 const Dashboard: React.FC = () => {
   const [profile, setProfile] = useState<Profile | null>(() => loadProfile());
+  const [customizing, setCustomizing] = useState(false);
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const t = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(t);
+  }, []);
 
   const handleComplete = (inputs: OnboardInputs) => {
     const cfg = buildConfig(inputs);
     const fresh: Profile = {
       inputs,
-      tx: seedTransactions(cfg, inputs.style),
+      tx: seedTransactions(cfg),
       toggles: emptyToggles(),
       streak: 0,
       lastWinDay: '',
@@ -36,21 +51,46 @@ const Dashboard: React.FC = () => {
     };
     saveProfile(fresh);
     setProfile(fresh);
+    setCustomizing(false);
+    window.location.hash = PATH.dashboard;
   };
 
   const backToSite = () => go(PATH.home);
 
-  if (!profile) {
-    return <Onboarding onComplete={handleComplete} onCancel={backToSite} />;
+  const update = (patch: Partial<Profile> | ((p: Profile) => Profile)) => {
+    setProfile((p) => {
+      if (!p) return p;
+      const next = typeof patch === 'function' ? patch(p) : { ...p, ...patch };
+      saveProfile(next);
+      return next;
+    });
+  };
+
+  if (!profile || customizing) {
+    return (
+      <Onboarding
+        initial={profile?.inputs ?? null}
+        onComplete={handleComplete}
+        onCancel={() => (profile ? setCustomizing(false) : backToSite())}
+      />
+    );
   }
 
   const cfg = buildConfig(profile.inputs);
+  const today = todayISO();
+  const spentToday = profile.tx
+    .filter((t) => t.date === today && t.cat !== 'Savings')
+    .reduce((s, t) => s + t.amount, 0);
+  const allowanceLeft = Math.max(0, cfg.dailyAllowance - spentToday);
+  const allowancePct = cfg.dailyAllowance > 0 ? Math.min(1, spentToday / cfg.dailyAllowance) : 0;
 
-  /* Generated-config preview (shell arrives next) */
+  const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
   return (
-    <div className="min-h-screen bg-[#F5F5F5] px-6 py-8">
-      <div className="max-w-[88rem] mx-auto">
-        <div className="flex items-center justify-between mb-16">
+    <div className="min-h-screen bg-[#F5F5F5]">
+      {/* ── Top nav ── */}
+      <div className="sticky top-0 z-30 bg-[#F5F5F5]/90 backdrop-blur border-b border-black/5">
+        <div className="max-w-[88rem] mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center shadow-md"
@@ -58,52 +98,98 @@ const Dashboard: React.FC = () => {
             >
               <Wallet size={18} className="text-white" />
             </div>
-            <span className="text-xl font-medium tracking-tight text-black">SpendSmart</span>
+            <div className="leading-none">
+              <span className="text-lg font-medium tracking-tight text-black">SpendSmart</span>
+              <p className="text-[9px] uppercase tracking-[0.24em] text-[#B8860B] font-semibold mt-1">
+                Autonomous
+              </p>
+            </div>
           </div>
-          <button
-            onClick={backToSite}
-            className="text-sm text-black/60 font-medium hover:text-black transition-colors duration-200 cursor-pointer"
-          >
-            ← Back to site
-          </button>
+
+          <div className="flex items-center gap-5">
+            <div className="hidden md:flex items-center gap-1.5 text-[#B8860B]">
+              <span className="text-sm font-semibold">🔥 {profile.streak}</span>
+              <span className="text-xs text-black/45 font-medium">day streak</span>
+            </div>
+            <button
+              onClick={() => setCustomizing(true)}
+              className="text-sm bg-black text-white px-5 py-2 rounded-full font-medium hover:bg-gray-800 transition-colors duration-200 cursor-pointer"
+            >
+              Re-customize
+            </button>
+            <button
+              onClick={backToSite}
+              className="hidden sm:inline-flex items-center gap-2 text-sm text-black/60 font-medium hover:text-black transition-colors duration-200 cursor-pointer"
+            >
+              <ArrowLeft size={15} /> Site
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-[88rem] mx-auto px-6 py-10">
+        {/* ── Header ── */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+          <div>
+            <p className="text-[#B8860B] text-xs uppercase tracking-[0.3em] font-semibold mb-2">
+              {statusOfDay(now)} · {timeStr}
+            </p>
+            <h1 className="text-3xl md:text-5xl font-medium text-black" style={{ letterSpacing: '-0.03em' }}>
+              {profile.inputs.name}'s money, <em className="not-italic text-[#B8860B]">mastered.</em>
+            </h1>
+          </div>
+          <p className="text-black/50 text-sm max-w-xs leading-relaxed">
+            Generated from your answers — {profile.tx.length} transactions, allowance, and autopilot
+            all live and updating right now.
+          </p>
         </div>
 
-        <div className="max-w-2xl mx-auto">
-          <p className="text-[#B8860B] text-xs uppercase tracking-[0.4em] font-semibold mb-4">
-            Your autonomous config
-          </p>
-          <h1 className="text-4xl font-medium text-black mb-6" style={{ letterSpacing: '-0.03em' }}>
-            Hey {profile.inputs.name}, your dashboard is ready.
-          </h1>
-          <p className="text-black/60 text-lg mb-10 leading-relaxed">
-            Built purely from your answers. Nothing is guessed — every number below came from what
-            you told us.
-          </p>
-
-          <div className="grid sm:grid-cols-2 gap-4 mb-10">
-            {[
-              { label: 'Locked every month', value: fmt(cfg.fixed) },
-              { label: 'Truly yours to spend', value: fmt(cfg.spendable) },
-              { label: 'Daily allowance', value: `${fmt(cfg.dailyAllowance)}/day` },
-              { label: 'Auto-saved to goal', value: fmt(cfg.monthlySave) },
-              { label: 'Goal coverage', value: `${Math.round(cfg.goalPct * 100)}% of income` },
-              { label: 'Runway', value: `${cfg.runwayDays} days` },
-            ].map((s) => (
-              <div key={s.label} className="rounded-2xl bg-white border border-gray-100 p-6">
-                <p className="text-xs uppercase tracking-[0.2em] text-black/45 font-semibold mb-2">{s.label}</p>
-                <p className="text-2xl font-semibold text-black" style={{ letterSpacing: '-0.02em' }}>
-                  {s.value}
-                </p>
-              </div>
-            ))}
+        {/* ── Balance cards ── */}
+        <div className="grid sm:grid-cols-3 gap-4 mb-8">
+          <div className="dash-card rounded-2xl bg-white border border-gray-100 p-6">
+            <p className="text-xs uppercase tracking-[0.2em] text-black/45 font-semibold mb-2">Monthly income</p>
+            <p className="text-3xl font-semibold text-black" style={{ letterSpacing: '-0.02em' }}>
+              {fmt(profile.inputs.income)}
+            </p>
           </div>
 
-          <button
-            onClick={() => go(PATH.dashboard)}
-            className="bg-black text-white px-8 py-3 rounded-full font-medium hover:bg-gray-800 transition-colors duration-200 cursor-pointer"
-          >
-            Take me inside
-          </button>
+          <div className="dash-card rounded-2xl bg-[#2B2644] p-6">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-xs uppercase tracking-[0.2em] text-white/50 font-semibold">Locked first</p>
+              <Lock size={14} className="text-[#d4af37]" />
+            </div>
+            <p className="text-3xl font-semibold text-white" style={{ letterSpacing: '-0.02em' }}>
+              {fmt(cfg.fixed)}
+            </p>
+            <p className="text-xs text-white/50 mt-1">Rent + fixed bills, autopilot-held</p>
+          </div>
+
+          <div className="dash-card rounded-2xl bg-white border border-gray-100 p-6">
+            <p className="text-xs uppercase tracking-[0.2em] text-black/45 font-semibold mb-2">Allowance left today</p>
+            <p className="text-3xl font-semibold text-black" style={{ letterSpacing: '-0.02em' }}>
+              {fmt(allowanceLeft)}
+            </p>
+            <div className="mt-3 h-1.5 rounded-full overflow-hidden" style={{ background: '#EDE8F5' }}>
+              <div
+                className="h-full rounded-full transition-all duration-700"
+                style={{
+                  width: `${allowancePct * 100}%`,
+                  background: allowancePct >= 1 ? '#c0392b' : 'linear-gradient(90deg, #f0c94d, #b8860b)',
+                }}
+              />
+            </div>
+            <p className="text-xs text-black/45 mt-1">{fmt(spentToday)} of {fmt(cfg.dailyAllowance)} used</p>
+          </div>
+        </div>
+
+        {/* ── Widgets (arriving next commits) ── */}
+        <div className="grid lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-1 rounded-2xl border-2 border-dashed border-black/10 p-10 text-center text-black/35 text-sm">
+            Savings goal ring — coming next
+          </div>
+          <div className="lg:col-span-2 rounded-2xl border-2 border-dashed border-black/10 p-10 text-center text-black/35 text-sm">
+            Autopilot, charts, transactions & AI insights — arriving next commits
+          </div>
         </div>
       </div>
     </div>
