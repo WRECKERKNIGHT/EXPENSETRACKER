@@ -10,7 +10,7 @@ import {
   todayISO,
   statusOfDay,
 } from './engine';
-import { loadProfile, saveProfile, emptyToggles, nextId, Profile } from './storage';
+import { loadProfile, saveProfile, clearProfile, emptyToggles, nextId, Profile } from './storage';
 import { go, PATH } from '../lib/router';
 import GoalRing from './widgets/GoalRing';
 import AllowanceCard from './widgets/AllowanceCard';
@@ -44,6 +44,19 @@ const Dashboard: React.FC = () => {
     const t = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(t);
   }, []);
+
+  /* ── Streak: +1 the first time each under-budget day is detected ── */
+  const cfgLive = profile ? buildConfig(profile.inputs) : null;
+  const todayLive = todayISO();
+  useEffect(() => {
+    if (!profile || !cfgLive) return;
+    const spent = profile.tx
+      .filter((t) => t.date === todayLive && t.cat !== 'Savings')
+      .reduce((s, t) => s + t.amount, 0);
+    if (spent <= cfgLive.dailyAllowance && profile.lastWinDay !== todayLive && cfgLive.dailyAllowance > 0) {
+      update((p) => ({ ...p, streak: p.streak + 1, lastWinDay: todayLive }));
+    }
+  }, [profile, cfgLive, todayLive, update]);
 
   const handleComplete = (inputs: OnboardInputs) => {
     const cfg = buildConfig(inputs);
@@ -143,6 +156,17 @@ const Dashboard: React.FC = () => {
             <h1 className="text-3xl md:text-5xl font-medium text-black" style={{ letterSpacing: '-0.03em' }}>
               {profile.inputs.name}'s money, <em className="not-italic text-[#B8860B]">mastered.</em>
             </h1>
+            <div className="flex flex-wrap gap-2 mt-4">
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#B8860B] bg-[#B8860B]/10 px-3 py-1.5 rounded-full">
+                🛣️ {cfg.runwayDays} day runway
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#B8860B] bg-[#B8860B]/10 px-3 py-1.5 rounded-full">
+                🎯 {Math.round(cfg.goalPct * 100)}% goal locked
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#B8860B] bg-[#B8860B]/10 px-3 py-1.5 rounded-full">
+                🔥 {profile.streak} day streak
+              </span>
+            </div>
           </div>
           <p className="text-black/50 text-sm max-w-xs leading-relaxed">
             Generated from your answers — {profile.tx.length} transactions, allowance, and autopilot
@@ -227,6 +251,30 @@ const Dashboard: React.FC = () => {
             onDelete={(id) => update((p) => ({ ...p, tx: p.tx.filter((x) => x.id !== id) }))}
             onResetDay={() => update((p) => ({ ...p, tx: p.tx.filter((x) => x.date !== today) }))}
           />
+        </div>
+
+        {/* ── Footer bar ── */}
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-black/5 pt-6">
+          <p className="text-xs text-black/40">
+            Data lives in your browser ({profile.tx.length} transactions). Nothing leaves your device.
+          </p>
+          <div className="flex items-center gap-6 text-xs font-medium">
+            <button
+              onClick={() => setCustomizing(true)}
+              className="text-black/50 hover:text-black transition-colors duration-200 cursor-pointer"
+            >
+              Customize again
+            </button>
+            <button
+              onClick={() => {
+                clearProfile();
+                setProfile(null);
+              }}
+              className="text-[#c0392b]/70 hover:text-[#c0392b] transition-colors duration-200 cursor-pointer"
+            >
+              Reset all data
+            </button>
+          </div>
         </div>
       </div>
     </div>
