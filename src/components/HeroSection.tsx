@@ -1,6 +1,7 @@
 import React from 'react';
 import Coin3D from './Coin3D';
 import { BrandMarquee, JoinUsButton } from './Marquee';
+import { go, PATH } from '../lib/router';
 
 const HeroSection: React.FC = () => {
   return (
@@ -37,7 +38,7 @@ const HeroSection: React.FC = () => {
           </p>
 
           <div className="hero-animate">
-            <JoinUsButton label="Get Started" />
+            <JoinUsButton label="Get Started" onClick={() => go(PATH.dashboard)} />
           </div>
 
           <div className="hero-animate">

@@ -34,8 +34,11 @@ export const BrandMarquee: React.FC = () => {
 };
 
 /* ── Join Us Button ── */
-export const JoinUsButton: React.FC<{ className?: string; label?: string }> = ({ className = '', label = 'Get Started' }) => (
-  <button className={`inline-flex items-center gap-3 bg-black text-white text-base md:text-lg font-medium pl-8 pr-2 py-2 rounded-full hover:bg-gray-800 transition-colors duration-200 cursor-pointer ${className}`}>
+export const JoinUsButton: React.FC<{ className?: string; label?: string; onClick?: () => void }> = ({ className = '', label = 'Get Started', onClick }) => (
+  <button
+    onClick={onClick}
+    className={`inline-flex items-center gap-3 bg-black text-white text-base md:text-lg font-medium pl-8 pr-2 py-2 rounded-full hover:bg-gray-800 transition-colors duration-200 cursor-pointer ${className}`}
+  >
     {label}
     <span className="bg-white rounded-full p-2">
       <ArrowRight className="w-5 h-5 text-black" />
@@ -44,8 +47,11 @@ export const JoinUsButton: React.FC<{ className?: string; label?: string }> = ({
 );
 
 /* ── Discover Button ── */
-export const DiscoverButton: React.FC<{ className?: string }> = ({ className = '' }) => (
-  <button className={`inline-flex items-center gap-3 bg-black text-white text-base font-medium pl-8 pr-2 py-2 rounded-full hover:bg-gray-800 transition-colors duration-200 cursor-pointer ${className}`}>
+export const DiscoverButton: React.FC<{ className?: string; onClick?: () => void }> = ({ className = '', onClick }) => (
+  <button
+    onClick={onClick}
+    className={`inline-flex items-center gap-3 bg-black text-white text-base font-medium pl-8 pr-2 py-2 rounded-full hover:bg-gray-800 transition-colors duration-200 cursor-pointer ${className}`}
+  >
     Discover it
     <span className="bg-white rounded-full p-2">
       <ArrowRight className="w-5 h-5 text-black" />

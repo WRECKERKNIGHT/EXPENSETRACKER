@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import Coin3D from './Coin3D';
+import { go, PATH } from '../lib/router';
 
 const FinaleSection: React.FC = () => (
   <section className="finale-section relative bg-[#2B2644] overflow-hidden">
@@ -41,13 +42,19 @@ const FinaleSection: React.FC = () => (
             that ends in savings.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button className="inline-flex items-center gap-3 bg-white text-black text-base font-medium pl-8 pr-2 py-2 rounded-full hover:bg-gray-200 transition-colors duration-200 cursor-pointer">
+            <button
+              onClick={() => go(PATH.dashboard)}
+              className="inline-flex items-center gap-3 bg-white text-black text-base font-medium pl-8 pr-2 py-2 rounded-full hover:bg-gray-200 transition-colors duration-200 cursor-pointer"
+            >
               Start Free
               <span className="bg-black rounded-full p-2">
                 <ArrowRight className="w-5 h-5 text-white" />
               </span>
             </button>
-            <button className="px-8 py-3 rounded-full border border-white/25 text-white/80 font-medium hover:border-white/60 hover:text-white transition-colors duration-200 cursor-pointer">
+            <button
+              onClick={() => go(PATH.dashboard)}
+              className="px-8 py-3 rounded-full border border-white/25 text-white/80 font-medium hover:border-white/60 hover:text-white transition-colors duration-200 cursor-pointer"
+            >
               Sign In
             </button>
           </div>

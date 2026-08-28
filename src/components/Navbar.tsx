@@ -1,5 +1,6 @@
 import React from 'react';
 import { Wallet } from 'lucide-react';
+import { go, PATH } from '../lib/router';
 
 const NAV_LINKS = [
   { label: 'Features', href: '#features' },
@@ -38,7 +39,10 @@ const Navbar: React.FC = () => (
         ))}
       </div>
 
-      <button className="bg-black text-white text-base font-medium px-7 py-2.5 rounded-full hover:bg-gray-800 transition-colors duration-200 cursor-pointer">
+      <button
+        onClick={() => go(PATH.dashboard)}
+        className="bg-black text-white text-base font-medium px-7 py-2.5 rounded-full hover:bg-gray-800 transition-colors duration-200 cursor-pointer"
+      >
         Get Started
       </button>
     </div>
