@@ -27,13 +27,12 @@ const HeroSection: React.FC = () => {
             as="h1"
             text="Every rupee\nhas a story."
             highlight={['story.']}
-            emClass="text-[#B8860B]"
-            className="hero-title text-black text-5xl md:text-6xl font-medium leading-tight max-w-xl mb-4"
-            style={{ letterSpacing: '-0.04em' }}
+            emClass="text-[#d4af37] glow-gold"
+            className="hero-title glow-cream text-[#FBF9F0] text-6xl md:text-7xl lg:text-8xl font-medium leading-[0.98] max-w-2xl mb-5"
           />
 
           <p
-            className="hero-animate text-black/70 text-base md:text-lg max-w-md mb-8 leading-relaxed"
+            className="hero-animate text-[#FBF9F0]/80 text-base md:text-lg max-w-md mb-8 leading-relaxed"
             style={{ fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif" }}
           >
             SpendSmart reads the story your money is already writing — bank SMS, UPI and receipts —

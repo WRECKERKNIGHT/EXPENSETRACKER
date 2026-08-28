@@ -67,9 +67,8 @@ const SafetyNetSection: React.FC = () => (
             as="h2"
             text="Your Safety\nNet."
             highlight={['Net.']}
-            emClass="text-[#d4af37]"
-            className="safety-heading text-white text-4xl md:text-6xl font-medium leading-[1.05] mb-12"
-            style={{ letterSpacing: '-0.04em' }}
+            emClass="text-[#d4af37] glow-gold"
+            className="safety-heading glow-cream text-[#FBF9F0] text-5xl md:text-7xl font-medium leading-[1.02] mb-12"
           />
           <div className="relative h-56">
             {LINES.map((line, i) => (

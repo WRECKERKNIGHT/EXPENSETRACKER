@@ -23,10 +23,9 @@ export default function AutopilotTeaser() {
             Sense the machine
           </p>
           <h2
-            className="auto-heading text-white text-4xl md:text-6xl font-medium leading-[1.05] mb-6"
-            style={{ letterSpacing: '-0.04em' }}
+            className="auto-heading glow-cream text-[#FBF9F0] text-5xl md:text-7xl font-medium leading-[1.02] mb-6"
           >
-            The <em className="text-[#d4af37]">autopilot.</em>
+            The <em className="text-[#d4af37] glow-gold">autopilot.</em>
           </h2>
           <p className="auto-sub text-white/60 text-base max-w-md">
             Stop logging every rupee. SpendSmart watches your UPI and does the
@@ -53,7 +52,7 @@ export default function AutopilotTeaser() {
         </div>
 
         <div className="auto-ui relative">
-          <div className="auto-word pointer-events-none absolute -top-24 -right-8 select-none text-[10rem] lg:text-[15rem] leading-none font-medium text-white/[0.06]">
+          <div className="auto-word pointer-events-none absolute -top-24 -right-8 select-none text-[10rem] lg:text-[15rem] leading-none font-medium text-[#d4af37]/10 glow-gold">
             50%
           </div>
           <div className="auto-card relative z-10 w-[19rem] rounded-3xl border border-white/10 bg-[#151F19]/80 p-7 backdrop-blur">

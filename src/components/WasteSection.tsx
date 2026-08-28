@@ -35,9 +35,8 @@ const WasteSection: React.FC = () => (
             as="h2"
             text="Money doesn't vanish.\nIt drips."
             highlight={['drips.']}
-            emClass="text-[#d4af37]"
-            className="waste-heading text-white text-4xl md:text-6xl font-medium leading-[1.05] mb-12"
-            style={{ letterSpacing: '-0.04em' }}
+            emClass="text-[#d4af37] glow-gold"
+            className="waste-heading glow-cream text-[#FBF9F0] text-5xl md:text-7xl font-medium leading-[1.02] mb-12"
           />
           <div className="relative h-72">
             {LINES.map((line, i) => (

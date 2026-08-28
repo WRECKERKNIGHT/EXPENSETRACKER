@@ -35,9 +35,8 @@ const FinaleSection: React.FC = () => (
             as="h2"
             text="Ready to make money\nwork?"
             highlight={['work?']}
-            emClass="text-[#d4af37]"
-            className="finale-title text-white text-4xl md:text-6xl font-medium leading-[1.05] mb-7"
-            style={{ letterSpacing: '-0.04em' }}
+            emClass="text-[#d4af37] glow-gold"
+            className="finale-title glow-cream text-[#FBF9F0] text-5xl md:text-7xl font-medium leading-[1.02] mb-7"
           />
           <p className="finale-sub text-white/70 text-base md:text-lg max-w-md mx-auto mb-10 leading-relaxed">
             Join SpendSmart — free forever for the first 10,000 users. Turn every coin into a story
