@@ -1,4 +1,5 @@
 import React from 'react';
+import Coin3D from './Coin3D';
 import { BrandMarquee, JoinUsButton } from './Marquee';
 
 const HeroSection: React.FC = () => {
@@ -24,22 +25,27 @@ const HeroSection: React.FC = () => {
             className="hero-animate text-black text-5xl md:text-6xl font-medium leading-tight max-w-xl mb-4"
             style={{ letterSpacing: '-0.04em' }}
           >
-            Your Wealth<br />Works
+            Every rupee<br />has a <em>story.</em>
           </h1>
 
           <p
             className="hero-animate text-black/70 text-base md:text-lg max-w-md mb-8 leading-relaxed"
             style={{ fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif" }}
           >
-            An automated, reward-powered digital dollar built for native passive earnings and effortless connection into DeFi.
+            SpendSmart reads the story your money is already writing — bank SMS, UPI and receipts —
+            and turns every rupee into clear, private insight.
           </p>
 
           <div className="hero-animate">
-            <JoinUsButton />
+            <JoinUsButton label="Get Started" />
           </div>
 
           <div className="hero-animate">
             <BrandMarquee />
+          </div>
+
+          <div className="hero-coin absolute hidden lg:block right-14 top-28">
+            <Coin3D size={110} label="10" symbolBack="SM" />
           </div>
         </div>
       </div>
