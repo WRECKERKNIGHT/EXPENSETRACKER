@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, ArrowRight, Banknote, Home, Receipt, Rocket, SlidersHorizontal, Wallet } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Banknote, Home, Receipt, Rocket, SlidersHorizontal, Target, Wallet } from 'lucide-react';
 import { OnboardInputs, SpendStyle, parseRupee } from './engine';
 
 interface OnboardingProps {

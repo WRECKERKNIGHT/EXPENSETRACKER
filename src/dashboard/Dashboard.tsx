@@ -45,6 +45,15 @@ const Dashboard: React.FC = () => {
     return () => clearInterval(t);
   }, []);
 
+  const update = (patch: Partial<Profile> | ((p: Profile) => Profile)) => {
+    setProfile((p) => {
+      if (!p) return p;
+      const next = typeof patch === 'function' ? patch(p) : { ...p, ...patch };
+      saveProfile(next);
+      return next;
+    });
+  };
+
   /* ── Streak: +1 the first time each under-budget day is detected ── */
   const cfgLive = profile ? buildConfig(profile.inputs) : null;
   const todayLive = todayISO();
@@ -75,15 +84,6 @@ const Dashboard: React.FC = () => {
   };
 
   const backToSite = () => go(PATH.home);
-
-  const update = (patch: Partial<Profile> | ((p: Profile) => Profile)) => {
-    setProfile((p) => {
-      if (!p) return p;
-      const next = typeof patch === 'function' ? patch(p) : { ...p, ...patch };
-      saveProfile(next);
-      return next;
-    });
-  };
 
   if (!profile || customizing) {
     return (

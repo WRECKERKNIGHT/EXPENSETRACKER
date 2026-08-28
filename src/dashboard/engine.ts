@@ -28,6 +28,7 @@ export interface DashboardConfig {
   monthlySave: number;
   goalPct: number;
   runwayDays: number;
+  style: SpendStyle;
 }
 
 export const AUTOPILOT = [
@@ -48,7 +49,7 @@ export const buildConfig = (i: OnboardInputs): DashboardConfig => {
   const monthlySave = Math.max(0, i.goal + spendable - dailyAllowance * 30);
   const goalPct = i.income > 0 ? Math.min(1, i.goal / i.income) : 0;
   const runwayDays = dailyAllowance > 0 ? Math.round(spendable / dailyAllowance) : 0;
-  return { inputs: i, fixed, spendable, dailyAllowance, monthlySave, goalPct, runwayDays };
+  return { inputs: i, fixed, spendable, dailyAllowance, monthlySave, goalPct, runwayDays, style: i.style };
 };
 
 export const todayISO = () => new Date().toISOString().slice(0, 10);

@@ -2,7 +2,7 @@ import React from 'react';
 import { KeyRound, Repeat, Gauge, PiggyBank, BellRing, Sparkles } from 'lucide-react';
 import { AUTOPILOT, AutopilotId } from '../engine';
 
-const ICONS: Record<AutopilotId, React.ComponentType<{ size?: number; className?: string }>> = {
+const ICONS: Record<AutopilotId, React.ComponentType<{ size?: number | string; className?: string }>> = {
   rent: KeyRound,
   autopay: Repeat,
   allowance: Gauge,
