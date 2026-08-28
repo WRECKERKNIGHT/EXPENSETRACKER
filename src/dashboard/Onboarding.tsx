@@ -26,7 +26,7 @@ const inputClass =
 
 const chipClass = (active: boolean) =>
   `px-4 py-2 rounded-full text-sm font-medium border transition-colors duration-200 cursor-pointer ${
-    active ? 'bg-[#2B2644] border-[#2B2644] text-white' : 'border-black/15 text-black/60 hover:border-black/40'
+    active ? 'bg-[#18241C] border-[#18241C] text-white' : 'border-black/15 text-black/60 hover:border-black/40'
   }`;
 
 const Onboarding: React.FC<OnboardingProps> = ({ initial, onComplete, onCancel }) => {
@@ -64,16 +64,16 @@ const Onboarding: React.FC<OnboardingProps> = ({ initial, onComplete, onCancel }
   const goalPct = inputs.income > 0 ? Math.round((inputs.goal / inputs.income) * 100) : 0;
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5]">
+    <div className="min-h-screen bg-[#F4EFE4]">
       <div
         className="px-6 pt-8 pb-16 text-white"
-        style={{ background: 'linear-gradient(160deg, #17142B 0%, #2B2644 100%)' }}
+        style={{ background: 'linear-gradient(160deg, #17142B 0%, #18241C 100%)' }}
       >
         <div className="max-w-[88rem] mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center shadow-md"
-              style={{ background: 'linear-gradient(135deg, #f0c94d, #b8860b)' }}
+              style={{ background: 'linear-gradient(135deg, #d5b256, #b8860b)' }}
             >
               <Wallet size={18} className="text-white" />
             </div>
@@ -91,16 +91,16 @@ const Onboarding: React.FC<OnboardingProps> = ({ initial, onComplete, onCancel }
       </div>
 
       <div className="max-w-2xl mx-auto px-6 -mt-6 pb-24">
-        <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 md:p-12">
+        <div className="bg-[#FBF9F0] rounded-3xl shadow-xl border border-[#E7DEC7] p-8 md:p-12">
           {/* Progress */}
           <div className="flex items-center gap-2 mb-10">
             {STEPS.map((_, i) => (
-              <div key={i} className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: '#EDE8F5' }}>
+              <div key={i} className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: '#E9E0CB' }}>
                 <div
                   className="h-full rounded-full transition-all duration-500"
                   style={{
                     width: i <= step ? '100%' : '0%',
-                    background: 'linear-gradient(90deg, #f0c94d, #b8860b)',
+                    background: 'linear-gradient(90deg, #d5b256, #b8860b)',
                   }}
                 />
               </div>
@@ -110,7 +110,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ initial, onComplete, onCancel }
           {/* Step header */}
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-xl bg-[#2B2644] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-[#18241C] flex items-center justify-center">
                 {(() => {
                   const Icon = STEPS[step].icon;
                   return <Icon size={18} className="text-[#d4af37]" />;
@@ -265,7 +265,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ initial, onComplete, onCancel }
             {STEPS[step].key === 'style' ? (
               <button
                 onClick={() => onComplete(inputs)}
-                className="inline-flex items-center gap-3 bg-black text-white text-base font-medium pl-8 pr-2 py-2 rounded-full hover:bg-gray-800 transition-colors duration-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-3 bg-[#18241C] text-white text-base font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#2A3B31] transition-colors duration-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Build my dashboard
                 <span className="bg-white rounded-full p-2">
@@ -276,7 +276,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ initial, onComplete, onCancel }
               <button
                 onClick={next}
                 disabled={!stepOk()}
-                className="inline-flex items-center gap-3 bg-black text-white text-base font-medium pl-8 pr-2 py-2 rounded-full hover:bg-gray-800 transition-colors duration-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-3 bg-[#18241C] text-white text-base font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#2A3B31] transition-colors duration-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Continue
                 <span className="bg-white rounded-full p-2">

@@ -25,7 +25,7 @@ const STEPS = [
 ];
 
 const HowItWorks: React.FC = () => (
-  <section id="how" className="relative overflow-hidden bg-[#F5F5F5] px-6 pb-24">
+  <section id="how" className="relative overflow-hidden bg-[#F4EFE4] px-6 pb-24">
     <div className="float-coin absolute hidden lg:block left-6 bottom-10" data-dist="80">
       <Coin3D size={42} label="10" />
     </div>
@@ -47,7 +47,7 @@ const HowItWorks: React.FC = () => (
         {STEPS.map((s) => (
           <div
             key={s.num}
-            className="step-card relative rounded-2xl bg-white border border-gray-100 p-9 overflow-hidden"
+            className="step-card relative rounded-2xl bg-[#FBF9F0] border border-[#E7DEC7] p-9 overflow-hidden"
           >
             <span
               className="absolute -top-3 right-5 text-[7rem] leading-none font-semibold text-black/[0.05] pointer-events-none"
@@ -56,8 +56,8 @@ const HowItWorks: React.FC = () => (
               {s.num}
             </span>
             <div
-              className="w-12 h-12 rounded-full flex items-center justify-center mb-7"
-              style={{ background: 'linear-gradient(135deg, #f0c94d, #b8860b)' }}
+              className="w-12 h-12 rounded-full flex items-center justify-center mb-7 border border-[#C9A444]/50 shadow-sm"
+              style={{ background: 'linear-gradient(135deg, #d5b256, #9a7416)' }}
             >
               <s.icon size={20} className="text-white" />
             </div>

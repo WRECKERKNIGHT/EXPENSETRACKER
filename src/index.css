@@ -7,11 +7,17 @@ html, body {
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #F4EFE4;
 }
 
 * {
-  font-family: 'TT Norms Pro', ui-sans-serif, system-ui, sans-serif;
+  font-family: 'Inter', 'TT Norms Pro', ui-sans-serif, system-ui, sans-serif;
   box-sizing: border-box;
+}
+
+h1, h2, h3, .font-serif {
+  font-family: 'Playfair Display', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+  letter-spacing: -0.012em !important;
 }
 
 html {
@@ -114,13 +120,13 @@ html {
   width: 46px;
   height: 26px;
   border-radius: 9999px;
-  background: #e3deee;
+  background: #D8CFBA;
   transition: background 0.25s ease;
   cursor: pointer;
 }
 
 .sswitch[data-on='true'] {
-  background: linear-gradient(135deg, #f0c94d, #b8860b);
+  background: linear-gradient(135deg, #d5b256, #b8860b);
 }
 
 .sswitch::after {

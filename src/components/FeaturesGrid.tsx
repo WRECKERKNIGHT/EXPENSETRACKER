@@ -56,7 +56,7 @@ const FEATURES = [
 ];
 
 const FeaturesGrid: React.FC = () => (
-  <section id="features" className="relative overflow-hidden bg-[#F5F5F5] px-6 py-24">
+  <section id="features" className="relative overflow-hidden bg-[#F4EFE4] px-6 py-24">
     <div className="float-coin absolute hidden lg:block left-8 top-40" data-dist="90">
       <Coin3D size={40} label="10" />
     </div>
@@ -79,10 +79,10 @@ const FeaturesGrid: React.FC = () => (
         {FEATURES.map((f) => (
           <div
             key={f.title}
-            className="feature-card tilt-card rounded-2xl p-7 min-h-56 flex flex-col justify-between bg-white border border-gray-100 hover:border-gray-200 transition-colors duration-300"
+            className="feature-card tilt-card rounded-2xl p-7 min-h-56 flex flex-col justify-between bg-[#FBF9F0] border border-[#E7DEC7] hover:border-gray-200 transition-colors duration-300"
           >
-            <div className="w-11 h-11 rounded-xl bg-[#2B2644] flex items-center justify-center mb-6">
-              <f.icon size={20} className="text-[#d4af37]" />
+<div className="w-11 h-11 rounded-full bg-[#18241C] border border-[#C9A444]/50 flex items-center justify-center mb-6">
+              <f.icon size={20} className="text-[#d5b256]" />
             </div>
             <div>
               <h3

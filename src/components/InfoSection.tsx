@@ -19,7 +19,7 @@ const INFO_CARDS = [
 ];
 
 const InfoSection: React.FC = () => (
-  <section id="about" className="relative overflow-hidden bg-[#F5F5F5] px-6 py-24">
+  <section id="about" className="relative overflow-hidden bg-[#F4EFE4] px-6 py-24">
     <div className="float-coin absolute hidden lg:block right-10 bottom-16" data-dist="70">
       <Coin3D size={46} label="10" />
     </div>
@@ -35,7 +35,7 @@ const InfoSection: React.FC = () => (
           />
           <DiscoverButton />
         </div>
-        <p className="text-black/70 text-2xl md:text-3xl leading-relaxed">
+        <p className="font-serif text-black/70 text-2xl md:text-3xl leading-snug">
           SpendSmart is the smart ledger that parses your bank messages, scans receipts and uses AI
           to turn every rupee into clear, actionable insight — automatically.
         </p>
@@ -53,12 +53,9 @@ const InfoSection: React.FC = () => (
           }}
         >
           <div className="p-7 min-h-80 flex flex-col justify-between">
-            <p
-              className="text-black text-2xl font-medium leading-snug"
-              style={{ letterSpacing: '-0.02em' }}
-            >
+            <h3 className="text-black text-2xl font-medium leading-snug mb-3">
               One ledger,<br />every rupee.
-            </p>
+            </h3>
             <p className="text-black/70 text-base max-w-xs">
               Transactions from every bank, UPI app and receipt land in one living ledger —
               categorized, searchable, always at hand.
@@ -69,32 +66,29 @@ const InfoSection: React.FC = () => (
         {/* Cards 2–4 */}
         <div
           className="gsap-card rounded-2xl p-7 min-h-80 flex flex-col justify-between"
-          style={{ backgroundColor: '#2B2644' }}
+          style={{ backgroundColor: '#18241C' }}
         >
-          <p className="text-2xl font-medium leading-snug whitespace-pre-line text-white">
+          <h3 className="text-2xl font-medium leading-snug whitespace-pre-line text-white">
             {INFO_CARDS[0].title}
-          </p>
+          </h3>
           <p className="text-base text-white/60">{INFO_CARDS[0].body}</p>
         </div>
 
         <div
           className="gsap-card rounded-2xl p-7 min-h-80 flex flex-col justify-between"
-          style={{ backgroundColor: '#2B2644' }}
+          style={{ backgroundColor: '#18241C' }}
         >
-          <p className="text-2xl font-medium leading-snug whitespace-pre-line text-white">
+          <h3 className="text-2xl font-medium leading-snug whitespace-pre-line text-white">
             {INFO_CARDS[1].title}
-          </p>
+          </h3>
           <p className="text-base text-white/60">{INFO_CARDS[1].body}</p>
         </div>
 
-        <div className="gsap-card rounded-2xl p-7 min-h-80 flex flex-col justify-between bg-white/50 border border-gray-100">
-          <p
-            className="text-black text-2xl font-medium leading-snug"
-            style={{ letterSpacing: '-0.02em' }}
-          >
+        <div className="gsap-card rounded-2xl p-7 min-h-80 flex flex-col justify-between bg-[#FBF9F0] border border-[#E7DEC7]">
+          <h3 className="text-black text-2xl font-medium leading-snug">
             {INFO_CARDS[2].title.split('\n')[0]}
             {INFO_CARDS[2].title.includes('\n') ? <><br />{INFO_CARDS[2].title.split('\n')[1]}</> : null}
-          </p>
+          </h3>
           <p className="text-black/70 text-base max-w-xs">{INFO_CARDS[2].body}</p>
         </div>
       </div>

@@ -14,14 +14,14 @@ const Navbar: React.FC = () => (
     <div className="flex items-center justify-between max-w-[88rem] mx-auto">
       <div className="flex items-center gap-3">
         <div
-          className="w-9 h-9 rounded-xl flex items-center justify-center shadow-md"
-          style={{ background: 'linear-gradient(135deg, #f0c94d, #b8860b)' }}
+          className="w-9 h-9 rounded-full flex items-center justify-center border border-[#C9A444]/60 shadow-sm"
+          style={{ background: 'linear-gradient(135deg, #d5b256, #9a7416)' }}
         >
-          <Wallet size={18} className="text-white" />
+          <Wallet size={17} className="text-white" />
         </div>
         <div className="leading-none">
-          <span className="text-xl font-medium tracking-tight text-black">SpendSmart</span>
-          <p className="text-[9px] uppercase tracking-[0.24em] text-[#B8860B] font-semibold mt-1">
+          <span className="font-serif text-xl text-black">SpendSmart</span>
+          <p className="text-[9px] uppercase tracking-[0.26em] text-[#B8860B] font-semibold mt-1.5">
             Money, mastered
           </p>
         </div>
@@ -41,7 +41,7 @@ const Navbar: React.FC = () => (
 
       <button
         onClick={() => go(PATH.dashboard)}
-        className="bg-black text-white text-base font-medium px-7 py-2.5 rounded-full hover:bg-gray-800 transition-colors duration-200 cursor-pointer"
+        className="bg-[#18241C] text-white text-base font-medium px-7 py-2.5 rounded-full hover:bg-[#2A3B31] transition-colors duration-200 cursor-pointer"
       >
         Get Started
       </button>

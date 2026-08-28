@@ -38,7 +38,7 @@ const Insights: React.FC<InsightsProps> = ({ cfg, tx, toggles, streak }) => {
         style={{ background: 'radial-gradient(circle, #b8960c 0%, transparent 60%)' }}
       />
       <div className="relative z-10 flex items-start gap-4">
-        <div className="w-10 h-10 rounded-xl bg-[#2B2644] flex items-center justify-center shrink-0">
+        <div className="w-10 h-10 rounded-xl bg-[#18241C] flex items-center justify-center shrink-0">
           <Sparkles size={18} className="text-[#d4af37]" />
         </div>
         <div className="flex-1 min-w-0">

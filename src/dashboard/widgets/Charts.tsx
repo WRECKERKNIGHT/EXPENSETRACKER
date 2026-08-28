@@ -4,7 +4,7 @@ import { CATEGORIES, Category, Tx, fmt } from '../engine';
 
 const COLORS: Record<Category, string> = {
   Food: '#B8860B',
-  Transport: '#2B2644',
+  Transport: '#18241C',
   Shopping: '#8a5d0b',
   Subscriptions: '#a06a15',
   Utilities: '#5c4f8a',
@@ -59,7 +59,7 @@ const Charts: React.FC<ChartsProps> = ({ tx }) => {
   const renderDay = (d: string) => new Date(d + 'T00:00:00').getDate();
 
   return (
-    <div className="rounded-2xl bg-white border border-gray-100 p-6">
+    <div className="rounded-2xl bg-[#FBF9F0] border border-[#E7DEC7] p-6">
       <div className="flex items-center gap-2 mb-6">
         <PieChart size={17} className="text-[#B8860B]" />
         <h3 className="text-lg font-medium text-black" style={{ letterSpacing: '-0.02em' }}>
@@ -76,7 +76,7 @@ const Charts: React.FC<ChartsProps> = ({ tx }) => {
               style={{
                 background: stops.length
                   ? `conic-gradient(from -90deg, ${stops.join(', ')})`
-                  : '#EDE8F5',
+                  : '#E9E0CB',
                 WebkitMask: 'radial-gradient(closest-side, transparent 60%, #000 61%)',
                 mask: 'radial-gradient(closest-side, transparent 60%, #000 61%)',
               }}
@@ -112,7 +112,7 @@ const Charts: React.FC<ChartsProps> = ({ tx }) => {
                   data-h={v}
                   style={{
                     height: `${(v / max) * 100}%`,
-                    background: i === LAST_DAYS - 1 ? 'linear-gradient(180deg, #f0c94d, #b8860b)' : '#DCD4EA',
+                    background: i === LAST_DAYS - 1 ? 'linear-gradient(180deg, #d5b256, #b8860b)' : '#DCD4EA',
                   }}
                 />
               </div>

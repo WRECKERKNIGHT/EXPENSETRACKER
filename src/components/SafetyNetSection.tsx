@@ -11,12 +11,12 @@ const LINES = [
 ];
 
 const SafetyNetSection: React.FC = () => (
-  <section className="safety-section skew-target relative bg-[#2B2644] overflow-hidden">
+  <section className="safety-section skew-target relative bg-[#18241C] overflow-hidden">
     <div className="safety-stage min-h-screen flex items-center py-24 overflow-hidden">
       {/* Ambient glow */}
       <div
         className="absolute right-0 top-0 w-[40rem] h-[40rem] rounded-full opacity-15 pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #3a3458 0%, transparent 60%)' }}
+        style={{ background: 'radial-gradient(circle, #24352A 0%, transparent 60%)' }}
       />
       {[8, 35, 65, 92].map((left, i) => (
         <span
@@ -47,7 +47,7 @@ const SafetyNetSection: React.FC = () => (
                 width: 132,
                 height: 58,
                 borderRadius: 20,
-                background: 'linear-gradient(145deg, #3a3458, #2B2644)',
+                background: 'linear-gradient(145deg, #26362C, #18241C)',
                 boxShadow: '0 20px 50px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.12)',
               }}
             >

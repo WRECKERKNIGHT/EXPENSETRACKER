@@ -24,13 +24,13 @@ const BULLETS = [
 
 const BARS = [38, 62, 44, 78, 55, 88, 70];
 const TXS = [
-  { icon: ArrowDownLeft, name: 'Swiggy', note: 'Lunch', amount: '-₹286', color: '#2B2644' },
+  { icon: ArrowDownLeft, name: 'Swiggy', note: 'Lunch', amount: '-₹286', color: '#18241C' },
   { icon: ArrowUpLeft, name: 'Salary', note: 'HDFC · Monthly', amount: '+₹62,000', color: '#B8860B' },
-  { icon: ArrowDownLeft, name: 'Netflix', note: 'Subscription', amount: '-₹649', color: '#2B2644' },
+  { icon: ArrowDownLeft, name: 'Netflix', note: 'Subscription', amount: '-₹649', color: '#18241C' },
 ];
 
 const DashboardShowcase: React.FC = () => (
-  <section className="bg-[#F5F5F5] px-6 py-28 overflow-hidden">
+  <section className="bg-[#F4EFE4] px-6 py-28 overflow-hidden">
     <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
       {/* Copy */}
       <div>
@@ -49,9 +49,7 @@ const DashboardShowcase: React.FC = () => (
             <div key={b.title} className="dash-bullet flex items-start gap-4">
               <CheckCircle2 size={22} className="mt-1 shrink-0 text-[#B8860B]" />
               <div>
-                <p className="text-lg font-medium text-black" style={{ letterSpacing: '-0.02em' }}>
-                  {b.title}
-                </p>
+                <h3 className="text-lg font-medium text-black leading-snug">{b.title}</h3>
                 <p className="text-black/60 leading-relaxed">{b.desc}</p>
               </div>
             </div>
@@ -71,11 +69,11 @@ const DashboardShowcase: React.FC = () => (
         <div
           className="dash-phone relative w-full max-w-sm rounded-[2.5rem] p-3"
           style={{
-            background: 'linear-gradient(150deg, #36305F, #17142B)',
-            boxShadow: '0 30px 80px rgba(23,20,43,0.45)',
+            background: 'linear-gradient(150deg, #18241C, #0C120E)',
+            boxShadow: '0 30px 80px rgba(15,24,18,0.45)',
           }}
         >
-          <div className="rounded-[2rem] bg-[#F5F5F5] p-5 flex flex-col gap-4">
+          <div className="rounded-[2rem] bg-[#F4EFE4] p-5 flex flex-col gap-4">
             {/* Header */}
             <div className="flex items-center justify-between">
               <div>
@@ -88,17 +86,17 @@ const DashboardShowcase: React.FC = () => (
               </div>
               <div
                 className="w-9 h-9 rounded-full flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg, #f0c94d, #b8860b)' }}
+                style={{ background: 'linear-gradient(135deg, #d5b256, #b8860b)' }}
               >
                 <Crown size={16} className="text-white" />
               </div>
             </div>
 
             {/* Goal ring widget */}
-            <div className="dash-chip bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-4">
+            <div className="dash-chip bg-[#FBF9F0] border border-[#E7DEC7] rounded-2xl p-4 flex items-center gap-4">
               <div className="relative w-20 h-20 shrink-0">
                 <svg className="w-20 h-20 -rotate-90" viewBox="0 0 100 100">
-                  <circle cx="50" cy="50" r="44" fill="none" stroke="#EDE8F5" strokeWidth="9" />
+                  <circle cx="50" cy="50" r="44" fill="none" stroke="#E9E0CB" strokeWidth="9" />
                   <circle
                     className="dash-goal-fill"
                     cx="50"
@@ -113,7 +111,7 @@ const DashboardShowcase: React.FC = () => (
                   />
                   <defs>
                     <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stopColor="#f0c94d" />
+                      <stop offset="0%" stopColor="#d5b256" />
                       <stop offset="100%" stopColor="#b8860b" />
                     </linearGradient>
                   </defs>
@@ -131,13 +129,13 @@ const DashboardShowcase: React.FC = () => (
 
             {/* Money chip row */}
             <div className="grid grid-cols-2 gap-3">
-              <div className="dash-chip bg-white border border-gray-100 rounded-2xl px-4 py-3">
+              <div className="dash-chip bg-[#FBF9F0] border border-[#E7DEC7] rounded-2xl px-4 py-3">
                 <p className="text-xs text-black/50 font-medium">Daily allowance</p>
                 <p className="text-lg text-black font-semibold" style={{ letterSpacing: '-0.02em' }}>
                   ₹742 left
                 </p>
               </div>
-              <div className="dash-chip bg-[#2B2644] rounded-2xl px-4 py-3">
+              <div className="dash-chip bg-[#18241C] rounded-2xl px-4 py-3">
                 <p className="text-xs text-white/50 font-medium">Rent auto-set</p>
                 <p className="text-lg text-white font-semibold" style={{ letterSpacing: '-0.02em' }}>
                   ₹15,000
@@ -146,7 +144,7 @@ const DashboardShowcase: React.FC = () => (
             </div>
 
             {/* Chart */}
-            <div className="dash-chip bg-white border border-gray-100 rounded-2xl px-4 py-4">
+            <div className="dash-chip bg-[#FBF9F0] border border-[#E7DEC7] rounded-2xl px-4 py-4">
               <div className="flex items-center justify-between mb-3">
                 <p className="text-sm text-black font-medium">This week</p>
                 <p className="text-xs text-black/40">-8.2% spend</p>
@@ -159,7 +157,7 @@ const DashboardShowcase: React.FC = () => (
                     data-h={h}
                     style={{
                       height: 0,
-                      background: i === 5 ? 'linear-gradient(180deg, #f0c94d, #b8860b)' : '#DCD4EA',
+                      background: i === 5 ? 'linear-gradient(180deg, #d5b256, #b8860b)' : '#D9CFB8',
                     }}
                   />
                 ))}
@@ -171,7 +169,7 @@ const DashboardShowcase: React.FC = () => (
               {TXS.map((t) => (
                 <div
                   key={t.name}
-                  className="dash-tx bg-white border border-gray-100 rounded-2xl px-4 py-3 flex items-center gap-3"
+                  className="dash-tx bg-[#FBF9F0] border border-[#E7DEC7] rounded-2xl px-4 py-3 flex items-center gap-3"
                 >
                   <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${t.color}14` }}>
                     <t.icon size={16} style={{ color: t.color }} />

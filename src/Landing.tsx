@@ -496,11 +496,11 @@ const Landing: React.FC = () => {
   }, []);
 
   return (
-    <div ref={mainRef} className="flex flex-col bg-[#F5F5F5]">
+    <div ref={mainRef} className="flex flex-col bg-[#F4EFE4]">
       {/* Scroll progress bar */}
       <div
         className="scroll-progress fixed top-0 left-0 z-[60] h-[3px] w-0"
-        style={{ background: 'linear-gradient(90deg, #f0c94d, #b8860b)' }}
+        style={{ background: 'linear-gradient(90deg, #d5b256, #b8860b)' }}
       />
 
       {/* Hero Wrapper */}
@@ -545,7 +545,7 @@ const Landing: React.FC = () => {
 
       <FinaleSection />
 
-      <footer className="bg-[#F5F5F5] px-6 py-12">
+      <footer className="bg-[#F4EFE4] px-6 py-12">
         <div className="max-w-[88rem] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-black/50">© {new Date().getFullYear()} SpendSmart. Money, mastered.</p>
           <div className="flex items-center gap-6 text-sm text-black/60 font-medium">

@@ -106,14 +106,14 @@ const Dashboard: React.FC = () => {
   const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5]">
+    <div className="min-h-screen bg-[#F4EFE4]">
       {/* ── Top nav ── */}
-      <div className="sticky top-0 z-30 bg-[#F5F5F5]/90 backdrop-blur border-b border-black/5">
+      <div className="sticky top-0 z-30 bg-[#F4EFE4]/90 backdrop-blur border-b border-black/5">
         <div className="max-w-[88rem] mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center shadow-md"
-              style={{ background: 'linear-gradient(135deg, #f0c94d, #b8860b)' }}
+              style={{ background: 'linear-gradient(135deg, #d5b256, #b8860b)' }}
             >
               <Wallet size={18} className="text-white" />
             </div>
@@ -132,7 +132,7 @@ const Dashboard: React.FC = () => {
             </div>
             <button
               onClick={() => setCustomizing(true)}
-              className="text-sm bg-black text-white px-5 py-2 rounded-full font-medium hover:bg-gray-800 transition-colors duration-200 cursor-pointer"
+              className="text-sm bg-[#18241C] text-white px-5 py-2 rounded-full font-medium hover:bg-[#2A3B31] transition-colors duration-200 cursor-pointer"
             >
               Re-customize
             </button>
@@ -176,35 +176,29 @@ const Dashboard: React.FC = () => {
 
         {/* ── Balance cards ── */}
         <div className="grid sm:grid-cols-3 gap-4 mb-8">
-          <div className="dash-card rounded-2xl bg-white border border-gray-100 p-6">
+          <div className="dash-card rounded-2xl bg-[#FBF9F0] border border-[#E7DEC7] p-6">
             <p className="text-xs uppercase tracking-[0.2em] text-black/45 font-semibold mb-2">Monthly income</p>
-            <p className="text-3xl font-semibold text-black" style={{ letterSpacing: '-0.02em' }}>
-              {fmt(profile.inputs.income)}
-            </p>
+            <p className="font-serif text-3xl font-semibold text-black">{fmt(profile.inputs.income)}</p>
           </div>
 
-          <div className="dash-card rounded-2xl bg-[#2B2644] p-6">
+          <div className="dash-card rounded-2xl bg-[#18241C] p-6">
             <div className="flex items-center justify-between mb-2">
               <p className="text-xs uppercase tracking-[0.2em] text-white/50 font-semibold">Locked first</p>
               <Lock size={14} className="text-[#d4af37]" />
             </div>
-            <p className="text-3xl font-semibold text-white" style={{ letterSpacing: '-0.02em' }}>
-              {fmt(cfg.fixed)}
-            </p>
+            <p className="font-serif text-3xl font-semibold text-white">{fmt(cfg.fixed)}</p>
             <p className="text-xs text-white/50 mt-1">Rent + fixed bills, autopilot-held</p>
           </div>
 
-          <div className="dash-card rounded-2xl bg-white border border-gray-100 p-6">
+          <div className="dash-card rounded-2xl bg-[#FBF9F0] border border-[#E7DEC7] p-6">
             <p className="text-xs uppercase tracking-[0.2em] text-black/45 font-semibold mb-2">Allowance left today</p>
-            <p className="text-3xl font-semibold text-black" style={{ letterSpacing: '-0.02em' }}>
-              {fmt(allowanceLeft)}
-            </p>
-            <div className="mt-3 h-1.5 rounded-full overflow-hidden" style={{ background: '#EDE8F5' }}>
+            <p className="font-serif text-3xl font-semibold text-black">{fmt(allowanceLeft)}</p>
+            <div className="mt-3 h-1.5 rounded-full overflow-hidden" style={{ background: '#E9E0CB' }}>
               <div
                 className="h-full rounded-full transition-all duration-700"
                 style={{
                   width: `${allowancePct * 100}%`,
-                  background: allowancePct >= 1 ? '#c0392b' : 'linear-gradient(90deg, #f0c94d, #b8860b)',
+                  background: allowancePct >= 1 ? '#c0392b' : 'linear-gradient(90deg, #d5b256, #b8860b)',
                 }}
               />
             </div>

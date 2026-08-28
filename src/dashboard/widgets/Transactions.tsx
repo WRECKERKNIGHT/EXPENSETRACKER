@@ -12,7 +12,7 @@ interface TransactionsProps {
 
 const CAT_COLOR: Record<string, string> = {
   Food: '#B8860B',
-  Transport: '#2B2644',
+  Transport: '#18241C',
   Shopping: '#8a5d0b',
   Subscriptions: '#a06a15',
   Utilities: '#5c4f8a',
@@ -45,7 +45,7 @@ const Transactions: React.FC<TransactionsProps> = ({ tx, onAdd, onDelete, onRese
   };
 
   return (
-    <div className="rounded-2xl bg-white border border-gray-100 p-6">
+    <div className="rounded-2xl bg-[#FBF9F0] border border-[#E7DEC7] p-6">
       <div className="flex items-center justify-between mb-5">
         <h3 className="text-lg font-medium text-black" style={{ letterSpacing: '-0.02em' }}>
           Transactions · {tx.length}
@@ -70,7 +70,7 @@ const Transactions: React.FC<TransactionsProps> = ({ tx, onAdd, onDelete, onRese
         </select>
         <button
           onClick={submit}
-          className="inline-flex items-center justify-center gap-2 bg-black text-white text-sm font-medium px-5 py-2.5 rounded-xl hover:bg-gray-800 transition-colors duration-200 cursor-pointer"
+          className="inline-flex items-center justify-center gap-2 bg-[#18241C] text-white text-sm font-medium px-5 py-2.5 rounded-xl hover:bg-[#2A3B31] transition-colors duration-200 cursor-pointer"
         >
           <Plus size={16} /> Add
         </button>
@@ -83,7 +83,7 @@ const Transactions: React.FC<TransactionsProps> = ({ tx, onAdd, onDelete, onRese
         {sorted.map((t) => (
           <div
             key={t.id}
-            className="flex items-center gap-3 rounded-xl bg-[#F5F5F5] px-4 py-3"
+            className="flex items-center gap-3 rounded-xl bg-[#F4EFE4] px-4 py-3"
           >
             <span className="w-2 h-2 rounded-full shrink-0" style={{ background: CAT_COLOR[t.cat] || '#888' }} />
             <div className="flex-1 min-w-0">

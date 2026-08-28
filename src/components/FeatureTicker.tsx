@@ -14,7 +14,7 @@ const ITEMS = [
 ];
 
 const FeatureTicker: React.FC = () => (
-  <div className="bg-black py-4 overflow-hidden">
+  <div className="bg-[#18241C] py-4 overflow-hidden">
     <div className="ticker-track">
       {[...ITEMS, ...ITEMS].map((item, i) => (
         <span

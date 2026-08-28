@@ -17,7 +17,7 @@ interface AutopilotProps {
 }
 
 const Autopilot: React.FC<AutopilotProps> = ({ toggles, onChange }) => (
-  <div className="rounded-2xl bg-white border border-gray-100 p-6">
+  <div className="rounded-2xl bg-[#FBF9F0] border border-[#E7DEC7] p-6">
     <div className="flex items-center justify-between mb-5">
       <h3 className="text-lg font-medium text-black" style={{ letterSpacing: '-0.02em' }}>
         Autonomous autopilot
@@ -33,10 +33,10 @@ const Autopilot: React.FC<AutopilotProps> = ({ toggles, onChange }) => (
           <div
             key={a.id}
             className={`flex items-center gap-3 rounded-xl px-3 py-3 transition-colors duration-200 ${
-              on ? 'bg-[#F5F5F5]' : 'opacity-55'
+              on ? 'bg-[#F4EFE4]' : 'opacity-55'
             }`}
           >
-            <div className="w-9 h-9 rounded-lg bg-[#2B2644] flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 rounded-lg bg-[#18241C] flex items-center justify-center shrink-0">
               <Icon size={16} className="text-[#d4af37]" />
             </div>
             <div className="flex-1 min-w-0">

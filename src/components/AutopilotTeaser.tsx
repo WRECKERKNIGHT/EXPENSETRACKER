@@ -16,7 +16,7 @@ const AutoSmall = [
 
 export default function AutopilotTeaser() {
   return (
-    <section className="auto-section skew-target relative bg-[#2B2644] overflow-hidden px-6 py-28">
+    <section className="auto-section skew-target relative bg-[#18241C] overflow-hidden px-6 py-28">
       <div className="auto-stage relative max-w-[88rem] mx-auto flex flex-col lg:flex-row items-center justify-between gap-16">
         <div className="auto-copy max-w-xl self-start lg:self-auto">
           <p className="auto-chapter text-[#d4af37] text-xs uppercase tracking-[0.4em] font-semibold mb-3">
@@ -45,7 +45,7 @@ export default function AutopilotTeaser() {
           </div>
           <button
             onClick={() => go(PATH.dashboard)}
-            className="auto-cta mt-10 inline-flex items-center gap-2 bg-[#d4af37] text-[#2B2644] font-semibold px-6 py-3 rounded-full text-sm uppercase tracking-wider group"
+            className="auto-cta mt-10 inline-flex items-center gap-2 bg-[#d4af37] text-[#18241C] font-semibold px-6 py-3 rounded-full text-sm uppercase tracking-wider group"
           >
             Turn it on
             <Play className="size-4 transition-transform group-hover:translate-x-1" />
@@ -56,10 +56,10 @@ export default function AutopilotTeaser() {
           <div className="auto-word pointer-events-none absolute -top-24 -right-8 select-none text-[10rem] lg:text-[15rem] leading-none font-medium text-white/[0.06]">
             50%
           </div>
-          <div className="auto-card relative z-10 w-[19rem] rounded-3xl border border-white/10 bg-[#20204F]/80 p-7 backdrop-blur">
+          <div className="auto-card relative z-10 w-[19rem] rounded-3xl border border-white/10 bg-[#151F19]/80 p-7 backdrop-blur">
             <div className="mb-6 flex items-center justify-between">
               <p className="text-white/70 text-sm">Daily Autopilot</p>
-              <span className="rounded-full bg-[#d4af37] px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-[#2B2644]">
+              <span className="rounded-full bg-[#d4af37] px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-[#18241C]">
                 <span className="animate-pulse">●</span> LIVE
               </span>
             </div>
@@ -67,7 +67,7 @@ export default function AutopilotTeaser() {
               <p className="text-white/50 text-xs mb-1">Allowance left today</p>
               <p className="text-white text-3xl font-medium">₹460</p>
               <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
-                <div className="h-full w-[63%] rounded-full" style={{ background: 'linear-gradient(90deg,#f0c94d,#b8860b)' }} />
+                <div className="h-full w-[63%] rounded-full" style={{ background: 'linear-gradient(90deg,#d5b256,#b8860b)' }} />
               </div>
             </div>
             <div className="space-y-3">

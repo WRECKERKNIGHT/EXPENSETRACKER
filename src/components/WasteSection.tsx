@@ -10,7 +10,7 @@ const LINES = [
 ];
 
 const WasteSection: React.FC = () => (
-  <section className="waste-section skew-target relative bg-[#2B2644] overflow-hidden">
+  <section className="waste-section skew-target relative bg-[#18241C] overflow-hidden">
     <div className="waste-stage min-h-screen flex items-center overflow-hidden py-24">
       {/* Ambient glow */}
       <div
