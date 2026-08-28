@@ -48,12 +48,31 @@ const Landing: React.FC = () => {
       { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.14, delay: 0.4 }
     );
 
+    /* ── 1b. Hero title char split ── */
+    const heroChars = root.querySelectorAll('.hero-title .sc');
+    gsap.set(heroChars, { yPercent: 115, opacity: 0 });
+    gsap.to(heroChars, {
+      yPercent: 0,
+      opacity: 1,
+      duration: 0.7,
+      ease: 'power3.out',
+      stagger: 0.035,
+      delay: 0.35,
+    });
+
+    /* ── 1c. Video intro settle, then scroll parallax ── */
+    gsap.fromTo(
+      root.querySelector('.hero-video-el'),
+      { scale: 1.3 },
+      { scale: 1.14, duration: 1.6, ease: 'power2.out', delay: 0.1 }
+    );
+
     /* ── 2. Hero coin idle float ── */
     gsap.to('.hero-coin', { y: -16, rotation: 10, duration: 5, ease: 'sine.inOut', yoyo: true, repeat: -1 });
 
     /* ── 3. Hero parallax + fade on scroll away ── */
     gsap.to(root.querySelector('.hero-video-el'), {
-      scale: 1.14,
+      scale: 1.25,
       ease: 'none',
       scrollTrigger: {
         trigger: root.querySelector('.hero-scroll'),

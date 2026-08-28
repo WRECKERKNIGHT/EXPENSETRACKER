@@ -1,5 +1,6 @@
 import React from 'react';
 import Coin3D from './Coin3D';
+import SplitHeading from './SplitHeading';
 import { BrandMarquee, JoinUsButton } from './Marquee';
 import { go, PATH } from '../lib/router';
 
@@ -22,12 +23,14 @@ const HeroSection: React.FC = () => {
 
         {/* Content Overlay */}
         <div className="hero-fade relative z-10 flex flex-col items-start justify-start h-full p-12 pt-36">
-          <h1
-            className="hero-animate text-black text-5xl md:text-6xl font-medium leading-tight max-w-xl mb-4"
+          <SplitHeading
+            as="h1"
+            text="Every rupee\nhas a story."
+            highlight={['story.']}
+            emClass="text-[#B8860B]"
+            className="hero-title text-black text-5xl md:text-6xl font-medium leading-tight max-w-xl mb-4"
             style={{ letterSpacing: '-0.04em' }}
-          >
-            Every rupee<br />has a <em>story.</em>
-          </h1>
+          />
 
           <p
             className="hero-animate text-black/70 text-base md:text-lg max-w-md mb-8 leading-relaxed"
