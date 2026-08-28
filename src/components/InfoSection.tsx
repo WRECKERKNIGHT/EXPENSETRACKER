@@ -3,23 +3,21 @@ import { DiscoverButton } from './Marquee';
 
 const INFO_CARDS = [
   {
-    title: 'Always fluid,\nalways pegged.',
-    body: 'Keep fully dollar-anchored with on-demand access to funds — no lockups or waits.',
-    bg: '#2B2644',
-    titleColor: 'text-white',
-    bodyColor: 'text-white/60',
+    title: 'Rent first.',
+    body: 'Rent and fixed bills get locked before anything else. You only see what is truly yours to spend.',
   },
   {
     title: 'Fully\nautomated',
-    body: 'Skip the task of tuning positions yourself. USD Halo runs in the background for you.',
-    bg: '#2B2644',
-    titleColor: 'text-white',
-    bodyColor: 'text-white/60',
+    body: 'Skip typing expenses yourself. SMS parsing and OCR handle the heavy lifting in the background.',
+  },
+  {
+    title: 'Private by\ndesign',
+    body: 'Sensitive parsing runs locally on your device. Your money story stays yours.',
   },
 ];
 
 const InfoSection: React.FC = () => (
-  <section className="bg-[#F5F5F5] px-6 py-24">
+  <section id="about" className="bg-[#F5F5F5] px-6 py-24">
     <div className="max-w-[88rem] mx-auto">
       {/* Row 1: 2-col grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16 items-start">
@@ -28,12 +26,13 @@ const InfoSection: React.FC = () => (
             className="text-black text-4xl md:text-5xl font-medium leading-tight mb-8"
             style={{ letterSpacing: '-0.03em' }}
           >
-            Meet USD Halo.
+            Meet SpendSmart.
           </h2>
           <DiscoverButton />
         </div>
         <p className="text-black/70 text-2xl md:text-3xl leading-relaxed">
-          USD Halo is a reward-earning dollar coin that lets your savings grow while remaining tied to the U.S. dollar.
+          SpendSmart is the smart ledger that parses your bank messages, scans receipts and uses AI
+          to turn every rupee into clear, actionable insight — automatically.
         </p>
       </div>
 
@@ -53,41 +52,45 @@ const InfoSection: React.FC = () => (
               className="text-black text-2xl font-medium leading-snug"
               style={{ letterSpacing: '-0.02em' }}
             >
-              Savings that bloom
+              One ledger,<br />every rupee.
             </p>
             <p className="text-black/70 text-base max-w-xs">
-              Gain steady returns as your dollar tokens are routed into top-performing DeFi strategies.
+              Transactions from every bank, UPI app and receipt land in one living ledger —
+              categorized, searchable, always at hand.
             </p>
           </div>
         </div>
 
-        {/* Card 2 & 3 */}
-        {INFO_CARDS.map((card, i) => (
-          <div
-            key={i}
-            className="gsap-card rounded-2xl p-7 min-h-80 flex flex-col justify-between"
-            style={{ backgroundColor: card.bg }}
-          >
-            <p className={`text-2xl font-medium leading-snug whitespace-pre-line ${card.titleColor}`}>
-              {card.title}
-            </p>
-            <p className={`text-base ${card.bodyColor}`}>
-              {card.body}
-            </p>
-          </div>
-        ))}
+        {/* Cards 2–4 */}
+        <div
+          className="gsap-card rounded-2xl p-7 min-h-80 flex flex-col justify-between"
+          style={{ backgroundColor: '#2B2644' }}
+        >
+          <p className="text-2xl font-medium leading-snug whitespace-pre-line text-white">
+            {INFO_CARDS[0].title}
+          </p>
+          <p className="text-base text-white/60">{INFO_CARDS[0].body}</p>
+        </div>
 
-        {/* Card 4: empty spacer or additional content */}
+        <div
+          className="gsap-card rounded-2xl p-7 min-h-80 flex flex-col justify-between"
+          style={{ backgroundColor: '#2B2644' }}
+        >
+          <p className="text-2xl font-medium leading-snug whitespace-pre-line text-white">
+            {INFO_CARDS[1].title}
+          </p>
+          <p className="text-base text-white/60">{INFO_CARDS[1].body}</p>
+        </div>
+
         <div className="gsap-card rounded-2xl p-7 min-h-80 flex flex-col justify-between bg-white/50 border border-gray-100">
           <p
             className="text-black text-2xl font-medium leading-snug"
             style={{ letterSpacing: '-0.02em' }}
           >
-            Built for scale
+            {INFO_CARDS[2].title.split('\n')[0]}
+            {INFO_CARDS[2].title.includes('\n') ? <><br />{INFO_CARDS[2].title.split('\n')[1]}</> : null}
           </p>
-          <p className="text-black/70 text-base max-w-xs">
-            Enterprise-grade infrastructure designed to handle millions in TVL with zero downtime.
-          </p>
+          <p className="text-black/70 text-base max-w-xs">{INFO_CARDS[2].body}</p>
         </div>
       </div>
     </div>

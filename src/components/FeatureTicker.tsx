@@ -1,14 +1,16 @@
 import React from 'react';
 
 const ITEMS = [
-  'Reward-powered digital dollar',
-  '1:1 dollar pegged',
-  'Auto-compounding yields',
-  'Zero lockups',
-  'DeFi native',
-  'Treasury-grade',
-  'Instant redemptions',
-  'Audited & transparent',
+  'Track every rupee',
+  'Protect your rent',
+  'AI-powered insights',
+  'Ghost savings',
+  'Receipt OCR',
+  'Bank connected',
+  'Subscription hunter',
+  'No more spreadsheets',
+  'Daily allowance',
+  'On-device privacy',
 ];
 
 const FeatureTicker: React.FC = () => (
