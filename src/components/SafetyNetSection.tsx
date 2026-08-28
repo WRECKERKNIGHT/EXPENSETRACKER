@@ -11,7 +11,7 @@ const LINES = [
 ];
 
 const SafetyNetSection: React.FC = () => (
-  <section className="safety-section skew-target relative bg-[#18241C] overflow-hidden">
+  <section className="safety-section relative bg-[#18241C] overflow-hidden">
     <div className="safety-stage min-h-screen flex items-center py-24 overflow-hidden">
       {/* Ambient glow */}
       <div

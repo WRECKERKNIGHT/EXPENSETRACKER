@@ -5,7 +5,7 @@ import SplitHeading from './SplitHeading';
 import { go, PATH } from '../lib/router';
 
 const FinaleSection: React.FC = () => (
-  <section className="finale-section skew-target relative bg-[#18241C] overflow-hidden">
+  <section className="finale-section relative bg-[#18241C] overflow-hidden">
     <div className="finale-stage min-h-screen flex items-center justify-center py-24 overflow-hidden">
       <div
         className="absolute inset-0 pointer-events-none"
@@ -27,8 +27,8 @@ const FinaleSection: React.FC = () => (
           </div>
         </div>
 
-        <div className="finale-content" style={{ opacity: 0 }}>
-          <p className="text-[11px] uppercase tracking-[0.4em] text-[#d4af37] font-semibold mb-5">
+        <div className="finale-content">
+          <p className="finale-kicker text-[11px] uppercase tracking-[0.4em] text-[#d4af37] font-semibold mb-5">
             The Flip
           </p>
           <SplitHeading
@@ -39,11 +39,11 @@ const FinaleSection: React.FC = () => (
             className="finale-title text-white text-4xl md:text-6xl font-medium leading-[1.05] mb-7"
             style={{ letterSpacing: '-0.04em' }}
           />
-          <p className="text-white/70 text-base md:text-lg max-w-md mx-auto mb-10 leading-relaxed">
+          <p className="finale-sub text-white/70 text-base md:text-lg max-w-md mx-auto mb-10 leading-relaxed">
             Join SpendSmart — free forever for the first 10,000 users. Turn every coin into a story
             that ends in savings.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="finale-actions flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={() => go(PATH.dashboard)}
               className="inline-flex items-center gap-3 bg-white text-black text-base font-medium pl-8 pr-2 py-2 rounded-full hover:bg-gray-200 transition-colors duration-200 cursor-pointer"

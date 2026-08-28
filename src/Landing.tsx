@@ -29,6 +29,7 @@ const Landing: React.FC = () => {
     const gsap = window.gsap;
     const ST = window.ScrollTrigger;
     gsap.registerPlugin(ST);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     /* ── 0. Scroll progress bar ── */
     gsap.to('.scroll-progress', {
@@ -94,45 +95,36 @@ const Landing: React.FC = () => {
       },
     });
 
-    /* ── 4. Standard section reveals ── */
-    const reveals = root.querySelectorAll('.gsap-section');
-    gsap.set(reveals, { opacity: 0, y: 60 });
-    reveals.forEach((el) => {
-      gsap.to(el, {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none' },
-      });
+    /* ── 4. Standard section reveals (scrubbed, speed-synced) ── */
+    root.querySelectorAll<HTMLElement>('.gsap-section').forEach((el) => {
+      gsap.fromTo(
+        el,
+        { opacity: 0, y: 70 },
+        {
+          opacity: 1,
+          y: 0,
+          ease: 'none',
+          scrollTrigger: { trigger: el, start: 'top 92%', end: 'top 42%', scrub: 0.5 },
+        }
+      );
     });
 
     /* ── 4b. Split-title char reveals on scroll ── */
-    root.querySelectorAll('.split-title').forEach((h) => {
+    root.querySelectorAll<HTMLElement>('.split-title').forEach((h) => {
+      if (h.closest('.dash-show, .waste-section, .safety-section, .auto-section, .finale-section')) return;
       const chars = h.querySelectorAll('.sc');
-      gsap.set(chars, { yPercent: 115, opacity: 0 });
+      gsap.set(chars, { yPercent: 118, opacity: 0 });
       gsap.to(chars, {
         yPercent: 0,
         opacity: 1,
-        duration: 0.6,
-        ease: 'power3.out',
-        stagger: 0.02,
-        scrollTrigger: { trigger: h, start: 'top 88%', toggleActions: 'play none none none' },
+        ease: 'none',
+        duration: 0.7,
+        stagger: 0.01,
+        scrollTrigger: { trigger: h, start: 'top 88%', end: 'top 52%', scrub: 0.5 },
       });
     });
 
-    /* ── 4c. Velocity-reactive skew on major sections ── */
-    root.querySelectorAll('.skew-target').forEach((el) => {
-      const quick = gsap.quickTo(el, 'skewY', { duration: 0.4, ease: 'power3' });
-      ST.create({
-        onUpdate: (self: any) => {
-          const v = gsap.utils.clamp(-6, 6, (self.getVelocity() || 0) / -90);
-          quick(v);
-        },
-      });
-    });
-
-    /* ── 4d. Floating coins parallax rise on scroll ── */
+    /* ── 4c. Floating coins parallax rise on scroll ── */
     root.querySelectorAll('.float-coin').forEach((el) => {
       const dist = parseFloat(el.getAttribute('data-dist') || '90');
       gsap.fromTo(
@@ -153,170 +145,139 @@ const Landing: React.FC = () => {
     });
 
     /* ── 5. Info cards stagger ── */
-    const icards = root.querySelectorAll('.gsap-card');
-    gsap.set(icards, { opacity: 0, y: 50, scale: 0.96 });
-    gsap.to(icards, {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      duration: 0.8,
-      stagger: 0.1,
-      ease: 'power3.out',
-      scrollTrigger: { trigger: root.querySelector('.gsap-card-grid'), start: 'top 85%' },
-    });
-
-    /* ── 6. Waste — pinned scroll story (The Leak) ── */
-    gsap
-      .timeline({
-        scrollTrigger: {
-          trigger: root.querySelector('.waste-section'),
-          start: 'top top',
-          end: '+=380%',
-          pin: true,
-          scrub: 1,
-        },
-      })
-      .fromTo('.waste-chapter', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.05 }, 0)
-      .fromTo('.waste-heading', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.05 }, 0.02)
-      .fromTo(
-        '.waste-heading .sc',
-        { yPercent: 110, opacity: 0 },
-        { yPercent: 0, opacity: 1, duration: 0.05, stagger: 0.02 },
-        0.03
-      )
-      .fromTo('.waste-line-0', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.06 }, 0.07)
-      .fromTo('.waste-line-1', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.06 }, 0.14)
-      .fromTo('.waste-line-2', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.06 }, 0.21)
-      .fromTo('.waste-line-3', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.06 }, 0.28)
-      .fromTo(
-        '.waste-coin-0',
-        { opacity: 0, y: -140, rotation: 0 },
-        { opacity: 1, y: 220, rotation: 540, duration: 0.12 },
-        0.08
-      )
-      .fromTo(
-        '.waste-coin-1',
-        { opacity: 0, y: -180, rotation: 0 },
-        { opacity: 1, y: 170, rotation: -540, duration: 0.12 },
-        0.14
-      )
-      .fromTo(
-        '.waste-coin-2',
-        { opacity: 0, y: -220, rotation: 0 },
-        { opacity: 1, y: 120, rotation: 720, duration: 0.12 },
-        0.2
-      )
-      .fromTo(
-        '.waste-coin-3',
-        { opacity: 0, y: -260, rotation: 0 },
-        { opacity: 1, y: 60, rotation: -720, duration: 0.12 },
-        0.26
-      )
-      .fromTo('.waste-stat', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.06 }, 0.38)
-      .to('.waste-stage', { opacity: 0, y: -50, duration: 0.08 }, 0.92);
-
-    /* ── 7. DashboardShowcase ── */
-    gsap.fromTo(
-      root.querySelector('.dash-phone'),
-      { opacity: 0, y: 60, rotationY: -8, transformPerspective: 900 },
-      {
+    const cards = root.querySelector('.gsap-card-grid') as HTMLElement | null;
+    if (cards) {
+      const gcards = cards.querySelectorAll('.gsap-card');
+      gsap.set(gcards, { opacity: 0, y: 70, scale: 0.96 });
+      gsap.to(gcards, {
         opacity: 1,
         y: 0,
-        rotationY: 0,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: '.dash-phone', start: 'top 80%', toggleActions: 'play none none none' },
-      }
-    );
-    root.querySelectorAll('.dash-bullet').forEach((el, i) => {
-      gsap.fromTo(
-        el,
-        { opacity: 0, x: -40 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.7,
-          delay: i * 0.12,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.dash-phone', start: 'top 78%' },
-        }
-      );
-    });
-
-    const goalFill = root.querySelector<SVGCircleElement>('.dash-goal-fill');
-    const goalText = root.querySelector<HTMLElement>('.dash-goal-text');
-    if (goalFill && goalText) {
-      const C = 276.46;
-      const target = 0.68;
-      const obj = { v: 0 };
-      const tt = { trigger: '.dash-phone', start: 'top 70%', toggleActions: 'play none none none' };
-      gsap.fromTo(
-        goalFill,
-        { strokeDashoffset: C },
-        { strokeDashoffset: C * (1 - target), duration: 1.8, ease: 'power2.inOut', scrollTrigger: tt }
-      );
-      gsap.to(obj, {
-        v: target,
-        duration: 1.8,
-        ease: 'power2.inOut',
-        scrollTrigger: tt,
-        onUpdate: () => {
-          goalText.textContent = Math.round(obj.v * 100) + '%';
-        },
+        scale: 1,
+        ease: 'none',
+        duration: 0.7,
+        stagger: 0.06,
+        scrollTrigger: { trigger: cards, start: 'top 85%', end: 'top 30%', scrub: 0.5 },
       });
     }
 
-    const bars = root.querySelectorAll('.dash-bar');
-    gsap.to(bars, {
-      height: (i: number, el: any) => el.getAttribute('data-h') + '%',
-      duration: 0.6,
-      ease: 'power3.out',
-      stagger: 0.08,
-      scrollTrigger: { trigger: '.dash-phone', start: 'top 65%', toggleActions: 'play none none none' },
-    });
-    root.querySelectorAll('.dash-chip').forEach((el, i) => {
-      gsap.fromTo(
-        el,
-        { opacity: 0, scale: 0.92 },
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.5,
-          delay: i * 0.08,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.dash-phone', start: 'top 60%' },
-        }
-      );
-    });
-    root.querySelectorAll('.dash-tx').forEach((el, i) => {
-      gsap.fromTo(
-        el,
-        { opacity: 0, x: 40 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.5,
-          delay: i * 0.1,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.dash-phone', start: 'top 55%' },
-        }
-      );
-    });
+    /* ── Chapter engine: scrubbed, sequential choreography (no pins) ── */
+    const chapter = (
+      trigger: Element | null,
+      cues: Array<{ sel: string; from: any; to: any; dur?: number }>,
+      start = 'top 80%',
+      end = 'top 15%'
+    ) => {
+      if (!trigger) return;
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger, start, end, scrub: 0.5 },
+        defaults: { ease: 'power1.inOut' },
+      });
+      let t = 0;
+      cues.forEach((cue) => {
+        const dur = cue.dur ?? 0.1;
+        tl.fromTo(cue.sel, cue.from, { ...cue.to, duration: dur }, t);
+        t += dur;
+      });
+    };
+
+    /* ── 6. Waste — The Leak ── */
+    chapter(
+      root.querySelector('.waste-section'),
+      [
+        { sel: '.waste-chapter', from: { opacity: 0, y: 16 }, to: { opacity: 1, y: 0 }, dur: 0.05 },
+        { sel: '.waste-heading', from: { opacity: 0, y: 24 }, to: { opacity: 1, y: 0 }, dur: 0.05 },
+        { sel: '.waste-heading .sc', from: { yPercent: 115, opacity: 0 }, to: { yPercent: 0, opacity: 1 }, dur: 0.09 },
+        { sel: '.waste-coin-0', from: { opacity: 0, y: 120, rotation: -40, scale: 0.8 }, to: { opacity: 1, y: 0, rotation: 360, scale: 1 }, dur: 0.09 },
+        { sel: '.waste-coin-1', from: { opacity: 0, y: 140, rotation: 40, scale: 0.8 }, to: { opacity: 1, y: 0, rotation: -360, scale: 1 }, dur: 0.09 },
+        { sel: '.waste-coin-2', from: { opacity: 0, y: 160, rotation: -60, scale: 0.8 }, to: { opacity: 1, y: 0, rotation: 540, scale: 1 }, dur: 0.09 },
+        { sel: '.waste-coin-3', from: { opacity: 0, y: 180, rotation: 60, scale: 0.8 }, to: { opacity: 1, y: 0, rotation: -540, scale: 1 }, dur: 0.09 },
+        { sel: '.waste-line-0', from: { opacity: 0, x: -26 }, to: { opacity: 1, x: 0 }, dur: 0.045 },
+        { sel: '.waste-line-1', from: { opacity: 0, x: -26 }, to: { opacity: 1, x: 0 }, dur: 0.045 },
+        { sel: '.waste-line-2', from: { opacity: 0, x: -26 }, to: { opacity: 1, x: 0 }, dur: 0.045 },
+        { sel: '.waste-line-3', from: { opacity: 0, x: -26 }, to: { opacity: 1, x: 0 }, dur: 0.045 },
+        { sel: '.waste-stat', from: { opacity: 0, y: 14 }, to: { opacity: 1, y: 0 }, dur: 0.045 },
+      ],
+      'top 82%',
+      'top 12%'
+    );
+    gsap.fromTo(
+      root.querySelector('.waste-stage'),
+      { y: 0 },
+      {
+        y: -70,
+        ease: 'none',
+        scrollTrigger: { trigger: '.waste-section', start: 'top 0%', end: 'top -80%', scrub: true },
+      }
+    );
+
+    /* ── 7. DashboardShowcase ── */
+    const phone = root.querySelector('.dash-phone') as HTMLElement | null;
+    const goalFill = root.querySelector<SVGCircleElement>('.dash-goal-fill');
+    const goalText = root.querySelector<HTMLElement>('.dash-goal-text');
+    if (phone) {
+      const C = 276.46;
+      const counter = { v: 0 };
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: root.querySelector('.dash-show'), start: 'top 82%', end: 'top 5%', scrub: 0.6 },
+        defaults: { ease: 'power1.inOut' },
+      });
+      tl.fromTo('.dash-kicker', { opacity: 0, y: 14 }, { opacity: 1, y: 0 }, 0)
+        .fromTo('.dash-show .split-title .sc', { yPercent: 118, opacity: 0 }, { yPercent: 0, opacity: 1 }, 0.01)
+        .fromTo(phone, { opacity: 0, y: 90, rotationY: -10, transformPerspective: 900 }, { opacity: 1, y: 0, rotationY: 0 }, 0.06)
+        .fromTo('.dash-bullet', { opacity: 0, x: -30 }, { opacity: 1, x: 0, stagger: 0.05 }, 0.14)
+        .fromTo(
+          phone.querySelectorAll('.dash-chip'),
+          { opacity: 0, y: 14, scale: 0.94 },
+          { opacity: 1, y: 0, scale: 1, stagger: 0.04 },
+          0.26
+        )
+        .fromTo(
+          phone.querySelectorAll('.dash-bar'),
+          { height: '0%' },
+          { height: (i: number, el: any) => el.getAttribute('data-h') + '%', stagger: 0.03 },
+          0.31
+        )
+        .fromTo(
+          goalFill,
+          { strokeDashoffset: C },
+          { strokeDashoffset: C * (1 - 0.68) },
+          0.31
+        )
+        .to(
+          counter,
+          {
+            v: 0.68,
+            onUpdate: () => {
+              if (goalText) goalText.textContent = Math.round(counter.v * 100) + '%';
+            },
+          },
+          0.31
+        )
+        .fromTo(
+          phone.querySelectorAll('.dash-tx'),
+          { opacity: 0, x: 26 },
+          { opacity: 1, x: 0, stagger: 0.04 },
+          0.37
+        );
+    }
     gsap.to('.dash-coin-0', { y: -14, rotation: 10, duration: 4.5, ease: 'sine.inOut', yoyo: true, repeat: -1 });
     gsap.to('.dash-coin-1', { y: -18, rotation: -12, duration: 6, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 0.5 });
 
     /* ── 8. Features stagger ── */
-    const fc = root.querySelectorAll('.feature-card');
-    gsap.set(fc, { opacity: 0, y: 46, scale: 0.95, transformPerspective: 900 });
-    gsap.to(fc, {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      duration: 0.7,
-      ease: 'power3.out',
-      stagger: 0.09,
-      scrollTrigger: { trigger: root.querySelector('.features-grid'), start: 'top 82%' },
-    });
+    const fg = root.querySelector('.features-grid') as HTMLElement | null;
+    if (fg) {
+      const fc = fg.querySelectorAll('.feature-card');
+      gsap.set(fc, { opacity: 0, y: 54, scale: 0.97, transformPerspective: 900 });
+      gsap.to(fc, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        ease: 'none',
+        duration: 0.75,
+        stagger: 0.05,
+        scrollTrigger: { trigger: fg, start: 'top 85%', end: 'top 25%', scrub: 0.5 },
+      });
+    }
 
     /* ── 8b. Feature card 3D tilt on hover ── */
     const tiltCleanups: Array<() => void> = [];
@@ -344,87 +305,77 @@ const Landing: React.FC = () => {
       });
     });
 
-    /* ── 9. SafetyNet — pinned scroll story ── */
-    gsap
-      .timeline({
-        scrollTrigger: {
-          trigger: root.querySelector('.safety-section'),
-          start: 'top top',
-          end: '+=340%',
-          pin: true,
-          scrub: 1,
-        },
-      })
-      .fromTo('.safety-chapter', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.05 }, 0)
-      .fromTo('.safety-heading', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.05 }, 0.02)
-      .fromTo(
-        '.safety-heading .sc',
-        { yPercent: 110, opacity: 0 },
-        { yPercent: 0, opacity: 1, duration: 0.05, stagger: 0.02 },
-        0.03
-      )
-      .fromTo('.safety-coin-0', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 0.08 }, 0.1)
-      .fromTo('.safety-coin-1', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 0.08 }, 0.17)
-      .fromTo('.safety-coin-2', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 0.08 }, 0.24)
-      .fromTo('.safety-coin-3', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 0.08 }, 0.31)
-      .fromTo(
-        '.safety-shield',
-        { opacity: 0, scale: 0.7 },
-        { opacity: 1, scale: 1, duration: 0.08, ease: 'back.out(1.7)' },
-        0.38
-      )
-      .fromTo('.safety-line-0', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.05 }, 0.48)
-      .fromTo('.safety-line-1', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.05 }, 0.56)
-      .fromTo('.safety-line-2', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.05 }, 0.64)
-      .to('.safety-stage', { opacity: 0, y: -50, duration: 0.07 }, 0.94);
+    /* ── 9. SafetyNet — The Shield ── */
+    chapter(
+      root.querySelector('.safety-section'),
+      [
+        { sel: '.safety-chapter', from: { opacity: 0, y: 16 }, to: { opacity: 1, y: 0 }, dur: 0.05 },
+        { sel: '.safety-heading', from: { opacity: 0, y: 24 }, to: { opacity: 1, y: 0 }, dur: 0.05 },
+        { sel: '.safety-heading .sc', from: { yPercent: 115, opacity: 0 }, to: { yPercent: 0, opacity: 1 }, dur: 0.09 },
+        { sel: '.safety-coin-3', from: { opacity: 0, y: 100, scale: 0.7 }, to: { opacity: 1, y: 0, scale: 1 }, dur: 0.06 },
+        { sel: '.safety-coin-2', from: { opacity: 0, y: 100, scale: 0.7 }, to: { opacity: 1, y: 0, scale: 1 }, dur: 0.06 },
+        { sel: '.safety-coin-1', from: { opacity: 0, y: 100, scale: 0.7 }, to: { opacity: 1, y: 0, scale: 1 }, dur: 0.06 },
+        { sel: '.safety-coin-0', from: { opacity: 0, y: 100, scale: 0.7 }, to: { opacity: 1, y: 0, scale: 1 }, dur: 0.06 },
+        { sel: '.safety-shield', from: { opacity: 0, scale: 0.6, y: 30 }, to: { opacity: 1, scale: 1, y: 0, ease: 'back.out(1.6)' }, dur: 0.1 },
+        { sel: '.safety-line-0', from: { opacity: 0, x: -26 }, to: { opacity: 1, x: 0 }, dur: 0.05 },
+        { sel: '.safety-line-1', from: { opacity: 0, x: -26 }, to: { opacity: 1, x: 0 }, dur: 0.05 },
+        { sel: '.safety-line-2', from: { opacity: 0, x: -26 }, to: { opacity: 1, x: 0 }, dur: 0.05 },
+        { sel: '.safety-line-3', from: { opacity: 0, x: -26 }, to: { opacity: 1, x: 0 }, dur: 0.05 },
+      ],
+      'top 82%',
+      'top 12%'
+    );
+    gsap.fromTo(
+      root.querySelector('.safety-stage'),
+      { y: 0 },
+      {
+        y: -70,
+        ease: 'none',
+        scrollTrigger: { trigger: '.safety-section', start: 'top 0%', end: 'top -80%', scrub: true },
+      }
+    );
 
     /* ── 10. HowItWorks steps ── */
-    const steps = root.querySelectorAll('.step-card');
-    steps.forEach((el, i) => gsap.set(el, { opacity: 0, x: i % 2 ? 70 : -70, y: 30 }));
-    gsap.to(steps, {
-      opacity: 1,
-      x: 0,
-      y: 0,
-      duration: 0.8,
-      ease: 'power3.out',
-      stagger: 0.16,
-      scrollTrigger: { trigger: root.querySelector('.steps-grid'), start: 'top 82%' },
-    });
+    const sgrid = root.querySelector('.steps-grid') as HTMLElement | null;
+    if (sgrid) {
+      const steps = sgrid.querySelectorAll('.step-card');
+      gsap.set(steps, { opacity: 0, x: (i: number) => (i % 2 ? 80 : -80), y: 40 });
+      gsap.to(steps, {
+        opacity: 1,
+        x: 0,
+        y: 0,
+        ease: 'none',
+        duration: 0.7,
+        stagger: 0.08,
+        scrollTrigger: { trigger: sgrid, start: 'top 85%', end: 'top 30%', scrub: 0.5 },
+      });
+    }
 
-    /* ── 10b. Autopilot — pinned scroll story ── */
-    gsap
-      .timeline({
-        scrollTrigger: {
-          trigger: root.querySelector('.auto-section'),
-          start: 'top top',
-          end: '+=320%',
-          pin: true,
-          scrub: 1,
-        },
-      })
-      .fromTo('.auto-chapter', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.05 }, 0)
-      .fromTo('.auto-heading', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.05 }, 0.02)
-      .fromTo('.auto-sub', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.05 }, 0.06)
-      .fromTo(
-        '.auto-line',
-        { opacity: 0, x: -36 },
-        { opacity: 1, x: 0, duration: 0.05, stagger: 0.04 },
-        0.1
-      )
-      .fromTo('.auto-cta', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.05 }, 0.24)
-      .fromTo(
-        '.auto-word',
-        { opacity: 0, scale: 0.8, yPercent: 60 },
-        { opacity: 1, scale: 1, yPercent: 0, duration: 0.1, ease: 'power1.out' },
-        0.12
-      )
-      .fromTo(
-        '.auto-card',
-        { opacity: 0, y: 70, rotation: 3 },
-        { opacity: 1, y: 0, rotation: 0, duration: 0.12, ease: 'power1.out' },
-        0.2
-      )
-      .to('.auto-stage', { opacity: 0, y: -50, duration: 0.08 }, 0.94);
+    /* ── 10b. Autopilot — Sense the machine ── */
+    chapter(
+      root.querySelector('.auto-section'),
+      [
+        { sel: '.auto-chapter', from: { opacity: 0, y: 16 }, to: { opacity: 1, y: 0 }, dur: 0.05 },
+        { sel: '.auto-heading', from: { opacity: 0, y: 24 }, to: { opacity: 1, y: 0 }, dur: 0.05 },
+        { sel: '.auto-heading .sc', from: { yPercent: 115, opacity: 0 }, to: { yPercent: 0, opacity: 1 }, dur: 0.08 },
+        { sel: '.auto-sub', from: { opacity: 0, y: 18 }, to: { opacity: 1, y: 0 }, dur: 0.05 },
+        { sel: '.auto-line', from: { opacity: 0, x: -30 }, to: { opacity: 1, x: 0, stagger: 0.04 }, dur: 0.12 },
+        { sel: '.auto-word', from: { opacity: 0, scale: 0.82 }, to: { opacity: 1, scale: 1 }, dur: 0.12 },
+        { sel: '.auto-card', from: { opacity: 0, y: 80, rotation: 3, scale: 0.96 }, to: { opacity: 1, y: 0, rotation: 0, scale: 1 }, dur: 0.14 },
+        { sel: '.auto-cta', from: { opacity: 0, y: 18 }, to: { opacity: 1, y: 0 }, dur: 0.05 },
+      ],
+      'top 84%',
+      'top 10%'
+    );
+    gsap.fromTo(
+      root.querySelector('.auto-word'),
+      { y: 70 },
+      {
+        y: -70,
+        ease: 'none',
+        scrollTrigger: { trigger: '.auto-section', start: 'top bottom', end: 'bottom top', scrub: true },
+      }
+    );
 
     /* ── 11. Stats count-up ── */
     root.querySelectorAll('.stat-count').forEach((el) => {
@@ -444,52 +395,51 @@ const Landing: React.FC = () => {
     });
 
     /* ── 12. Testimonial flip-in ── */
+    const tcard = root.querySelector('.testimonial-card') as HTMLElement | null;
+    if (tcard) {
+      gsap.fromTo(
+        tcard,
+        { opacity: 0, rotationY: -10, y: 46 },
+        {
+          opacity: 1,
+          rotationY: 0,
+          y: 0,
+          ease: 'none',
+          scrollTrigger: { trigger: tcard, start: 'top 86%', end: 'top 42%', scrub: 0.5 },
+        }
+      );
+    }
+
+    /* ── 13. Finale — The Flip ── */
+    chapter(
+      root.querySelector('.finale-section'),
+      [
+        { sel: '.finale-ring', from: { scale: 0.5, opacity: 0, rotation: -30 }, to: { scale: 1.15, opacity: 0.65, rotation: 0 }, dur: 0.14 },
+        { sel: '.finale-coin', from: { opacity: 0, rotationY: -220, rotationX: -16, scale: 0.7 }, to: { opacity: 1, rotationY: 180, rotationX: 4, scale: 1, transformPerspective: 900 }, dur: 0.2 },
+        { sel: '.finale-kicker', from: { opacity: 0, y: 16 }, to: { opacity: 1, y: 0 }, dur: 0.05 },
+        { sel: '.finale-title', from: { opacity: 0, y: 22 }, to: { opacity: 1, y: 0 }, dur: 0.05 },
+        { sel: '.finale-title .sc', from: { yPercent: 115, opacity: 0 }, to: { yPercent: 0, opacity: 1 }, dur: 0.1 },
+        { sel: '.finale-sub', from: { opacity: 0, y: 18 }, to: { opacity: 1, y: 0 }, dur: 0.05 },
+        { sel: '.finale-actions', from: { opacity: 0, y: 22 }, to: { opacity: 1, y: 0 }, dur: 0.05 },
+      ],
+      'top 84%',
+      'top 20%'
+    );
     gsap.fromTo(
-      root.querySelector('.testimonial-card'),
-      { opacity: 0, rotationY: -14, y: 50 },
+      root.querySelector('.finale-stage'),
+      { y: 0 },
       {
-        opacity: 1,
-        rotationY: 0,
-        y: 0,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: '.testimonial-card', start: 'top 85%' },
+        y: -60,
+        ease: 'none',
+        scrollTrigger: { trigger: '.finale-section', start: 'top 0%', end: 'top -80%', scrub: true },
       }
     );
 
-    /* ── 13. Finale — pinned coin flip ── */
-    gsap
-      .timeline({
-        scrollTrigger: {
-          trigger: root.querySelector('.finale-section'),
-          start: 'top top',
-          end: '+=300%',
-          pin: true,
-          scrub: 1,
-        },
-      })
-      .fromTo(
-        '.finale-coin',
-        { rotationY: -360, rotationX: 10, scale: 0.6, transformPerspective: 900 },
-        { rotationY: 360, rotationX: -4, scale: 1, duration: 0.55, ease: 'power1.inOut' },
-        0.02
-      )
-      .fromTo(
-        '.finale-ring',
-        { scale: 0.4, opacity: 0, rotation: -20 },
-        { scale: 1.25, opacity: 0.7, rotation: 0, duration: 0.55 },
-        0.02
-      )
-      .fromTo('.finale-content', { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.1 }, 0.45)
-      .fromTo(
-        '.finale-title .sc',
-        { yPercent: 110, opacity: 0 },
-        { yPercent: 0, opacity: 1, duration: 0.06, stagger: 0.015 },
-        0.5
-      )
-      .to('.finale-stage', { opacity: 0, scale: 0.96, duration: 0.06 }, 0.95);
+    const refresh = () => ST.refresh();
+    window.addEventListener('load', refresh);
 
     return () => {
+      window.removeEventListener('load', refresh);
       tiltCleanups.forEach((fn) => fn());
       ST.getAll().forEach((t: any) => t.kill());
     };
@@ -519,7 +469,7 @@ const Landing: React.FC = () => {
 
       <WasteSection />
 
-      <div className="gsap-section skew-target">
+      <div className="gsap-section">
         <DashboardShowcase />
       </div>
 

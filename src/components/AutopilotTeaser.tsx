@@ -16,7 +16,7 @@ const AutoSmall = [
 
 export default function AutopilotTeaser() {
   return (
-    <section className="auto-section skew-target relative bg-[#18241C] overflow-hidden px-6 py-28">
+    <section className="auto-section relative bg-[#18241C] overflow-hidden px-6 py-28">
       <div className="auto-stage relative max-w-[88rem] mx-auto flex flex-col lg:flex-row items-center justify-between gap-16">
         <div className="auto-copy max-w-xl self-start lg:self-auto">
           <p className="auto-chapter text-[#d4af37] text-xs uppercase tracking-[0.4em] font-semibold mb-3">

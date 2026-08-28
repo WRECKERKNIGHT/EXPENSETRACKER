@@ -30,11 +30,11 @@ const TXS = [
 ];
 
 const DashboardShowcase: React.FC = () => (
-  <section className="bg-[#F4EFE4] px-6 py-28 overflow-hidden">
+  <section className="dash-show bg-[#F4EFE4] px-6 py-28 overflow-hidden">
     <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
       {/* Copy */}
       <div>
-        <p className="text-[#B8860B] text-xs uppercase tracking-[0.4em] font-semibold mb-4">
+        <p className="dash-kicker text-[#B8860B] text-xs uppercase tracking-[0.4em] font-semibold mb-4">
           Your Dashboard
         </p>
         <SplitHeading
