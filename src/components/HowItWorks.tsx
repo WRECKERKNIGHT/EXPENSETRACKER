@@ -1,17 +1,34 @@
 import React from 'react';
-import { Landmark, TrendingUp, MonitorPlay } from 'lucide-react';
+import { Smartphone, Sparkles, TrendingUp } from 'lucide-react';
 
 const STEPS = [
-  { icon: Landmark, num: '01', title: 'Connect', desc: 'Deposit dollars and receive your USD Halo balance instantly.' },
-  { icon: TrendingUp, num: '02', title: 'Earn', desc: 'Tokens are routed into proven strategies automatically, around the clock.' },
-  { icon: MonitorPlay, num: '03', title: 'Live', desc: 'Track, withdraw, or compound any time. No forms, no waits.' },
+  {
+    icon: Smartphone,
+    num: '01',
+    title: 'Connect',
+    desc: 'Link your bank, import your SMS, or upload receipts and CSV statements.',
+  },
+  {
+    icon: Sparkles,
+    num: '02',
+    title: 'Watch it think',
+    desc: 'AI sorts every transaction into categories and flags repeats in seconds.',
+  },
+  {
+    icon: TrendingUp,
+    num: '03',
+    title: 'Get richer',
+    desc: 'A daily allowance, rent shield and forecasts keep you ahead of every bill.',
+  },
 ];
 
 const HowItWorks: React.FC = () => (
-  <section className="bg-[#F5F5F5] px-6 pb-24">
+  <section id="how" className="bg-[#F5F5F5] px-6 pb-24">
     <div className="max-w-[88rem] mx-auto">
       <div className="max-w-2xl mb-16">
-        <p className="text-black/60 text-sm mb-3">Chapter 04 — The Flow</p>
+        <p className="text-[#B8860B] text-xs uppercase tracking-[0.4em] font-semibold mb-3">
+          Chapter 04 — The Flow
+        </p>
         <h2
           className="text-black text-4xl md:text-6xl font-medium leading-[1.05]"
           style={{ letterSpacing: '-0.04em' }}
@@ -32,7 +49,10 @@ const HowItWorks: React.FC = () => (
             >
               {s.num}
             </span>
-            <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center mb-7">
+            <div
+              className="w-12 h-12 rounded-full flex items-center justify-center mb-7"
+              style={{ background: 'linear-gradient(135deg, #f0c94d, #b8860b)' }}
+            >
               <s.icon size={20} className="text-white" />
             </div>
             <h3

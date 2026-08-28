@@ -1,10 +1,10 @@
 import React from 'react';
 
 const STATS = [
-  { value: '420', decimals: 0, suffix: 'M+', label: 'Total value secured' },
-  { value: '8', decimals: 0, suffix: '', label: 'Yield strategies routed' },
-  { value: '99.9', decimals: 1, suffix: '%', label: 'Infrastructure uptime' },
-  { value: '24', decimals: 0, suffix: '/7', label: 'On-demand redemptions' },
+  { value: '24', decimals: 0, suffix: '+', label: 'Smart categories' },
+  { value: '98', decimals: 0, suffix: '%', label: 'Parsing accuracy' },
+  { value: '500', decimals: 0, suffix: '+', label: 'Transactions tracked' },
+  { value: '3', decimals: 0, suffix: ' min', label: 'To full setup' },
 ];
 
 const StatsSection: React.FC = () => (
