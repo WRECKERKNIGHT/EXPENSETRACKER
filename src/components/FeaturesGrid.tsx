@@ -79,7 +79,7 @@ const FeaturesGrid: React.FC = () => (
         {FEATURES.map((f) => (
           <div
             key={f.title}
-            className="feature-card rounded-2xl p-7 min-h-56 flex flex-col justify-between bg-white border border-gray-100 hover:border-gray-200 transition-colors duration-300"
+            className="feature-card tilt-card rounded-2xl p-7 min-h-56 flex flex-col justify-between bg-white border border-gray-100 hover:border-gray-200 transition-colors duration-300"
           >
             <div className="w-11 h-11 rounded-xl bg-[#2B2644] flex items-center justify-center mb-6">
               <f.icon size={20} className="text-[#d4af37]" />

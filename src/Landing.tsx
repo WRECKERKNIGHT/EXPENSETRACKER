@@ -307,7 +307,7 @@ const Landing: React.FC = () => {
 
     /* ── 8. Features stagger ── */
     const fc = root.querySelectorAll('.feature-card');
-    gsap.set(fc, { opacity: 0, y: 46, scale: 0.95 });
+    gsap.set(fc, { opacity: 0, y: 46, scale: 0.95, transformPerspective: 900 });
     gsap.to(fc, {
       opacity: 1,
       y: 0,
@@ -316,6 +316,32 @@ const Landing: React.FC = () => {
       ease: 'power3.out',
       stagger: 0.09,
       scrollTrigger: { trigger: root.querySelector('.features-grid'), start: 'top 82%' },
+    });
+
+    /* ── 8b. Feature card 3D tilt on hover ── */
+    const tiltCleanups: Array<() => void> = [];
+    root.querySelectorAll<HTMLElement>('.tilt-card').forEach((el) => {
+      const rx = gsap.quickTo(el, 'rotationX', { duration: 0.35, ease: 'power2' });
+      const ry = gsap.quickTo(el, 'rotationY', { duration: 0.35, ease: 'power2' });
+      const onMove = (e: MouseEvent) => {
+        const r = el.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        ry(px * 8);
+        rx(-py * 8);
+      };
+      const onLeave = () => {
+        ry(0);
+        rx(0);
+      };
+      el.addEventListener('mousemove', onMove);
+      el.addEventListener('mouseleave', onLeave);
+      tiltCleanups.push(() => {
+        el.removeEventListener('mousemove', onMove);
+        el.removeEventListener('mouseleave', onLeave);
+        ry(0);
+        rx(0);
+      });
     });
 
     /* ── 9. SafetyNet — pinned scroll story ── */
@@ -464,6 +490,7 @@ const Landing: React.FC = () => {
       .to('.finale-stage', { opacity: 0, scale: 0.96, duration: 0.06 }, 0.95);
 
     return () => {
+      tiltCleanups.forEach((fn) => fn());
       ST.getAll().forEach((t: any) => t.kill());
     };
   }, []);
