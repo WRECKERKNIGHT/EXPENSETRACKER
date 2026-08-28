@@ -8,6 +8,7 @@ import DashboardShowcase from './components/DashboardShowcase';
 import FeaturesGrid from './components/FeaturesGrid';
 import SafetyNetSection from './components/SafetyNetSection';
 import HowItWorks from './components/HowItWorks';
+import AutopilotTeaser from './components/AutopilotTeaser';
 import StatsSection from './components/StatsSection';
 import TestimonialSection from './components/TestimonialSection';
 import FinaleSection from './components/FinaleSection';
@@ -364,6 +365,41 @@ const Landing: React.FC = () => {
       scrollTrigger: { trigger: root.querySelector('.steps-grid'), start: 'top 82%' },
     });
 
+    /* ── 10b. Autopilot — pinned scroll story ── */
+    gsap
+      .timeline({
+        scrollTrigger: {
+          trigger: root.querySelector('.auto-section'),
+          start: 'top top',
+          end: '+=320%',
+          pin: true,
+          scrub: 1,
+        },
+      })
+      .fromTo('.auto-chapter', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.05 }, 0)
+      .fromTo('.auto-heading', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.05 }, 0.02)
+      .fromTo('.auto-sub', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.05 }, 0.06)
+      .fromTo(
+        '.auto-line',
+        { opacity: 0, x: -36 },
+        { opacity: 1, x: 0, duration: 0.05, stagger: 0.04 },
+        0.1
+      )
+      .fromTo('.auto-cta', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.05 }, 0.24)
+      .fromTo(
+        '.auto-word',
+        { opacity: 0, scale: 0.8, yPercent: 60 },
+        { opacity: 1, scale: 1, yPercent: 0, duration: 0.1, ease: 'power1.out' },
+        0.12
+      )
+      .fromTo(
+        '.auto-card',
+        { opacity: 0, y: 70, rotation: 3 },
+        { opacity: 1, y: 0, rotation: 0, duration: 0.12, ease: 'power1.out' },
+        0.2
+      )
+      .to('.auto-stage', { opacity: 0, y: -50, duration: 0.08 }, 0.94);
+
     /* ── 11. Stats count-up ── */
     root.querySelectorAll('.stat-count').forEach((el) => {
       const target = parseFloat(el.getAttribute('data-value') || '0');
@@ -469,6 +505,8 @@ const Landing: React.FC = () => {
       <div className="gsap-section">
         <HowItWorks />
       </div>
+
+      <AutopilotTeaser />
 
       <div className="gsap-section">
         <StatsSection />
