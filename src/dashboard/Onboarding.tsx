@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeft, ArrowRight, Banknote, Home, Receipt, Rocket, SlidersHorizontal, Target, Wallet } from 'lucide-react';
-import { OnboardInputs, SpendStyle, parseRupee } from './engine';
+import { DEFAULT_INPUTS, OnboardInputs, SpendStyle, parseRupee } from './engine';
 
 interface OnboardingProps {
   initial?: OnboardInputs | null;
@@ -32,7 +32,7 @@ const chipClass = (active: boolean) =>
 const Onboarding: React.FC<OnboardingProps> = ({ initial, onComplete, onCancel }) => {
   const [step, setStep] = useState(0);
   const [inputs, setInputs] = useState<OnboardInputs>(
-    initial || { name: '', income: 60000, rent: 15000, bills: 4000, goal: 9000, style: 'balanced' }
+    initial || DEFAULT_INPUTS
   );
 
   const set = <K extends keyof OnboardInputs>(k: K, v: OnboardInputs[K]) =>

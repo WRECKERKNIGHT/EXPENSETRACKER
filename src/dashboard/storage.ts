@@ -1,4 +1,4 @@
-import { OnboardInputs, Tx, AutopilotId } from './engine';
+import { DEFAULT_INPUTS, OnboardInputs, Tx, AutopilotId } from './engine';
 
 const KEY = 'spendsmart.profile.v1';
 
@@ -26,6 +26,7 @@ export const loadProfile = (): Profile | null => {
     if (!raw) return null;
     const p = JSON.parse(raw) as Profile;
     if (!p.inputs || typeof p.inputs.income !== 'number') return null;
+    p.inputs = { ...DEFAULT_INPUTS, ...p.inputs };
     p.toggles = { ...emptyToggles(), ...(p.toggles || {}) };
     return p;
   } catch {
