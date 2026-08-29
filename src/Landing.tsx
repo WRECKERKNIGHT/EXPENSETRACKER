@@ -124,26 +124,6 @@ const Landing: React.FC = () => {
       });
     });
 
-    /* ── 4c. Floating coins parallax rise on scroll ── */
-    root.querySelectorAll('.float-coin').forEach((el) => {
-      const dist = parseFloat(el.getAttribute('data-dist') || '90');
-      gsap.fromTo(
-        el,
-        { y: dist, opacity: 0.15 },
-        {
-          y: -dist,
-          opacity: 0.9,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: (el as HTMLElement).closest('section') as Element,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true,
-          },
-        }
-      );
-    });
-
     /* ── 5. Info cards stagger ── */
     const cards = root.querySelector('.gsap-card-grid') as HTMLElement | null;
     if (cards) {
@@ -197,10 +177,7 @@ const Landing: React.FC = () => {
         { sel: '.waste-chapter', from: { opacity: 0, y: 16 }, to: { opacity: 1, y: 0 }, dur: 0.35 },
         { sel: '.waste-heading', from: { opacity: 0, y: 30 }, to: { opacity: 1, y: 0 }, dur: 0.4 },
         { sel: '.waste-heading .sc', from: { yPercent: 120, opacity: 0 }, to: { yPercent: 0, opacity: 1 }, dur: 0.5 },
-        { sel: '.waste-coin-0', from: { opacity: 0, y: 140, rotation: -60, scale: 0.8 }, to: { opacity: 1, y: 0, rotation: 360, scale: 1 }, dur: 0.4 },
-        { sel: '.waste-coin-1', from: { opacity: 0, y: 160, rotation: 60, scale: 0.8 }, to: { opacity: 1, y: 0, rotation: -360, scale: 1 }, dur: 0.4 },
-        { sel: '.waste-coin-2', from: { opacity: 0, y: 180, rotation: -90, scale: 0.8 }, to: { opacity: 1, y: 0, rotation: 540, scale: 1 }, dur: 0.4 },
-        { sel: '.waste-coin-3', from: { opacity: 0, y: 200, rotation: 90, scale: 0.8 }, to: { opacity: 1, y: 0, rotation: -540, scale: 1 }, dur: 0.4 },
+        { sel: '.waste-mark', from: { opacity: 0, scale: 0.55, rotation: -6 }, to: { opacity: 1, scale: 1, rotation: 0 }, dur: 0.7 },
         { sel: '.waste-line-0', from: { opacity: 0, x: -34 }, to: { opacity: 1, x: 0 }, dur: 0.35 },
         { sel: '.waste-line-1', from: { opacity: 0, x: -34 }, to: { opacity: 1, x: 0 }, dur: 0.35 },
         { sel: '.waste-line-2', from: { opacity: 0, x: -34 }, to: { opacity: 1, x: 0 }, dur: 0.35 },
@@ -260,8 +237,6 @@ const Landing: React.FC = () => {
           0.37
         );
     }
-    gsap.to('.dash-coin-0', { y: -14, rotation: 10, duration: 4.5, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-    gsap.to('.dash-coin-1', { y: -18, rotation: -12, duration: 6, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 0.5 });
 
     /* ── 8. Features stagger ── */
     const fg = root.querySelector('.features-grid') as HTMLElement | null;
@@ -312,11 +287,7 @@ const Landing: React.FC = () => {
         { sel: '.safety-chapter', from: { opacity: 0, y: 16 }, to: { opacity: 1, y: 0 }, dur: 0.35 },
         { sel: '.safety-heading', from: { opacity: 0, y: 30 }, to: { opacity: 1, y: 0 }, dur: 0.4 },
         { sel: '.safety-heading .sc', from: { yPercent: 120, opacity: 0 }, to: { yPercent: 0, opacity: 1 }, dur: 0.5 },
-        { sel: '.safety-coin-3', from: { opacity: 0, y: 110, scale: 0.7 }, to: { opacity: 1, y: 0, scale: 1 }, dur: 0.35 },
-        { sel: '.safety-coin-2', from: { opacity: 0, y: 110, scale: 0.7 }, to: { opacity: 1, y: 0, scale: 1 }, dur: 0.35 },
-        { sel: '.safety-coin-1', from: { opacity: 0, y: 110, scale: 0.7 }, to: { opacity: 1, y: 0, scale: 1 }, dur: 0.35 },
-        { sel: '.safety-coin-0', from: { opacity: 0, y: 110, scale: 0.7 }, to: { opacity: 1, y: 0, scale: 1 }, dur: 0.35 },
-        { sel: '.safety-shield', from: { opacity: 0, scale: 0.6, y: 40 }, to: { opacity: 1, scale: 1, y: 0, ease: 'back.out(1.6)' }, dur: 0.5 },
+        { sel: '.safety-shield', from: { opacity: 0, scale: 0.6, y: 40 }, to: { opacity: 1, scale: 1, y: 0, ease: 'back.out(1.6)' }, dur: 0.6 },
         { sel: '.safety-line-0', from: { opacity: 0, x: -34 }, to: { opacity: 1, x: 0 }, dur: 0.35 },
         { sel: '.safety-line-1', from: { opacity: 0, x: -34 }, to: { opacity: 1, x: 0 }, dur: 0.35 },
         { sel: '.safety-line-2', from: { opacity: 0, x: -34 }, to: { opacity: 1, x: 0 }, dur: 0.35 },
@@ -403,8 +374,7 @@ const Landing: React.FC = () => {
     chapter(
       root.querySelector('.finale-section'),
       [
-        { sel: '.finale-ring', from: { scale: 0.5, opacity: 0, rotation: -30 }, to: { scale: 1.25, opacity: 0.7, rotation: 0 }, dur: 0.6 },
-        { sel: '.finale-coin', from: { opacity: 0, rotationY: -240, rotationX: -18, scale: 0.7 }, to: { opacity: 1, rotationY: 180, rotationX: 4, scale: 1, transformPerspective: 900 }, dur: 0.8 },
+        { sel: '.finale-mark', from: { opacity: 0, scale: 0.5, rotation: -4 }, to: { opacity: 1, scale: 1, rotation: 0 }, dur: 0.7 },
         { sel: '.finale-kicker', from: { opacity: 0, y: 16 }, to: { opacity: 1, y: 0 }, dur: 0.35 },
         { sel: '.finale-title', from: { opacity: 0, y: 26 }, to: { opacity: 1, y: 0 }, dur: 0.4 },
         { sel: '.finale-title .sc', from: { yPercent: 120, opacity: 0 }, to: { yPercent: 0, opacity: 1 }, dur: 0.6 },

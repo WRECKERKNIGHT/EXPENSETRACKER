@@ -1,6 +1,5 @@
 import React from 'react';
 import { ArrowDownLeft, ArrowUpLeft, CheckCircle2, Crown } from 'lucide-react';
-import Coin3D from './Coin3D';
 import SplitHeading from './SplitHeading';
 
 const BULLETS = [
@@ -59,13 +58,6 @@ const DashboardShowcase: React.FC = () => (
 
       {/* Phone mockup */}
       <div className="relative flex justify-center">
-        <div className="dash-coin-0 absolute -top-6 left-2 z-10">
-          <Coin3D size={52} label="10" />
-        </div>
-        <div className="dash-coin-1 absolute -bottom-8 right-0 z-10">
-          <Coin3D size={68} label="10" symbolBack="₹" />
-        </div>
-
         <div
           className="dash-phone relative w-full max-w-sm rounded-[2.5rem] p-3"
           style={{

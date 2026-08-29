@@ -1,6 +1,5 @@
 import React from 'react';
 import { Lock } from 'lucide-react';
-import Coin3D from './Coin3D';
 import SplitHeading from './SplitHeading';
 
 const LINES = [
@@ -28,18 +27,9 @@ const SafetyNetSection: React.FC = () => (
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-10 grid lg:grid-cols-2 gap-14 items-center">
         <div className="relative h-[26rem] hidden lg:block">
-          {[0, 1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className={`safety-coin-${i} absolute left-1/2 -translate-x-1/2`}
-              style={{ top: 210 - i * 52, opacity: 0 }}
-            >
-              <Coin3D size={92} label="10" symbolBack="₹" />
-            </div>
-          ))}
           <div
             className="safety-shield absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
-            style={{ top: 40, opacity: 0 }}
+            style={{ top: 150, opacity: 0 }}
           >
             <div
               className="flex items-center justify-center"
@@ -55,7 +45,7 @@ const SafetyNetSection: React.FC = () => (
             </div>
           </div>
           <p className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-full text-center text-sm text-white/50 font-medium">
-            Four coins. One safety net.
+            Four rules. One shield.
           </p>
         </div>
 

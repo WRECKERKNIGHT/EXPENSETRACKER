@@ -1,6 +1,5 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
-import Coin3D from './Coin3D';
 import SplitHeading from './SplitHeading';
 import { go, PATH } from '../lib/router';
 
@@ -20,11 +19,13 @@ const FinaleSection: React.FC = () => (
       ))}
 
       <div className="relative z-10 text-center px-6">
-        <div className="relative h-56 flex items-center justify-center mb-8">
-          <div className="finale-ring absolute w-56 h-56 rounded-full border-2 border-[#d4af37]/40" style={{ opacity: 0 }} />
-          <div className="finale-coin relative">
-            <Coin3D size={132} label="10" symbolBack="SM" />
-          </div>
+        <div className="relative h-44 flex items-center justify-center mb-6 select-none">
+          <span
+            className="finale-mark font-serif font-semibold leading-none text-[#d4af37]/15 glow-gold"
+            style={{ fontSize: '12rem', opacity: 0 }}
+          >
+            ₹
+          </span>
         </div>
 
         <div className="finale-content">

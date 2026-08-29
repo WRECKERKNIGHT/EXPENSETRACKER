@@ -1,5 +1,4 @@
 import React from 'react';
-import Coin3D from './Coin3D';
 import SplitHeading from './SplitHeading';
 
 const LINES = [
@@ -62,19 +61,13 @@ const WasteSection: React.FC = () => (
           </div>
         </div>
 
-        <div className="relative h-[26rem] hidden lg:block">
-          <div className="waste-coin-0 absolute" style={{ left: '6%', top: '36%', opacity: 0 }}>
-            <Coin3D size={58} label="10" />
-          </div>
-          <div className="waste-coin-1 absolute" style={{ left: '30%', top: '28%', opacity: 0 }}>
-            <Coin3D size={84} label="10" symbolBack="₹" />
-          </div>
-          <div className="waste-coin-2 absolute" style={{ left: '56%', top: '40%', opacity: 0 }}>
-            <Coin3D size={66} label="10" />
-          </div>
-          <div className="waste-coin-3 absolute" style={{ left: '74%', top: '22%', opacity: 0 }}>
-            <Coin3D size={96} label="10" symbolBack="₹" />
-          </div>
+        <div className="waste-mark relative h-[26rem] hidden lg:flex items-center justify-center select-none">
+          <span className="absolute font-serif font-semibold leading-none text-[#d4af37]/15 glow-gold" style={{ fontSize: '20rem' }}>
+            ₹
+          </span>
+          <p className="absolute bottom-4 text-center text-sm text-white/40 font-medium tracking-[0.3em] uppercase">
+            The Leak
+          </p>
         </div>
       </div>
     </div>

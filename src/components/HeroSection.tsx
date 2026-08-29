@@ -1,5 +1,4 @@
 import React from 'react';
-import Coin3D from './Coin3D';
 import SplitHeading from './SplitHeading';
 import { BrandMarquee, JoinUsButton } from './Marquee';
 import { go, PATH } from '../lib/router';
@@ -45,10 +44,6 @@ const HeroSection: React.FC = () => {
 
           <div className="hero-animate">
             <BrandMarquee />
-          </div>
-
-          <div className="hero-coin absolute hidden lg:block right-14 top-28">
-            <Coin3D size={110} label="10" symbolBack="SM" />
           </div>
         </div>
       </div>

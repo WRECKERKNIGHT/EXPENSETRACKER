@@ -10,7 +10,6 @@ import {
   Fingerprint,
 } from 'lucide-react';
 import SplitHeading from './SplitHeading';
-import Coin3D from './Coin3D';
 
 const FEATURES = [
   {
@@ -57,12 +56,6 @@ const FEATURES = [
 
 const FeaturesGrid: React.FC = () => (
   <section id="features" className="relative overflow-hidden bg-[#F4EFE4] px-6 py-24">
-    <div className="float-coin absolute hidden lg:block left-8 top-40" data-dist="90">
-      <Coin3D size={40} label="10" />
-    </div>
-    <div className="float-coin absolute hidden lg:block right-10 bottom-16" data-dist="120">
-      <Coin3D size={54} label="10" symbolBack="₹" />
-    </div>
     <div className="max-w-[88rem] mx-auto">
       <div className="max-w-2xl mb-16">
         <p className="text-[#B8860B] text-sm mb-3">Chapter 03 — The Build</p>
