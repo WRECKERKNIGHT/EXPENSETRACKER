@@ -29,7 +29,7 @@ const FAQSection: React.FC = () => {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="faq-section relative bg-[#F4EFE4] px-6 py-28">
+    <section id="faq" className="faq-section relative bg-[#F4EFE4] px-6 py-28">
       <div className="max-w-3xl mx-auto">
         <p className="kicker mx-auto justify-center mb-5">The fine print, in plain words</p>
         <SplitHeading

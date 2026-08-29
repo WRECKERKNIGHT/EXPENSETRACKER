@@ -216,6 +216,24 @@ html {
   }
 }
 
+/* ── Nav link gold underline ── */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -4px;
+  height: 1.5px;
+  background: linear-gradient(90deg, #C9A444, #d4af37);
+  transition: right 0.3s ease;
+}
+.nav-link:hover::after {
+  right: 0;
+}
+
 /* ── Ambient floating particles for dark sections ── */
 @keyframes floatUp {
   0% { transform: translateY(0); opacity: 0; }

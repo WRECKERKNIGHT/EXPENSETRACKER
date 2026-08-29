@@ -34,7 +34,7 @@ const VAULT_ROWS = [
 ];
 
 const SecuritySection: React.FC = () => (
-  <section className="vault-section relative bg-[#18241C] overflow-hidden">
+  <section id="security" className="vault-section relative bg-[#18241C] overflow-hidden">
     <div className="vault-stage min-h-screen flex items-center py-24 overflow-hidden px-6">
       <div
         aria-hidden

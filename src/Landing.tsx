@@ -15,6 +15,7 @@ import FAQSection from './components/FAQSection';
 import StatsSection from './components/StatsSection';
 import TestimonialSection from './components/TestimonialSection';
 import FinaleSection from './components/FinaleSection';
+import Footer from './components/Footer';
 
 declare global {
   interface Window {
@@ -523,16 +524,7 @@ const Landing: React.FC = () => {
 
       <FinaleSection />
 
-      <footer className="bg-[#F4EFE4] px-6 py-12">
-        <div className="max-w-[88rem] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-black/50">© {new Date().getFullYear()} SpendSmart. Money, mastered.</p>
-          <div className="flex items-center gap-6 text-sm text-black/60 font-medium">
-            <span className="hover:text-black transition-colors duration-200 cursor-pointer">Features</span>
-            <span className="hover:text-black transition-colors duration-200 cursor-pointer">Privacy</span>
-            <span className="hover:text-black transition-colors duration-200 cursor-pointer">Terms</span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

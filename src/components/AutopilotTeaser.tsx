@@ -16,7 +16,7 @@ const AutoSmall = [
 
 export default function AutopilotTeaser() {
   return (
-    <section className="auto-section relative bg-[#18241C] overflow-hidden px-6 py-28">
+    <section id="autopilot" className="auto-section relative bg-[#18241C] overflow-hidden px-6 py-28">
       <div aria-hidden className="aura w-[30rem] h-[30rem] -top-40 right-[10%]" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.22), transparent 70%)' }} />
       <div aria-hidden className="aura w-[26rem] h-[26rem] -bottom-40 left-[5%]" style={{ background: 'radial-gradient(circle, rgba(24,52,42,0.8), transparent 70%)' }} />
       <div className="auto-stage relative max-w-[88rem] mx-auto flex flex-col lg:flex-row items-center justify-between gap-16">
