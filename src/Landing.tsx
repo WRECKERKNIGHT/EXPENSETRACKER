@@ -102,18 +102,32 @@ const Landing: React.FC = () => {
       },
     });
 
-    /* ── 4. Standard section reveals (scrubbed, speed-synced) ── */
+    /* ── 4. Standard section reveals (scrubbed, speed-synced, blur-in) ── */
     root.querySelectorAll<HTMLElement>('.gsap-section').forEach((el) => {
       gsap.fromTo(
         el,
-        { opacity: 0, y: 70 },
+        { opacity: 0, y: 72, scale: 0.985, filter: 'blur(10px)' },
         {
           opacity: 1,
           y: 0,
+          scale: 1,
+          filter: 'blur(0px)',
           ease: 'none',
-          scrollTrigger: { trigger: el, start: 'top 92%', end: 'top 42%', scrub: 0.5 },
+          scrollTrigger: { trigger: el, start: 'top 94%', end: 'top 40%', scrub: 0.6 },
         }
       );
+      const inner = el.firstElementChild as HTMLElement | null;
+      if (inner) {
+        gsap.fromTo(
+          inner,
+          { y: 60 },
+          {
+            y: -60,
+            ease: 'none',
+            scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true },
+          }
+        );
+      }
     });
 
     /* ── 4b. Split-title char reveals on scroll ── */
