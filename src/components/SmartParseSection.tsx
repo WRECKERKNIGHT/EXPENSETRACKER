@@ -1,6 +1,7 @@
 import React from 'react';
 import { MessageSquareText, Receipt, FileText } from 'lucide-react';
 import SplitHeading from './SplitHeading';
+import { SAMPLE_SMS, parseBankMessage } from '../dashboard/engine';
 
 const SOURCES = [
   {
@@ -91,7 +92,73 @@ const SmartParseSection: React.FC = () => (
         ))}
       </div>
     </div>
+
+    {/* Live demo — real parser, on this page */}
+    <div className="relative max-w-[88rem] mx-auto mt-16 rounded-3xl bg-[#18241C] p-8 md:p-10 overflow-hidden">
+      <div
+        aria-hidden
+        className="absolute right-0 top-0 w-[26rem] h-[26rem] rounded-full opacity-20 pointer-events-none"
+        style={{ background: 'radial-gradient(circle, #d4af37 0%, transparent 65%)' }}
+      />
+      <div className="relative grid lg:grid-cols-[1fr_1.2fr] gap-8 items-center">
+        <div>
+          <p className="kicker kicker-gold mb-4">Try it right now</p>
+          <h3 className="text-[#FBF9F0] text-3xl md:text-5xl font-medium leading-[1.05] mb-3">
+            Paste a bank SMS, <em className="not-italic text-[#d4af37] glow-gold">watch it parse.</em>
+          </h3>
+          <p className="text-white/60 text-base max-w-sm leading-relaxed">
+            A real parser is running on this page. Paste any of the samples — nothing leaves your browser.
+          </p>
+        </div>
+
+        <LiveParser />
+      </div>
+    </div>
   </section>
 );
+
+const LiveParser: React.FC = () => {
+  const [text, setText] = React.useState(SAMPLE_SMS[0]);
+  const parsed = React.useMemo(() => parseBankMessage(text), [text]);
+  return (
+    <div>
+      <textarea
+        rows={3}
+        className="w-full rounded-2xl border border-white/15 bg-white/[0.06] px-5 py-4 text-sm outline-none focus:border-[#d4af37]/60 transition-colors duration-200 resize-none font-mono text-white/90 placeholder:text-white/30"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      <div className="flex flex-wrap items-center gap-2 mt-3">
+        {SAMPLE_SMS.slice(0, 3).map((s, i) => (
+          <button
+            key={i}
+            onClick={() => setText(s)}
+            className="rounded-full border border-white/15 px-3 py-1 text-xs text-white/60 hover:border-[#d4af37] hover:text-[#d4af37] transition-colors duration-200 cursor-pointer"
+          >
+            Sample {i + 1}
+          </button>
+        ))}
+      </div>
+      <div className="mt-4 rounded-2xl bg-white/[0.04] border border-white/10 p-5">
+        {parsed.ok && parsed.amount ? (
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="flex-1 min-w-0">
+              <p className="text-white font-medium truncate">{parsed.name}</p>
+              <p className="text-[11px] uppercase tracking-[0.24em] text-[#d4af37] font-semibold mt-0.5">
+                {parsed.cat} · {parsed.kind}
+              </p>
+            </span>
+            <span className="font-serif text-2xl text-[#d4af37] glow-gold">
+              {parsed.kind === 'credit' ? '+' : '−'}₹{parsed.amount.toLocaleString('en-IN')}
+            </span>
+          </div>
+        ) : (
+          <p className="text-white/50 text-sm">Keep typing — the engine reads amount, merchant and category live.</p>
+        )}
+        <p className="mt-3 text-[11px] text-white/35">Parsed entirely in your browser. Nothing uploaded.</p>
+      </div>
+    </div>
+  );
+};
 
 export default SmartParseSection;

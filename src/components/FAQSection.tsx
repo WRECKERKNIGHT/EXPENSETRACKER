@@ -4,6 +4,14 @@ import SplitHeading from './SplitHeading';
 
 const FAQS = [
   {
+    q: 'Can I import past expenses without connecting a bank?',
+    a: 'Yes — paste any bank SMS or UPI alert into Smart Import and it becomes a categorized transaction in one tap. No bank login, no server, nothing uploaded. Samples come built in so you can try it before you commit.',
+  },
+  {
+    q: 'How does the AI advisor decide what to tell me?',
+    a: 'It reads your actual ledger every few seconds: today vs your daily allowance, this week vs last week, your top-spend category (the leak radar) and how many months remain on your savings goal at the current pace. Every sentence is computed from your own numbers, on your device.',
+  },
+  {
     q: 'How does SpendSmart read my bank SMS?',
     a: 'We parse the transaction messages that banks and UPI apps already send you — amount, merchant, date and balance. Parsing runs locally on your device, so your raw messages are never uploaded anywhere.',
   },

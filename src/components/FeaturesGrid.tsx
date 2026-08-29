@@ -14,8 +14,8 @@ import SplitHeading from './SplitHeading';
 const FEATURES = [
   {
     icon: Smartphone,
-    title: 'SMS Parsing',
-    desc: 'Bank messages become categorized transactions. No typing, no missed spends.',
+    title: 'Smart Import',
+    desc: 'Paste a bank SMS or UPI alert and watch it become a categorized transaction — parsed on your device.',
   },
   {
     icon: ScanLine,
@@ -25,7 +25,7 @@ const FEATURES = [
   {
     icon: Sparkles,
     title: 'AI Advisor',
-    desc: 'Ask "can I afford this after rent?" and get an honest, data-driven answer.',
+    desc: 'Reads your week, week vs week, and tells you your goal runway and top leak — in plain words.',
   },
   {
     icon: ShieldCheck,
