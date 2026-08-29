@@ -22,6 +22,9 @@ import Footer from './components/Footer';
 gsap.registerPlugin(ScrollTrigger);
 const ST = ScrollTrigger;
 
+ST.config({ ignoreMobileResize: true });
+gsap.ticker.lagSmoothing(600, 16);
+
 const Landing: React.FC = () => {
   const mainRef = useRef<HTMLDivElement>(null);
 
@@ -391,6 +394,17 @@ const Landing: React.FC = () => {
         { sel: '.vault-cta', from: { opacity: 0, y: 16 }, to: { opacity: 1, y: 0 }, dur: 0.35 },
       ],
       { pin: true, pinEnd: '+=300%', exit: '.vault-stage' }
+    );
+
+    /* ── 10d. Finale ring counter-rotates as you approach ── */
+    gsap.fromTo(
+      root.querySelector('.ring-spin'),
+      { rotation: -40 },
+      {
+        rotation: 40,
+        ease: 'none',
+        scrollTrigger: { trigger: '.finale-section', start: 'top bottom', end: 'bottom top', scrub: true },
+      }
     );
 
     /* ── 11. Stats count-up ── */
