@@ -9,6 +9,7 @@ import FeaturesGrid from './components/FeaturesGrid';
 import SafetyNetSection from './components/SafetyNetSection';
 import HowItWorks from './components/HowItWorks';
 import AutopilotTeaser from './components/AutopilotTeaser';
+import SecuritySection from './components/SecuritySection';
 import StatsSection from './components/StatsSection';
 import TestimonialSection from './components/TestimonialSection';
 import FinaleSection from './components/FinaleSection';
@@ -360,6 +361,24 @@ const Landing: React.FC = () => {
       }
     );
 
+    /* ── 10c. Vault — Your money, your secret (scroll-locked story) ── */
+    chapter(
+      root.querySelector('.vault-section'),
+      [
+        { sel: '.vault-chapter', from: { opacity: 0, y: 16 }, to: { opacity: 1, y: 0 }, dur: 0.35 },
+        { sel: '.vault-heading', from: { opacity: 0, y: 30 }, to: { opacity: 1, y: 0 }, dur: 0.4 },
+        { sel: '.vault-heading .sc', from: { yPercent: 120, opacity: 0 }, to: { yPercent: 0, opacity: 1 }, dur: 0.5 },
+        { sel: '.vault-sub', from: { opacity: 0, y: 20 }, to: { opacity: 1, y: 0 }, dur: 0.4 },
+        { sel: '.vault-line-0', from: { opacity: 0, x: -34 }, to: { opacity: 1, x: 0 }, dur: 0.35 },
+        { sel: '.vault-line-1', from: { opacity: 0, x: -34 }, to: { opacity: 1, x: 0 }, dur: 0.35 },
+        { sel: '.vault-line-2', from: { opacity: 0, x: -34 }, to: { opacity: 1, x: 0 }, dur: 0.35 },
+        { sel: '.vault-line-3', from: { opacity: 0, x: -34 }, to: { opacity: 1, x: 0 }, dur: 0.35 },
+        { sel: '.vault-card', from: { opacity: 0, y: 90, rotationY: 12, transformPerspective: 900 }, to: { opacity: 1, y: 0, rotationY: 0 }, dur: 0.7 },
+        { sel: '.vault-cta', from: { opacity: 0, y: 16 }, to: { opacity: 1, y: 0 }, dur: 0.35 },
+      ],
+      { pin: true, pinEnd: '+=300%', exit: '.vault-stage' }
+    );
+
     /* ── 11. Stats count-up ── */
     root.querySelectorAll('.stat-count').forEach((el) => {
       const target = parseFloat(el.getAttribute('data-value') || '0');
@@ -455,6 +474,8 @@ const Landing: React.FC = () => {
       </div>
 
       <AutopilotTeaser />
+
+      <SecuritySection />
 
       <div className="gsap-section">
         <StatsSection />
