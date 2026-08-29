@@ -27,7 +27,7 @@ const WasteSection: React.FC = () => (
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-10 grid lg:grid-cols-2 gap-14 items-center">
         <div>
-          <p className="waste-chapter text-xs uppercase tracking-[0.4em] text-[#d4af37] font-semibold mb-6">
+          <p className="waste-chapter kicker kicker-gold mb-6">
             Chapter 01 — The Leak
           </p>
           <SplitHeading

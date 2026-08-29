@@ -50,7 +50,7 @@ const SafetyNetSection: React.FC = () => (
         </div>
 
         <div>
-          <p className="safety-chapter text-xs uppercase tracking-[0.4em] text-[#d4af37] font-semibold mb-6">
+          <p className="safety-chapter kicker kicker-gold mb-6">
             Chapter 02 — The Shield
           </p>
           <SplitHeading

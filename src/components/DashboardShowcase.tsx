@@ -33,15 +33,14 @@ const DashboardShowcase: React.FC = () => (
     <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
       {/* Copy */}
       <div>
-        <p className="dash-kicker text-[#B8860B] text-xs uppercase tracking-[0.4em] font-semibold mb-4">
+        <p className="dash-kicker kicker mb-5">
           Your Dashboard
         </p>
         <SplitHeading
           as="h2"
           text="Your money,\ncentre stage."
           highlight={['stage.']}
-          className="split-title text-black text-4xl md:text-6xl font-medium leading-[1.05] mb-8"
-          style={{ letterSpacing: '-0.04em' }}
+          className="split-title text-black text-5xl md:text-7xl font-medium leading-[1.02] mb-8"
         />
         <div className="flex flex-col gap-6">
           {BULLETS.map((b) => (

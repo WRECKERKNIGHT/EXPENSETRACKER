@@ -26,8 +26,7 @@ const InfoSection: React.FC = () => (
           <SplitHeading
             as="h2"
             text="Meet SpendSmart."
-            className="split-title text-black text-4xl md:text-5xl font-medium leading-tight mb-8"
-            style={{ letterSpacing: '-0.03em' }}
+            className="split-title text-black text-5xl md:text-6xl font-medium leading-[1.04] mb-8"
           />
           <DiscoverButton />
         </div>

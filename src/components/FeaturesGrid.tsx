@@ -58,13 +58,12 @@ const FeaturesGrid: React.FC = () => (
   <section id="features" className="relative overflow-hidden bg-[#F4EFE4] px-6 py-24">
     <div className="max-w-[88rem] mx-auto">
       <div className="max-w-2xl mb-16">
-        <p className="text-[#B8860B] text-sm mb-3">Chapter 03 — The Build</p>
+        <p className="kicker mb-4">Chapter 03 — The Build</p>
         <SplitHeading
           as="h2"
           text="Built to save.\nBuilt to last."
           highlight={['last.']}
-          className="split-title text-black text-4xl md:text-6xl font-medium leading-[1.05]"
-          style={{ letterSpacing: '-0.04em' }}
+          className="split-title text-black text-5xl md:text-7xl font-medium leading-[1.02]"
         />
       </div>
 

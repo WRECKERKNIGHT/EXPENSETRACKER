@@ -29,7 +29,7 @@ const FinaleSection: React.FC = () => (
         </div>
 
         <div className="finale-content">
-          <p className="finale-kicker text-[11px] uppercase tracking-[0.4em] text-[#d4af37] font-semibold mb-5">
+          <p className="finale-kicker kicker kicker-gold mb-5 justify-center">
             The Flip
           </p>
           <SplitHeading

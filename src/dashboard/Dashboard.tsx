@@ -150,10 +150,10 @@ const Dashboard: React.FC = () => {
         {/* ── Header ── */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
-            <p className="text-[#B8860B] text-xs uppercase tracking-[0.3em] font-semibold mb-2">
+            <p className="kicker mb-3">
               {statusOfDay(now)} · {timeStr}
             </p>
-            <h1 className="text-3xl md:text-5xl font-medium text-black" style={{ letterSpacing: '-0.03em' }}>
+            <h1 className="text-4xl md:text-6xl font-medium text-black">
               {profile.inputs.name}'s money, <em className="not-italic text-[#B8860B]">mastered.</em>
             </h1>
             <div className="flex flex-wrap gap-2 mt-4">

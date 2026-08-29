@@ -31,8 +31,7 @@ const HeroSection: React.FC = () => {
           />
 
           <p
-            className="hero-animate text-[#FBF9F0]/80 text-base md:text-lg max-w-md mb-8 leading-relaxed"
-            style={{ fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif" }}
+            className="hero-animate serif-lead text-[#FBF9F0]/85 text-lg md:text-xl max-w-lg mb-9 leading-snug"
           >
             SpendSmart reads the story your money is already writing — bank SMS, UPI and receipts —
             and turns every rupee into clear, private insight.

@@ -11,18 +11,48 @@ html, body {
 }
 
 * {
-  font-family: 'Inter', 'TT Norms Pro', ui-sans-serif, system-ui, sans-serif;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
   box-sizing: border-box;
 }
 
 h1, h2, h3, .font-serif {
-  font-family: 'Playfair Display', 'Iowan Old Style', Georgia, 'Times New Roman', serif !important;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
   letter-spacing: -0.012em !important;
   font-weight: 500;
 }
 
 em {
-  font-family: 'Playfair Display', 'Iowan Old Style', Georgia, 'Times New Roman', serif !important;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
+}
+
+/* ── Editorial kicker: small caps + gold rule ── */
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+  font-size: 12px;
+  font-weight: 600;
+  color: #B8860B;
+}
+.kicker::before {
+  content: '';
+  width: 2.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #B8860B);
+}
+.kicker-gold {
+  color: #d4af37;
+}
+.kicker-gold::before {
+  background: linear-gradient(90deg, transparent, #d4af37);
+}
+
+/* Editorial serif lead paragraph */
+.serif-lead {
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
+  letter-spacing: -0.01em !important;
 }
 
 html {

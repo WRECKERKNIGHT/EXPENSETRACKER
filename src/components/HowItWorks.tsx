@@ -27,15 +27,12 @@ const HowItWorks: React.FC = () => (
   <section id="how" className="relative overflow-hidden bg-[#F4EFE4] px-6 pb-24">
     <div className="max-w-[88rem] mx-auto">
       <div className="max-w-2xl mb-16">
-        <p className="text-[#B8860B] text-xs uppercase tracking-[0.4em] font-semibold mb-3">
-          Chapter 04 — The Flow
-        </p>
+        <p className="kicker mb-4">Chapter 04 — The Flow</p>
         <SplitHeading
           as="h2"
           text="Three moves.\nThat's it."
           highlight={['it.']}
-          className="split-title text-black text-4xl md:text-6xl font-medium leading-[1.05]"
-          style={{ letterSpacing: '-0.04em' }}
+          className="split-title text-black text-5xl md:text-7xl font-medium leading-[1.02]"
         />
       </div>
 
