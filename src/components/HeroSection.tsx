@@ -21,6 +21,7 @@ const HeroSection: React.FC = () => {
         />
 
         {/* Content Overlay */}
+        <div className="hero-glow absolute left-[6%] top-[12%] w-[30rem] h-[20rem] pointer-events-none rounded-full" style={{ background: 'radial-gradient(closest-side, rgba(212,175,55,0.28), transparent 70%)', filter: 'blur(30px)' }} />
         <div className="hero-fade relative z-10 flex flex-col items-start justify-start h-full p-12 pt-36">
           <SplitHeading
             as="h1"

@@ -65,12 +65,19 @@ const Landing: React.FC = () => {
     /* ── 1c. Video intro settle, then scroll parallax ── */
     gsap.fromTo(
       root.querySelector('.hero-video-el'),
-      { scale: 1.3 },
-      { scale: 1.14, duration: 1.6, ease: 'power2.out', delay: 0.1 }
+      { scale: 1.22, filter: 'brightness(0.55)' },
+      { scale: 1.06, filter: 'brightness(1)', duration: 1.8, ease: 'power2.out', delay: 0.1 }
     );
-
-    /* ── 2. Hero coin idle float ── */
-    gsap.to('.hero-coin', { y: -16, rotation: 10, duration: 5, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    gsap.fromTo(
+      root.querySelector('.hero-glow'),
+      { opacity: 0, scale: 0.82 },
+      { opacity: 1, scale: 1, duration: 2.2, ease: 'power2.out', delay: 0.5 }
+    );
+    gsap.fromTo(
+      root.querySelector('.hero-title .sc'),
+      { textShadow: '0 0 0px rgba(212,175,55,0)' },
+      { textShadow: '0 0 28px rgba(212,175,55,0.35)', duration: 1.6, delay: 0.9, stagger: 0.035 }
+    );
 
     /* ── 3. Hero parallax + fade on scroll away ── */
     gsap.to(root.querySelector('.hero-video-el'), {
