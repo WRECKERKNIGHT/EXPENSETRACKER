@@ -8,14 +8,21 @@ const STATS = [
 ];
 
 const StatsSection: React.FC = () => (
-  <section className="bg-[#18241C] px-6 py-20">
+  <section className="relative bg-[#18241C] px-6 py-20 overflow-hidden">
+    <div
+      aria-hidden
+      className="absolute left-0 top-0 right-0 h-px"
+      style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.5), transparent)' }}
+    />
+    <div
+      aria-hidden
+      className="absolute left-0 bottom-0 right-0 h-px"
+      style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.5), transparent)' }}
+    />
     <div className="max-w-[88rem] mx-auto grid grid-cols-2 md:grid-cols-4 gap-10">
       {STATS.map((st) => (
         <div key={st.label} className="stat-shine text-center px-2 py-4">
-          <p
-            className="font-serif text-4xl md:text-6xl font-semibold text-[#d5b256]"
-            style={{ letterSpacing: '-0.04em' }}
-          >
+          <p className="stat-glow font-serif text-4xl md:text-6xl font-semibold text-[#d5b256]" style={{ letterSpacing: '-0.02em' }}>
             <span
               className="stat-count"
               data-value={st.value}

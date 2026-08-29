@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Quote } from 'lucide-react';
+import SplitHeading from './SplitHeading';
 
 const SLIDES = [
   {
@@ -40,6 +41,16 @@ const TestimonialSection: React.FC = () => {
   return (
     <section className="bg-[#F4EFE4] px-6 py-24">
       <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-12">
+          <p className="kicker justify-center mb-4">In the wild</p>
+          <SplitHeading
+            as="h2"
+            text="People are getting their money back."
+            highlight={['back.']}
+            emClass="text-[#B8860B]"
+            className="split-title text-black text-4xl md:text-6xl font-medium leading-[1.05]"
+          />
+        </div>
         <div className="testimonial-card relative rounded-3xl bg-[#18241C] p-10 md:p-16 overflow-hidden">
           <Quote size={56} className="text-[#d4af37]/25 absolute top-8 right-8" />
           <div

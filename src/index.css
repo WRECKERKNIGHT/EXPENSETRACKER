@@ -234,6 +234,11 @@ html {
   right: 0;
 }
 
+/* ── Gold glow for stat numbers ── */
+.stat-glow {
+  text-shadow: 0 0 24px rgba(212, 175, 55, 0.35), 0 2px 12px rgba(212, 175, 55, 0.18);
+}
+
 /* ── Ambient floating particles for dark sections ── */
 @keyframes floatUp {
   0% { transform: translateY(0); opacity: 0; }
