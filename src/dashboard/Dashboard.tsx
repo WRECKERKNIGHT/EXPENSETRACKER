@@ -17,6 +17,7 @@ import AllowanceCard from './widgets/AllowanceCard';
 import Autopilot from './widgets/Autopilot';
 import Transactions from './widgets/Transactions';
 import SmartImport from './widgets/SmartImport';
+import Momentum from './widgets/Momentum';
 import Charts from './widgets/Charts';
 import Insights from './widgets/Insights';
 
@@ -207,6 +208,9 @@ const Dashboard: React.FC = () => {
             <p className="text-xs text-black/45 mt-1">{fmt(spentToday)} of {fmt(cfg.dailyAllowance)} used</p>
           </div>
         </div>
+
+        {/* ── Momentum: pace, goal runway, leak radar ── */}
+        <Momentum cfg={cfg} tx={profile.tx} />
 
         {/* ── Widgets ── */}
         <div className="grid lg:grid-cols-3 gap-4">
