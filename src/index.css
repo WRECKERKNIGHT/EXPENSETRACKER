@@ -10,6 +10,64 @@ html, body {
   background-color: #F4EFE4;
 }
 
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+section[id] {
+  scroll-margin-top: 24px;
+}
+
+::selection {
+  background: rgba(212, 175, 55, 0.35);
+  color: #18241C;
+}
+
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid #C9A444;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .marquee-track,
+  .ticker-track,
+  .ticker-track-reverse,
+  .particle-float,
+  .ring-spin,
+  .scan-sweep,
+  .mark-idle {
+    animation: none !important;
+  }
+  .dash-rise {
+    animation: none !important;
+  }
+}
+
+/* Thin gold scrollbar for the page */
+@media (prefers-reduced-motion: no-preference) {
+  ::-webkit-scrollbar {
+    width: 11px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #F4EFE4;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #d5b256, #b8860b);
+    border-radius: 8px;
+    border: 2px solid #F4EFE4;
+  }
+}
+
 * {
   font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
   box-sizing: border-box;
