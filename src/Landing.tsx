@@ -1,4 +1,6 @@
 import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import InfoSection from './components/InfoSection';
@@ -17,22 +19,15 @@ import TestimonialSection from './components/TestimonialSection';
 import FinaleSection from './components/FinaleSection';
 import Footer from './components/Footer';
 
-declare global {
-  interface Window {
-    gsap: any;
-    ScrollTrigger: any;
-  }
-}
+gsap.registerPlugin(ScrollTrigger);
+const ST = ScrollTrigger;
 
 const Landing: React.FC = () => {
   const mainRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const root = mainRef.current;
-    if (!root || !window.gsap || !window.ScrollTrigger) return;
-    const gsap = window.gsap;
-    const ST = window.ScrollTrigger;
-    gsap.registerPlugin(ST);
+    if (!root) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     /* ── 0. Scroll progress bar ── */
