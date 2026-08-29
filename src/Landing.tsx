@@ -11,6 +11,7 @@ import HowItWorks from './components/HowItWorks';
 import AutopilotTeaser from './components/AutopilotTeaser';
 import SecuritySection from './components/SecuritySection';
 import SmartParseSection from './components/SmartParseSection';
+import FAQSection from './components/FAQSection';
 import StatsSection from './components/StatsSection';
 import TestimonialSection from './components/TestimonialSection';
 import FinaleSection from './components/FinaleSection';
@@ -412,6 +413,18 @@ const Landing: React.FC = () => {
       });
     });
 
+    /* ── 11b. FAQ items stagger ── */
+    const faqItems = root.querySelectorAll<HTMLElement>('.faq-item');
+    gsap.set(faqItems, { opacity: 0, y: 34 });
+    gsap.to(faqItems, {
+      opacity: 1,
+      y: 0,
+      ease: 'none',
+      duration: 0.6,
+      stagger: 0.08,
+      scrollTrigger: { trigger: root.querySelector('.faq-section'), start: 'top 88%', end: 'top 25%', scrub: 0.6 },
+    });
+
     /* ── 12. Testimonial flip-in ── */
     const tcard = root.querySelector('.testimonial-card') as HTMLElement | null;
     if (tcard) {
@@ -501,6 +514,8 @@ const Landing: React.FC = () => {
       <div className="gsap-section">
         <StatsSection />
       </div>
+
+      <FAQSection />
 
       <div className="gsap-section">
         <TestimonialSection />
