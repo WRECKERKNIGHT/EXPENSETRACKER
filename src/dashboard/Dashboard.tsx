@@ -16,6 +16,7 @@ import GoalRing from './widgets/GoalRing';
 import AllowanceCard from './widgets/AllowanceCard';
 import Autopilot from './widgets/Autopilot';
 import Transactions from './widgets/Transactions';
+import SmartImport from './widgets/SmartImport';
 import Charts from './widgets/Charts';
 import Insights from './widgets/Insights';
 
@@ -237,6 +238,12 @@ const Dashboard: React.FC = () => {
 
         <div className="mt-4">
           <Charts tx={profile.tx} />
+        </div>
+
+        <div className="mt-4">
+          <SmartImport
+            onAdd={(t) => update((p) => ({ ...p, tx: [...p.tx, t] }))}
+          />
         </div>
 
         <div className="mt-4">

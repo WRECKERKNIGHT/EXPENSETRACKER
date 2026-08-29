@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
 import { Sparkles } from 'lucide-react';
 import { DashboardConfig, Tx, fmt, todayISO, insightsFor } from '../engine';
 
@@ -26,8 +27,7 @@ const Insights: React.FC<InsightsProps> = ({ cfg, tx, toggles, streak }) => {
   }, []);
 
   useEffect(() => {
-    const gsap = window.gsap;
-    if (!gsap || !textRef.current) return;
+    if (!textRef.current) return;
     gsap.fromTo(textRef.current, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' });
   }, [idx]);
 
