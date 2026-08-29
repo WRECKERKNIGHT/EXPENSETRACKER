@@ -23,6 +23,10 @@ const HeroSection: React.FC = () => {
         {/* Content Overlay */}
         <div className="hero-glow absolute left-[6%] top-[12%] w-[30rem] h-[20rem] pointer-events-none rounded-full" style={{ background: 'radial-gradient(closest-side, rgba(212,175,55,0.28), transparent 70%)', filter: 'blur(30px)' }} />
         <div className="hero-fade relative z-10 flex flex-col items-start justify-start h-full p-12 pt-36">
+          <p className="hero-animate inline-flex items-center gap-2.5 rounded-full border border-[#d4af37]/40 bg-[#18241C]/60 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#d4af37] mb-5 backdrop-blur">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#d4af37]" style={{ animation: 'pulse-dot 1.6s ease-in-out infinite' }} />
+            Private beta · Free forever
+          </p>
           <SplitHeading
             as="h1"
             text="Every rupee\nhas a story."
