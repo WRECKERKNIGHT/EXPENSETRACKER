@@ -7,9 +7,16 @@ const HeroSection: React.FC = () => {
   return (
     <div className="hero-scroll flex-1 px-6 pt-20 pb-6 flex items-end">
       <div
-        className="relative w-full rounded-2xl overflow-hidden"
-        style={{ height: 'calc(100vh - 96px)' }}
+        className="relative w-full rounded-2xl overflow-hidden bg-[#18241C]"
+        style={{ height: 'calc(100vh - 96px)', background: '#18241C' }}
       >
+        {/* Fallback frame if the video is slow or blocked */}
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(80rem 40rem at 70% 110%, rgba(212,175,55,0.22), transparent 60%), linear-gradient(160deg, #1d2b22 0%, #101713 100%)' }}
+        />
+
         {/* Background Video */}
         <video
           autoPlay

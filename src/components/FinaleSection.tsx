@@ -24,7 +24,7 @@ const FinaleSection: React.FC = () => (
           <div aria-hidden className="absolute inset-0 -m-14 rounded-full border border-[#d4af37]/25" />
           <div className="mark-idle">
             <span
-              className="finale-mark font-serif font-semibold leading-none text-[#d4af37]/15 glow-gold"
+              className="finale-mark font-serif font-semibold leading-none text-[#d4af37]/25 glow-gold"
               style={{ fontSize: '12rem', opacity: 0 }}
             >
               ₹

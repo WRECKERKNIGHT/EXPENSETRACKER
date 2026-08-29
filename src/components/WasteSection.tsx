@@ -62,10 +62,10 @@ const WasteSection: React.FC = () => (
         </div>
 
         <div className="waste-mark relative h-[26rem] hidden lg:flex items-center justify-center select-none">
-          <span className="mark-idle absolute font-serif font-semibold leading-none text-[#d4af37]/15 glow-gold" style={{ fontSize: '20rem' }}>
+          <span className="mark-idle absolute font-serif font-semibold leading-none text-[#d4af37]/30 glow-gold" style={{ fontSize: '20rem' }}>
             ₹
           </span>
-          <p className="absolute bottom-4 text-center text-sm text-white/40 font-medium tracking-[0.3em] uppercase">
+          <p className="absolute bottom-4 text-center text-sm text-white/55 font-medium tracking-[0.3em] uppercase">
             The Leak
           </p>
         </div>

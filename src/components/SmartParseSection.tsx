@@ -155,7 +155,7 @@ const LiveParser: React.FC = () => {
         ) : (
           <p className="text-white/50 text-sm">Keep typing — the engine reads amount, merchant and category live.</p>
         )}
-        <p className="mt-3 text-[11px] text-white/35">Parsed entirely in your browser. Nothing uploaded.</p>
+        <p className="mt-3 text-[11px] text-white/55">Parsed entirely in your browser. Nothing uploaded.</p>
       </div>
     </div>
   );
