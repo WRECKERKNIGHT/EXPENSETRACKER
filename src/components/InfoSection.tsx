@@ -26,7 +26,7 @@ const InfoSection: React.FC = () => (
           <SplitHeading
             as="h2"
             text="Meet SpendSmart."
-            className="split-title text-black text-5xl md:text-6xl font-medium leading-[1.04] mb-8"
+            className="split-title text-black text-6xl md:text-7xl font-medium leading-[1.02] mb-8"
           />
           <DiscoverButton onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })} />
         </div>

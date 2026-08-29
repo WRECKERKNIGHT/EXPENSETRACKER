@@ -12,6 +12,8 @@ html, body {
 
 :root {
   color-scheme: light;
+  /* Classic editorial: scale every rem-em up for bigger, prouder type */
+  font-size: 17px;
 }
 
 html {
@@ -69,14 +71,31 @@ button:focus-visible,
 }
 
 * {
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
   box-sizing: border-box;
 }
 
-h1, h2, h3, .font-serif {
+html,
+body,
+input,
+select,
+textarea,
+button {
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+}
+
+h1, h2, h3, h4, h5, h6, .font-serif {
   font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
   letter-spacing: -0.012em !important;
   font-weight: 500;
+}
+
+.font-mono,
+code,
+kbd,
+samp,
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 
 em {

@@ -120,7 +120,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ initial, onComplete, onCancel }
                 Step {step + 1} of {STEPS.length}
               </p>
             </div>
-            <h1 className="text-3xl md:text-4xl font-medium text-black" style={{ letterSpacing: '-0.03em' }}>
+            <h1 className="text-4xl md:text-5xl font-medium text-black">
               {STEPS[step].title}
             </h1>
             <p className="text-black/60 mt-2">{STEPS[step].hint}</p>
