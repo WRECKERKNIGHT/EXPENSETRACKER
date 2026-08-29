@@ -177,6 +177,16 @@ html {
   }
 }
 
+/* ── Slow spin for finale conic ring ── */
+.ring-spin {
+  animation: ring-spin 26s linear infinite;
+}
+@keyframes ring-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* ── Ambient floating particles for dark sections ── */
 @keyframes floatUp {
   0% { transform: translateY(0); opacity: 0; }

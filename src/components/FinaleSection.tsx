@@ -20,6 +20,8 @@ const FinaleSection: React.FC = () => (
 
       <div className="relative z-10 text-center px-6">
         <div className="relative h-44 flex items-center justify-center mb-6 select-none">
+          <div aria-hidden className="ring-spin absolute inset-0 -m-24 rounded-full" style={{ background: 'conic-gradient(from 0deg, transparent 0%, rgba(212,175,55,0.18) 14%, transparent 26%, transparent 52%, rgba(212,175,55,0.10) 64%, transparent 78%)', filter: 'blur(6px)' }} />
+          <div aria-hidden className="absolute inset-0 -m-14 rounded-full border border-[#d4af37]/25" />
           <span
             className="finale-mark mark-idle font-serif font-semibold leading-none text-[#d4af37]/15 glow-gold"
             style={{ fontSize: '12rem', opacity: 0 }}
