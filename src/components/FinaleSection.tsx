@@ -21,7 +21,7 @@ const FinaleSection: React.FC = () => (
       <div className="relative z-10 text-center px-6">
         <div className="relative h-44 flex items-center justify-center mb-6 select-none">
           <span
-            className="finale-mark font-serif font-semibold leading-none text-[#d4af37]/15 glow-gold"
+            className="finale-mark mark-idle font-serif font-semibold leading-none text-[#d4af37]/15 glow-gold"
             style={{ fontSize: '12rem', opacity: 0 }}
           >
             ₹

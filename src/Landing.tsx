@@ -259,6 +259,8 @@ const Landing: React.FC = () => {
         );
     }
 
+    gsap.to(phone, { y: -10, duration: 5, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 1.2 });
+
     /* ── 8. Features stagger ── */
     const fg = root.querySelector('.features-grid') as HTMLElement | null;
     if (fg) {
@@ -366,9 +368,8 @@ const Landing: React.FC = () => {
       const obj = { v: 0 };
       gsap.to(obj, {
         v: target,
-        duration: 1.8,
-        ease: 'power2.out',
-        scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' },
+        ease: 'none',
+        scrollTrigger: { trigger: el.parentElement, start: 'top 88%', end: 'bottom 55%', scrub: 1 },
         onUpdate: () => {
           el.textContent = obj.v.toFixed(decimals) + suffix;
         },

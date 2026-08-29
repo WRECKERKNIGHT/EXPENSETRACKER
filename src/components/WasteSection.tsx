@@ -61,7 +61,7 @@ const WasteSection: React.FC = () => (
           </div>
         </div>
 
-        <div className="waste-mark relative h-[26rem] hidden lg:flex items-center justify-center select-none">
+        <div className="waste-mark mark-idle relative h-[26rem] hidden lg:flex items-center justify-center select-none">
           <span className="absolute font-serif font-semibold leading-none text-[#d4af37]/15 glow-gold" style={{ fontSize: '20rem' }}>
             ₹
           </span>

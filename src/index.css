@@ -164,6 +164,19 @@ html {
   opacity: 0.35;
 }
 
+/* ── Idle float for giant serif marks ── */
+.mark-idle {
+  animation: mark-float 7s ease-in-out infinite alternate;
+}
+@keyframes mark-float {
+  from {
+    transform: translateY(8px) rotate(-1.2deg) scale(1);
+  }
+  to {
+    transform: translateY(-8px) rotate(1.2deg) scale(1.03);
+  }
+}
+
 /* ── Ambient floating particles for dark sections ── */
 @keyframes floatUp {
   0% { transform: translateY(0); opacity: 0; }
