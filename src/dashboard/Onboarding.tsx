@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { ArrowLeft, ArrowRight, Banknote, Home, Receipt, Rocket, SlidersHorizontal, Target, Wallet } from 'lucide-react';
-import { DEFAULT_INPUTS, OnboardInputs, SpendStyle, parseRupee } from './engine';
+import { ArrowLeft, ArrowRight, Banknote, Home, Receipt, Rocket, SlidersHorizontal, Smartphone, Sparkles, Target, Wallet } from 'lucide-react';
+import { APP_OPTIONS, DEFAULT_INPUTS, LEAK_OPTIONS, OnboardInputs, SpendStyle, parseRupee } from './engine';
 
 interface OnboardingProps {
   initial?: OnboardInputs | null;
@@ -14,6 +14,8 @@ const STEPS = [
   { key: 'rent', title: 'Monthly rent', icon: Home, hint: 'The number that gets locked first, no matter what.' },
   { key: 'bills', title: 'Fixed bills', icon: Receipt, hint: 'Electricity, internet, EMIs — all the non-negotiables.' },
   { key: 'goal', title: 'Your savings goal', icon: Target, hint: 'How much to bank automatically before you see the rest.' },
+  { key: 'leak', title: 'The money leak', icon: Sparkles, hint: 'What quietly drains you? The watcher will start hunting there first.' },
+  { key: 'apps', title: 'Wallets you use', icon: Smartphone, hint: 'SpendSmart auto-reads UPI and SMS from these — pick every one you actually use.' },
   { key: 'style', title: 'Spending style', icon: SlidersHorizontal, hint: 'Sets how much flex your autonomy gives you daily.' },
 ] as const;
 
@@ -50,6 +52,10 @@ const Onboarding: React.FC<OnboardingProps> = ({ initial, onComplete, onCancel }
         return inputs.bills >= 0;
       case 'goal':
         return inputs.goal >= 0;
+      case 'leak':
+        return inputs.leak.length > 0;
+      case 'apps':
+        return true;
       default:
         return true;
     }
@@ -62,6 +68,14 @@ const Onboarding: React.FC<OnboardingProps> = ({ initial, onComplete, onCancel }
   };
 
   const goalPct = inputs.income > 0 ? Math.round((inputs.goal / inputs.income) * 100) : 0;
+
+  const locked = inputs.rent + inputs.bills;
+  const spendable = Math.max(0, inputs.income - locked - inputs.goal);
+  const dailyPreview = {
+    allowance: inputs.income > 0 ? spendable / 30 : 0,
+    save: inputs.goal,
+    locked,
+  };
 
   return (
     <div className="min-h-screen bg-[#F4EFE4]">
@@ -223,29 +237,115 @@ const Onboarding: React.FC<OnboardingProps> = ({ initial, onComplete, onCancel }
               </div>
             )}
 
-            {STEPS[step].key === 'style' && (
-              <div className="grid sm:grid-cols-3 gap-3">
-                {(
-                  [
-                    { id: 'strict', title: 'Strict', desc: 'Tight leash, bigger savings' },
-                    { id: 'balanced', title: 'Balanced', desc: 'Save hard, still live a little' },
-                    { id: 'flex', title: 'Flex', desc: 'Autonomy with room to breathe' },
-                  ] as { id: SpendStyle; title: string; desc: string }[]
-                ).map((s) => (
+            {STEPS[step].key === 'leak' && (
+              <div className="space-y-3">
+                {LEAK_OPTIONS.map((l) => (
                   <button
-                    key={s.id}
-                    onClick={() => {
-                      set('style', s.id);
-                      onComplete({ ...inputs, style: s.id });
-                    }}
-                    className={`rounded-2xl p-5 text-left border-2 transition-all duration-200 cursor-pointer ${
-                      inputs.style === s.id ? 'border-[#B8860B] bg-[#B8860B]/5' : 'border-black/10 hover:border-black/30'
+                    key={l.id}
+                    onClick={() => set('leak', l.id)}
+                    className={`w-full flex items-center gap-4 rounded-2xl px-5 py-4 text-left border-2 transition-all duration-200 cursor-pointer ${
+                      inputs.leak === l.id ? 'border-[#B8860B] bg-[#B8860B]/5' : 'border-black/10 hover:border-black/30'
                     }`}
                   >
-                    <p className="font-medium text-black mb-1">{s.title}</p>
-                    <p className="text-sm text-black/50 leading-snug">{s.desc}</p>
+                    <span className="text-2xl">{l.icon}</span>
+                    <span className="text-lg font-medium text-black">{l.label}</span>
                   </button>
                 ))}
+              </div>
+            )}
+
+            {STEPS[step].key === 'apps' && (
+              <div>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {APP_OPTIONS.map((app) => {
+                    const on = inputs.apps.includes(app);
+                    return (
+                      <button
+                        key={app}
+                        onClick={() =>
+                          set('apps', on ? inputs.apps.filter((a) => a !== app) : [...inputs.apps, app])
+                        }
+                        className={`flex items-center justify-between rounded-2xl px-5 py-4 text-left border-2 transition-all duration-200 cursor-pointer ${
+                          on ? 'border-[#18241C] bg-[#18241C] text-white' : 'border-black/10 hover:border-black/30'
+                        }`}
+                      >
+                        <span className="font-medium">{app}</span>
+                        <span
+                          className={`h-5 w-5 rounded-full border-2 flex items-center justify-center text-[10px] ${
+                            on ? 'border-[#d4af37] text-[#d4af37]' : 'border-black/25'
+                          }`}
+                        >
+                          {on ? '✓' : ''}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="text-xs text-black/45 mt-4">
+                  {inputs.apps.length === 0
+                    ? 'Skip for now — you can still import manually from the dashboard.'
+                    : `${inputs.apps.length} source${inputs.apps.length === 1 ? '' : 's'} in the loop.`}
+                </p>
+              </div>
+            )}
+
+            {STEPS[step].key === 'style' && (
+              <div>
+                <div className="grid sm:grid-cols-3 gap-3">
+                  {(
+                    [
+                      { id: 'strict', title: 'Strict', desc: 'Tight leash, bigger savings' },
+                      { id: 'balanced', title: 'Balanced', desc: 'Save hard, still live a little' },
+                      { id: 'flex', title: 'Flex', desc: 'Autonomy with room to breathe' },
+                    ] as { id: SpendStyle; title: string; desc: string }[]
+                  ).map((s) => (
+                    <button
+                      key={s.id}
+                      onClick={() => set('style', s.id)}
+                      className={`rounded-2xl p-5 text-left border-2 transition-all duration-200 cursor-pointer ${
+                        inputs.style === s.id ? 'border-[#B8860B] bg-[#B8860B]/5' : 'border-black/10 hover:border-black/30'
+                      }`}
+                    >
+                      <p className="font-medium text-black mb-1">{s.title}</p>
+                      <p className="text-sm text-black/50 leading-snug">{s.desc}</p>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Smart preview — the math made visible */}
+                <div
+                  className="mt-6 rounded-2xl p-6 text-white overflow-hidden relative"
+                  style={{ background: 'linear-gradient(150deg, #18241C, #24352A)' }}
+                >
+                  <div
+                    aria-hidden
+                    className="absolute -right-14 -top-14 w-44 h-44 rounded-full opacity-25 pointer-events-none"
+                    style={{ background: 'radial-gradient(circle, #d4af37 0%, transparent 65%)' }}
+                  />
+                  <div className="relative z-10 flex items-center gap-2 mb-4">
+                    <span className="text-xs uppercase tracking-[0.3em] text-[#d4af37] font-semibold">
+                      Your plan, live
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div>
+                      <p className="text-[11px] uppercase tracking-[0.18em] text-white/50 mb-1">Daily</p>
+                      <p className="font-serif text-2xl md:text-3xl text-white">₹{Math.round(dailyPreview.allowance).toLocaleString('en-IN')}</p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] uppercase tracking-[0.18em] text-white/50 mb-1">Goals</p>
+                      <p className="font-serif text-2xl md:text-3xl text-[#d4af37]">₹{Math.round(dailyPreview.save).toLocaleString('en-IN')}/mo</p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] uppercase tracking-[0.18em] text-white/50 mb-1">Locked</p>
+                      <p className="font-serif text-2xl md:text-3xl text-white">₹{Math.round(dailyPreview.locked).toLocaleString('en-IN')}</p>
+                    </div>
+                  </div>
+                  <p className="relative z-10 mt-4 text-xs text-white/55 leading-relaxed">
+                    Rent + bills locked first · {inputs.style} flex factor ·{' '}
+                    {inputs.apps.length === 0 ? 'manual imports' : `${inputs.apps.length} sources auto-read`}
+                  </p>
+                </div>
               </div>
             )}
           </div>
