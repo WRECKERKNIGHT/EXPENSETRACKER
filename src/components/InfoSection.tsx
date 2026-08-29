@@ -28,7 +28,7 @@ const InfoSection: React.FC = () => (
             text="Meet SpendSmart."
             className="split-title text-black text-5xl md:text-6xl font-medium leading-[1.04] mb-8"
           />
-          <DiscoverButton />
+          <DiscoverButton onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })} />
         </div>
         <p className="font-serif text-black/70 text-2xl md:text-3xl leading-snug">
           SpendSmart is the smart ledger that parses your bank messages, scans receipts and uses AI

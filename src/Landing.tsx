@@ -503,6 +503,13 @@ const Landing: React.FC = () => {
         <DashboardShowcase />
       </div>
 
+      {/* Editorial ornament */}
+      <div aria-hidden className="flex items-center justify-center gap-4 py-10 max-w-xs mx-auto">
+        <span className="h-px flex-1" style={{ background: 'linear-gradient(90deg, transparent, #C9A444)' }} />
+        <span className="font-serif text-[#B8860B] text-sm">✦</span>
+        <span className="h-px flex-1" style={{ background: 'linear-gradient(90deg, #C9A444, transparent)' }} />
+      </div>
+
       <div className="gsap-section">
         <FeaturesGrid />
       </div>
@@ -526,6 +533,13 @@ const Landing: React.FC = () => {
       </div>
 
       <FAQSection />
+
+      {/* Editorial ornament */}
+      <div aria-hidden className="flex items-center justify-center gap-4 py-10 max-w-xs mx-auto">
+        <span className="h-px flex-1" style={{ background: 'linear-gradient(90deg, transparent, #C9A444)' }} />
+        <span className="font-serif text-[#B8860B] text-sm">✦</span>
+        <span className="h-px flex-1" style={{ background: 'linear-gradient(90deg, #C9A444, transparent)' }} />
+      </div>
 
       <div className="gsap-section">
         <TestimonialSection />
