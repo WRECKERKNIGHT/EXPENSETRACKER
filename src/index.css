@@ -239,6 +239,34 @@ html {
   text-shadow: 0 0 24px rgba(212, 175, 55, 0.35), 0 2px 12px rgba(212, 175, 55, 0.18);
 }
 
+/* ── Dashboard card hover + entrance ── */
+.dash-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.dash-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px -24px rgba(15, 24, 18, 0.35);
+  border-color: #C9A444 !important;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dash-rise {
+    animation: dash-rise 0.7s ease-out both;
+  }
+  .dash-card:nth-child(1) { animation-delay: 0.05s; }
+  .dash-card:nth-child(2) { animation-delay: 0.15s; }
+  .dash-card:nth-child(3) { animation-delay: 0.25s; }
+}
+@keyframes dash-rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ── Ambient floating particles for dark sections ── */
 @keyframes floatUp {
   0% { transform: translateY(0); opacity: 0; }

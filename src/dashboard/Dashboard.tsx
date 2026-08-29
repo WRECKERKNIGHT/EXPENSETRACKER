@@ -175,13 +175,14 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* ── Balance cards ── */}
+        {/* ── Balance cards ── */}
         <div className="grid sm:grid-cols-3 gap-4 mb-8">
-          <div className="dash-card rounded-2xl bg-[#FBF9F0] border border-[#E7DEC7] p-6">
+          <div className="dash-card dash-rise rounded-2xl bg-[#FBF9F0] border border-[#E7DEC7] p-6">
             <p className="text-xs uppercase tracking-[0.2em] text-black/45 font-semibold mb-2">Monthly income</p>
             <p className="font-serif text-3xl font-semibold text-black">{fmt(profile.inputs.income)}</p>
           </div>
 
-          <div className="dash-card rounded-2xl bg-[#18241C] p-6">
+          <div className="dash-card dash-rise rounded-2xl bg-[#18241C] p-6">
             <div className="flex items-center justify-between mb-2">
               <p className="text-xs uppercase tracking-[0.2em] text-white/50 font-semibold">Locked first</p>
               <Lock size={14} className="text-[#d4af37]" />
@@ -190,7 +191,7 @@ const Dashboard: React.FC = () => {
             <p className="text-xs text-white/50 mt-1">Rent + fixed bills, autopilot-held</p>
           </div>
 
-          <div className="dash-card rounded-2xl bg-[#FBF9F0] border border-[#E7DEC7] p-6">
+          <div className="dash-card dash-rise rounded-2xl bg-[#FBF9F0] border border-[#E7DEC7] p-6">
             <p className="text-xs uppercase tracking-[0.2em] text-black/45 font-semibold mb-2">Allowance left today</p>
             <p className="font-serif text-3xl font-semibold text-black">{fmt(allowanceLeft)}</p>
             <div className="mt-3 h-1.5 rounded-full overflow-hidden" style={{ background: '#E9E0CB' }}>
