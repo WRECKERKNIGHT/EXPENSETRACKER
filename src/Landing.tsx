@@ -10,6 +10,7 @@ import SafetyNetSection from './components/SafetyNetSection';
 import HowItWorks from './components/HowItWorks';
 import AutopilotTeaser from './components/AutopilotTeaser';
 import SecuritySection from './components/SecuritySection';
+import SmartParseSection from './components/SmartParseSection';
 import StatsSection from './components/StatsSection';
 import TestimonialSection from './components/TestimonialSection';
 import FinaleSection from './components/FinaleSection';
@@ -304,6 +305,22 @@ const Landing: React.FC = () => {
       });
     });
 
+    /* ── 8c. SmartParse cards stagger ── */
+    const pgrid = root.querySelector('.parse-grid') as HTMLElement | null;
+    if (pgrid) {
+      const pc = pgrid.querySelectorAll('.parse-card');
+      gsap.set(pc, { opacity: 0, y: 56, rotation: (i: number) => (i % 2 ? 2 : -2) });
+      gsap.to(pc, {
+        opacity: 1,
+        y: 0,
+        rotation: 0,
+        ease: 'none',
+        duration: 0.7,
+        stagger: 0.1,
+        scrollTrigger: { trigger: pgrid, start: 'top 88%', end: 'top 30%', scrub: 0.6 },
+      });
+    }
+
     /* ── 9. SafetyNet — The Shield (scroll-locked story) ── */
     chapter(
       root.querySelector('.safety-section'),
@@ -476,6 +493,10 @@ const Landing: React.FC = () => {
       <AutopilotTeaser />
 
       <SecuritySection />
+
+      <div className="gsap-section">
+        <SmartParseSection />
+      </div>
 
       <div className="gsap-section">
         <StatsSection />
