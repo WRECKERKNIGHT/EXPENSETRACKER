@@ -117,6 +117,53 @@ html {
   animation: glow-cream-pulse 5s ease-in-out infinite;
 }
 
+/* ── Button shine sweep on primary CTAs ── */
+.shine-btn {
+  position: relative;
+  overflow: hidden;
+}
+.shine-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 40%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: translateX(-180%) skewX(-20deg);
+  transition: transform 0.7s ease;
+  pointer-events: none;
+}
+.shine-btn:hover::after {
+  transform: translateX(340%) skewX(-20deg);
+}
+
+/* ── Classic card hover: lift + gold hairline ── */
+.feature-card,
+.step-card,
+.gsap-card {
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease, background-color 0.35s ease;
+}
+.feature-card:hover,
+.step-card:hover {
+  transform: translateY(-6px);
+  border-color: #C9A444 !important;
+  box-shadow: 0 26px 50px -22px rgba(120, 97, 24, 0.4);
+}
+.gsap-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 44px -24px rgba(15, 24, 18, 0.35);
+}
+
+/* ── Ambient glow aura for dark sections ── */
+.aura {
+  pointer-events: none;
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(60px);
+  opacity: 0.35;
+}
+
 /* ── Ambient floating particles for dark sections ── */
 @keyframes floatUp {
   0% { transform: translateY(0); opacity: 0; }

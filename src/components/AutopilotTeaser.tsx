@@ -17,6 +17,8 @@ const AutoSmall = [
 export default function AutopilotTeaser() {
   return (
     <section className="auto-section relative bg-[#18241C] overflow-hidden px-6 py-28">
+      <div aria-hidden className="aura w-[30rem] h-[30rem] -top-40 right-[10%]" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.22), transparent 70%)' }} />
+      <div aria-hidden className="aura w-[26rem] h-[26rem] -bottom-40 left-[5%]" style={{ background: 'radial-gradient(circle, rgba(24,52,42,0.8), transparent 70%)' }} />
       <div className="auto-stage relative max-w-[88rem] mx-auto flex flex-col lg:flex-row items-center justify-between gap-16">
         <div className="auto-copy max-w-xl self-start lg:self-auto">
           <p className="auto-chapter kicker kicker-gold mb-3">
@@ -44,7 +46,7 @@ export default function AutopilotTeaser() {
           </div>
           <button
             onClick={() => go(PATH.dashboard)}
-            className="auto-cta mt-10 inline-flex items-center gap-2 bg-[#d4af37] text-[#18241C] font-semibold px-6 py-3 rounded-full text-sm uppercase tracking-wider group"
+            className="auto-cta shine-btn mt-10 inline-flex items-center gap-2 bg-[#d4af37] text-[#18241C] font-semibold px-6 py-3 rounded-full text-sm uppercase tracking-wider group"
           >
             Turn it on
             <Play className="size-4 transition-transform group-hover:translate-x-1" />

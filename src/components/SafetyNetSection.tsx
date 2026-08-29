@@ -12,6 +12,7 @@ const LINES = [
 const SafetyNetSection: React.FC = () => (
   <section className="safety-section relative bg-[#18241C] overflow-hidden">
     <div className="safety-stage min-h-screen flex items-center py-24 overflow-hidden">
+      <div aria-hidden className="aura w-[26rem] h-[26rem] -right-32 -bottom-24" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.14), transparent 70%)' }} />
       {/* Ambient glow */}
       <div
         className="absolute right-0 top-0 w-[40rem] h-[40rem] rounded-full opacity-15 pointer-events-none"

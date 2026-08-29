@@ -41,7 +41,7 @@ const Navbar: React.FC = () => (
 
       <button
         onClick={() => go(PATH.dashboard)}
-        className="bg-[#18241C] text-white text-base font-medium px-7 py-2.5 rounded-full hover:bg-[#2A3B31] transition-colors duration-200 cursor-pointer"
+        className="shine-btn bg-[#18241C] text-white text-base font-medium px-7 py-2.5 rounded-full hover:bg-[#2A3B31] transition-colors duration-200 cursor-pointer"
       >
         Get Started
       </button>
