@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 import { Target } from 'lucide-react';
 import { DashboardConfig, Tx, fmt, todayISO } from '../engine';
 
@@ -29,8 +30,7 @@ const GoalRing: React.FC<GoalRingProps> = ({ cfg, tx, toggles }) => {
   const pct = goal > 0 ? Math.min(1, total / goal) : 0;
 
   useEffect(() => {
-    const gsap = window.gsap;
-    if (!gsap || !ringRef.current || !textRef.current) return;
+    if (!ringRef.current || !textRef.current) return;
     objRef.current.v = 0;
     gsap.to(objRef.current, {
       v: pct,

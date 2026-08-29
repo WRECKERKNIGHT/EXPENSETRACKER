@@ -81,7 +81,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ initial, onComplete, onCancel }
     <div className="min-h-screen bg-[#F4EFE4]">
       <div
         className="px-6 pt-8 pb-16 text-white"
-        style={{ background: 'linear-gradient(160deg, #17142B 0%, #18241C 100%)' }}
+        style={{ background: 'linear-gradient(160deg, #101713 0%, #18241C 100%)' }}
       >
         <div className="max-w-[88rem] mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">

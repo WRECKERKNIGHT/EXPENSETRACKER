@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 import { PieChart } from 'lucide-react';
 import { CATEGORIES, Category, Tx, fmt } from '../engine';
 
@@ -46,8 +47,7 @@ const Charts: React.FC<ChartsProps> = ({ tx }) => {
   const max = Math.max(...days, 1);
 
   useEffect(() => {
-    const gsap = window.gsap;
-    if (!gsap || !barsRef.current) return;
+    if (!barsRef.current) return;
     const bars = barsRef.current.querySelectorAll<HTMLElement>('.c-bar');
     gsap.fromTo(
       bars,
