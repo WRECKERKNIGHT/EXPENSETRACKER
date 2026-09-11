@@ -70,7 +70,7 @@ const Footer: React.FC = () => (
             {[Github, Twitter, Mail].map((Icon, i) => (
               <button
                 key={i}
-                aria-label="Social link"
+                aria-label={['GitHub profile', 'Twitter profile', 'Email us'][i]}
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/60 hover:border-[#d4af37] hover:text-[#d4af37] transition-colors duration-200 cursor-pointer"
               >
                 <Icon size={15} />
