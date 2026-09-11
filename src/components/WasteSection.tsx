@@ -37,7 +37,7 @@ const WasteSection: React.FC = () => (
             emClass="text-[#d4af37] glow-gold"
             className="waste-heading glow-cream text-[#FBF9F0] text-5xl md:text-7xl font-medium leading-[1.02] mb-12"
           />
-          <div className="relative h-72">
+          <div className="relative min-h-[20rem]">
             {LINES.map((line, i) => (
               <p
                 key={i}
@@ -50,7 +50,7 @@ const WasteSection: React.FC = () => (
             ))}
             <div
               className="waste-stat absolute inset-x-0 flex items-center gap-5"
-              style={{ top: 4 * 60 + 4 }}
+              style={{ top: 4 * 64 }}
             >
               <p className="text-3xl md:text-4xl font-semibold text-[#d4af37]">₹24,000+</p>
               <p className="text-sm md:text-base text-white/70 font-medium leading-snug">
