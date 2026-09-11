@@ -115,7 +115,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#F4EFE4]">
       {/* ── Top nav ── */}
-      <div className="sticky top-0 z-30 bg-[#F4EFE4]/90 backdrop-blur border-b border-black/5">
+      <div className="sticky top-0 z-30 bg-[#F4EFE4]/95 backdrop-blur-md border-b border-black/5">
         <div className="max-w-[88rem] mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div
@@ -125,7 +125,7 @@ const Dashboard: React.FC = () => {
               <Wallet size={18} className="text-white" />
             </div>
             <div className="leading-none">
-              <span className="text-lg font-medium tracking-tight text-black">SpendSmart</span>
+              <span className="text-lg font-semibold tracking-tight text-black">SpendSmart</span>
               <p className="text-[9px] uppercase tracking-[0.24em] text-[#B8860B] font-semibold mt-1">
                 Autonomous
               </p>
