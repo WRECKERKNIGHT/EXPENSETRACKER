@@ -27,7 +27,7 @@ const Insights: React.FC<InsightsProps> = ({ cfg, tx, toggles, streak }) => {
     if (list.length <= 1) return;
     const t = setInterval(() => setIdx((i) => (i + 1) % list.length), 5000);
     return () => clearInterval(t);
-  }, [list.length]);
+  }, [list]);
 
   useEffect(() => {
     if (!textRef.current) return;

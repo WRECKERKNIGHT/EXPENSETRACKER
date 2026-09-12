@@ -62,14 +62,14 @@ const GoalRing: React.FC<GoalRingProps> = ({ cfg, tx, toggles }) => {
             cy="50"
             r="44"
             fill="none"
-            stroke="url(#ringGrad)"
+            stroke="url(#goalRingGrad)"
             strokeWidth="9"
             strokeLinecap="round"
             strokeDasharray={C}
             strokeDashoffset={C}
           />
           <defs>
-            <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+            <linearGradient id="goalRingGrad" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="#d5b256" />
               <stop offset="100%" stopColor="#b8860b" />
             </linearGradient>
