@@ -108,8 +108,8 @@ const SmartImport: React.FC<SmartImportProps> = ({ onAdd }) => {
               {last.kind === 'credit' ? '+' : '−'}{fmt(last.amount ?? 0)}
             </span>
             {last.kind === 'credit' ? (
-              <span className="text-xs text-black/55">
-                Money in isn't tracked here yet — imports log spends only.
+              <span className="text-xs text-black/55 max-w-[14rem]">
+                Credits are not tracked as expenses — the import only logs spends.
               </span>
             ) : (
               <button
