@@ -188,7 +188,7 @@ export const seedTransactions = (inputs: OnboardInputs): Tx[] => {
     ['Coffee run', 90, 'Food', 0],
     ['Auto — office peak', 145, 'Transport', 0],
     ['BigBasket', 640, 'Food', 1],
-    ['Speed post — recharge', 299, 'Utilities', 1],
+    ['Recharge', 299, 'Utilities', 1],
     ['Netflix', 649, 'Subscriptions', 2],
   ];
   return base
