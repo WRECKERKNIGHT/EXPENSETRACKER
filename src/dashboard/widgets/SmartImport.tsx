@@ -8,7 +8,7 @@ interface SmartImportProps {
 }
 
 const textareaCls =
-  'w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:border-[#B8860B] transition-colors duration-200 resize-none font-mono';
+  'w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B]/30 transition-colors duration-200 resize-none font-mono';
 
 const SmartImport: React.FC<SmartImportProps> = ({ onAdd }) => {
   const [text, setText] = useState('');

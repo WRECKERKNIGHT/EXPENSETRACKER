@@ -21,7 +21,7 @@ const CAT_COLOR: Record<string, string> = {
 };
 
 const inputCls =
-  'w-full rounded-xl border border-black/10 bg-white px-3 py-2.5 text-sm text-black outline-none focus:border-[#B8860B] transition-colors duration-200';
+  'w-full rounded-xl border border-black/10 bg-white px-3 py-2.5 text-sm text-black outline-none focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B]/30 transition-colors duration-200';
 
 const Transactions: React.FC<TransactionsProps> = ({ tx, onAdd, onDelete, onResetDay }) => {
   const [name, setName] = useState('');
