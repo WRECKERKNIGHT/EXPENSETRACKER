@@ -21,7 +21,7 @@ const StatsSection: React.FC = () => (
     />
     <div className="max-w-[88rem] mx-auto grid grid-cols-2 md:grid-cols-4 gap-10">
       {STATS.map((st) => (
-        <div key={st.label} className="stat-shine text-center px-2 py-4">
+        <div key={st.label} className="stat-shine text-center px-2 py-4 relative z-0">
           <p className="stat-glow font-serif text-4xl md:text-6xl font-semibold text-[#d5b256]" style={{ letterSpacing: '-0.02em' }}>
             <span
               className="stat-count"
