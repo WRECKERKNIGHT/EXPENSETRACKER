@@ -27,7 +27,7 @@ const SafetyNetSection: React.FC = () => (
       ))}
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-10 grid lg:grid-cols-2 gap-14 items-center">
-        <div className="relative h-[26rem] hidden lg:block">
+        <div className="relative h-[22rem] hidden lg:block">
           <div
             className="safety-shield absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
             style={{ top: 150 }}
@@ -44,8 +44,7 @@ const SafetyNetSection: React.FC = () => (
             >
               <Lock size={22} color="#d4af37" />
             </div>
-          </div>
-          <p className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-full text-center text-sm text-white/50 font-medium">
+          </div>              <p className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-full text-center text-sm text-white/50 font-medium">
             Four rules. One shield.
           </p>
         </div>
