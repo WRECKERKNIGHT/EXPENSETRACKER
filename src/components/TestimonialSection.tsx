@@ -59,7 +59,7 @@ const TestimonialSection: React.FC = () => {
           />
           <div key={active} className="t-fade transition-all duration-500 ease-out">
             <p
-              className="font-serif text-white text-xl md:text-3xl leading-snug mb-10 pl-6"
+              className="font-serif text-white text-lg md:text-2xl leading-relaxed mb-10 pl-6 italic"
               style={{ letterSpacing: '0' }}
             >
               "{slide.quote}"
