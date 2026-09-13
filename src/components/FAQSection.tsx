@@ -72,7 +72,7 @@ const FAQSection: React.FC = () => {
                   className="grid transition-[grid-template-rows] duration-300 ease-out"
                   style={{ gridTemplateRows: isOpen ? '1fr' : '0fr' }}
                 >
-                  <div className="overflow-hidden">
+                  <div className="overflow-hidden min-h-0">
                     <p className="px-6 pb-6 text-black/65 leading-relaxed">{item.a}</p>
                   </div>
                 </div>
