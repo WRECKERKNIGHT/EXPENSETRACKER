@@ -36,7 +36,7 @@ export default function AutopilotTeaser() {
           <div className="mt-10 space-y-6">
             {LINES.map((l) => (
               <div key={l.id} className="auto-line flex items-start gap-5">
-                <span className="text-[#d4af37] text-xl font-medium mt-0.5">{l.id}</span>
+                <span className="text-[#d4af37] text-lg font-semibold mt-0.5 font-mono">{l.id}</span>
                 <div>
                   <p className="text-white text-lg font-medium">{l.title}</p>
                   <p className="text-white/50 text-sm mt-0.5">{l.sub}</p>
