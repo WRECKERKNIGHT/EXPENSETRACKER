@@ -34,7 +34,7 @@ const Momentum: React.FC<MomentumProps> = ({ cfg, tx }) => {
   const topCat = [...byCat.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? ('Other' as Category);
   const topSpend = byCat.get(topCat) || 0;
 
-  let monthsToGoal = cfg.monthlySave > 0 ? Math.max(0, cfg.inputs.goal / cfg.monthlySave) : 0;
+  const monthsToGoal = cfg.monthlySave > 0 ? Math.max(0, cfg.inputs.goal / cfg.monthlySave) : 0;
 
   return (
     <div className="grid sm:grid-cols-3 gap-4 mb-8">
