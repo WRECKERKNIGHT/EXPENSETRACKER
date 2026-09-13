@@ -365,8 +365,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ initial, onComplete, onCancel }
                 step === 0 ? 'text-black/40' : 'text-black/70 hover:text-black'
               }`}
             >
-              {step === 0 && onCancel ? null : <ArrowLeft size={16} />}
-              {step === 0 ? 'Skip for now' : 'Back'}
+              {step === 0 ? 'Skip for now' : <><ArrowLeft size={16} /> Back</>}
             </button>
 
             {STEPS[step].key === 'style' ? (
