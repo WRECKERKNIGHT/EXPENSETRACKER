@@ -34,7 +34,9 @@ const Charts: React.FC<ChartsProps> = ({ tx }) => {
   let acc = 0;
   const stops = shares.map((s) => {
     const p = total > 0 ? (s.val / total) * 100 : 0;
-    const seg = `${acc}% ${Math.min(100, acc + p)}%`;
+    const start = Math.round(acc * 10) / 10;
+    const end = Math.round(Math.min(100, acc + p) * 10) / 10;
+    const seg = `${start}% ${end}%`;
     acc += p;
     return `${COLORS[s.cat]} ${seg}`;
   });
