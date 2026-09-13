@@ -50,7 +50,7 @@ const FinaleSection: React.FC = () => (
           <div className="finale-actions flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={() => go(PATH.dashboard)}
-              className="shine-btn inline-flex items-center gap-3 bg-white text-black text-base font-medium pl-8 pr-2 py-2 rounded-full hover:bg-gray-200 transition-colors duration-200 cursor-pointer"
+              className="shine-btn inline-flex items-center gap-3 bg-white text-black text-base font-medium pl-8 pr-2 py-2 rounded-full hover:bg-gray-100 transition-colors duration-200 cursor-pointer focus-visible:outline-white/50"
             >
               Start Free
               <span className="bg-black rounded-full p-2">
@@ -59,7 +59,7 @@ const FinaleSection: React.FC = () => (
             </button>
             <button
               onClick={() => go(PATH.dashboard)}
-              className="px-8 py-3 rounded-full border border-white/25 text-white/80 font-medium hover:border-white/60 hover:text-white transition-colors duration-200 cursor-pointer"
+              className="px-8 py-3 rounded-full border border-white/25 text-white/80 font-medium hover:border-white/50 hover:text-white transition-colors duration-200 cursor-pointer focus-visible:outline-white/50"
             >
               Sign In
             </button>
