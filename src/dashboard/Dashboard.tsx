@@ -170,9 +170,11 @@ const Dashboard: React.FC = () => {
               <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#B8860B] bg-[#B8860B]/10 px-3 py-1.5 rounded-full">
                 🎯 {Math.round(cfg.goalPct * 100)}% goal locked
               </span>
-              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#B8860B] bg-[#B8860B]/10 px-3 py-1.5 rounded-full">
-                🔥 {profile.streak} day streak
-              </span>
+              {profile.streak > 0 && (
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#B8860B] bg-[#B8860B]/10 px-3 py-1.5 rounded-full">
+                  🔥 {profile.streak} day streak
+                </span>
+              )}
             </div>
           </div>
           <p className="text-black/50 text-sm max-w-xs leading-relaxed">
