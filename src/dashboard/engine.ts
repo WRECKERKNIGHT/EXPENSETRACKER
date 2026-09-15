@@ -220,7 +220,7 @@ export const insightsFor = (
     }% of income straight into the goal.`);
   }
 
-  const subscriptions = tx.filter((t) => t.cat === 'Subscriptions' && !toggles['hunter']);
+  const subscriptions = tx.filter((t) => t.cat === 'Subscriptions');
   if (subscriptions.length > 0 && toggles['hunter']) {
     const yearly = subscriptions.reduce((s, t) => s + t.amount, 0) * 12;
     out.push(`Your subscriptions cost roughly ${fmt(yearly)} a year. Turn hunter off for any you actually use.`);

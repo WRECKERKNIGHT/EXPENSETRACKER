@@ -15,8 +15,6 @@ const COLORS: Record<Category, string> = {
 
 const LAST_DAYS = 14;
 
-const monthPrefix = new Date().toISOString().slice(0, 7);
-
 interface ChartsProps {
   tx: Tx[];
 }
@@ -24,6 +22,7 @@ interface ChartsProps {
 const Charts: React.FC<ChartsProps> = ({ tx }) => {
   const barsRef = useRef<HTMLDivElement | null>(null);
 
+  const monthPrefix = new Date().toISOString().slice(0, 7);
   const monthly = tx.filter((t) => t.date.startsWith(monthPrefix) && t.cat !== 'Savings');
   const total = monthly.reduce((s, t) => s + t.amount, 0);
 
