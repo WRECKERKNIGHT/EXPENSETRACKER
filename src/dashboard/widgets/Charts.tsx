@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { PieChart } from 'lucide-react';
-import { CATEGORIES, Category, Tx, fmt } from '../engine';
+import { CATEGORIES, Category, Tx, fmt, todayISO, todayISOOn } from '../engine';
 
 const COLORS: Record<Category, string> = {
   Food: '#B8860B',
@@ -40,8 +40,10 @@ const Charts: React.FC<ChartsProps> = ({ tx }) => {
   });
 
   const days = [...Array(LAST_DAYS)].map((_, i) => {
-    const d = new Date(Date.now() - (LAST_DAYS - 1 - i) * 864e5).toISOString().slice(0, 10);
-    return tx.filter((t) => t.date === d && t.cat !== 'Savings').reduce((s, t) => s + t.amount, 0);
+    const d = new Date();
+    d.setDate(d.getDate() - (LAST_DAYS - 1 - i));
+    const dISO = todayISOOn(d);
+    return tx.filter((t) => t.date === dISO && t.cat !== 'Savings').reduce((s, t) => s + t.amount, 0);
   });
   const max = Math.max(...days, 1);
 
@@ -55,7 +57,7 @@ const Charts: React.FC<ChartsProps> = ({ tx }) => {
     );
   }, [tx, max]);
 
-  const renderDay = (d: string) => new Date(d + 'T00:00:00').getDate();
+  const renderDay = (d: Date) => todayISOOn(d).split('-')[2];
 
   return (
     <div className="rounded-2xl bg-[#FBF9F0] border border-[#E7DEC7] p-6">
@@ -118,7 +120,7 @@ const Charts: React.FC<ChartsProps> = ({ tx }) => {
             ))}
           </div>
           <div className="flex justify-between text-xs text-black/40">
-            <span>{renderDay(new Date(Date.now() - (LAST_DAYS - 1) * 864e5).toISOString().slice(0, 10))} {new Date().toLocaleString('en-IN', { month: 'short' })}</span>
+            <span>{renderDay(new Date(Date.now() - (LAST_DAYS - 1) * 864e5))} {new Date().toLocaleDateString('en-IN', { month: 'short' })}</span>
             <span>today · {fmt(days[LAST_DAYS - 1])}</span>
           </div>
         </div>
