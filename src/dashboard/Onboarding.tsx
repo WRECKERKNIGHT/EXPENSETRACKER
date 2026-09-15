@@ -38,7 +38,14 @@ const Onboarding: React.FC<OnboardingProps> = ({ initial, onComplete, onCancel }
   );
 
   const set = <K extends keyof OnboardInputs>(k: K, v: OnboardInputs[K]) =>
-    setInputs((s) => ({ ...s, [k]: v }));
+    setInputs((s) => {
+      const next = { ...s, [k]: v };
+      if (k === 'income' || k === 'goal') {
+        const cap = Math.max(1, Math.round(Number(next.income) * 0.4));
+        next.goal = Math.max(0, Math.min(next.goal, cap));
+      }
+      return next;
+    });
 
   const stepOk = () => {
     switch (STEPS[step].key) {
