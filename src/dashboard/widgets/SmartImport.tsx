@@ -107,13 +107,18 @@ const SmartImport: React.FC<SmartImportProps> = ({ onAdd }) => {
             <span className={`font-serif text-xl ${last.kind === 'credit' ? 'text-[#2a7a4b]' : 'text-black'}`}>
               {last.kind === 'credit' ? '+' : '−'}{fmt(last.amount ?? 0)}
             </span>
-            <button
-              onClick={importIt}
-              disabled={last.kind === 'credit'}
-              className="shine-btn inline-flex items-center gap-2 rounded-full bg-[#18241C] text-white text-sm font-medium px-5 py-2 hover:bg-[#2A3B31] transition-colors duration-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              Import
-            </button>
+            {last.kind === 'credit' ? (
+              <span className="text-xs text-black/55">
+                Money in isn't tracked here yet — imports log spends only.
+              </span>
+            ) : (
+              <button
+                onClick={importIt}
+                className="shine-btn inline-flex items-center gap-2 rounded-full bg-[#18241C] text-white text-sm font-medium px-5 py-2 hover:bg-[#2A3B31] transition-colors duration-200 cursor-pointer"
+              >
+                Import
+              </button>
+            )}
           </div>
         </div>
       )}
