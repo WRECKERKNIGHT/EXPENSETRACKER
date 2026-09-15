@@ -48,7 +48,15 @@ const Autopilot: React.FC<AutopilotProps> = ({ toggles, onChange }) => (
               data-on={on}
               role="switch"
               aria-checked={on}
+              aria-label={`${a.label} automation`}
+              tabIndex={0}
               onClick={() => onChange(a.id, !on)}
+              onKeyDown={(e) => {
+                if (e.key === ' ' || e.key === 'Enter') {
+                  e.preventDefault();
+                  onChange(a.id, !on);
+                }
+              }}
             />
           </div>
         );
