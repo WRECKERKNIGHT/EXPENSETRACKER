@@ -59,7 +59,7 @@ const Transactions: React.FC<TransactionsProps> = ({ tx, onAdd, onDelete, onRese
       </div>
 
       <div className="grid sm:grid-cols-[1.4fr_1fr_1fr_auto] gap-3 mb-5">
-        <input className={inputCls} placeholder="What did you spend on?" value={name} onChange={(e) => setName(e.target.value)} />
+        <input className={inputCls} placeholder="What did you spend on?" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && submit()} />
         <input className={inputCls} placeholder="Amount ₹" value={amount} onChange={(e) => setAmount(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && submit()} inputMode="numeric" />
         <select className={inputCls} value={cat} onChange={(e) => setCat(e.target.value as Category)}>
           {CATEGORIES.map((c) => (
