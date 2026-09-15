@@ -25,7 +25,7 @@ const FinaleSection: React.FC = () => (
           <div className="mark-idle">
             <span
               className="finale-mark font-serif font-semibold leading-none text-[#d4af37]/25 glow-gold"
-              style={{ fontSize: '12rem', opacity: 0 }}
+              style={{ fontSize: '12rem' }}
             >
               ₹
             </span>

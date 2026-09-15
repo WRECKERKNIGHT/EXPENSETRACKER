@@ -42,7 +42,7 @@ const WasteSection: React.FC = () => (
               <p
                 key={i}
                 className={`waste-line-${i} absolute inset-x-0 text-lg md:text-2xl text-white/80 font-medium`}
-                style={{ top: i * 60, opacity: 0 }}
+                style={{ top: i * 60 }}
               >
                 <span className="text-[#d4af37] mr-3">✦</span>
                 {line}
@@ -50,7 +50,7 @@ const WasteSection: React.FC = () => (
             ))}
             <div
               className="waste-stat absolute inset-x-0 flex items-center gap-5"
-              style={{ top: 4 * 60 + 4, opacity: 0 }}
+              style={{ top: 4 * 60 + 4 }}
             >
               <p className="text-3xl md:text-4xl font-semibold text-[#d4af37]">₹24,000+</p>
               <p className="text-sm md:text-base text-white/70 font-medium leading-snug">

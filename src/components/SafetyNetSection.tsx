@@ -30,7 +30,7 @@ const SafetyNetSection: React.FC = () => (
         <div className="relative h-[26rem] hidden lg:block">
           <div
             className="safety-shield absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
-            style={{ top: 150, opacity: 0 }}
+            style={{ top: 150 }}
           >
             <div
               className="flex items-center justify-center"
@@ -66,7 +66,7 @@ const SafetyNetSection: React.FC = () => (
               <p
                 key={i}
                 className={`safety-line-${i} absolute inset-x-0 text-lg md:text-2xl text-white/80 font-medium`}
-                style={{ top: i * 56, opacity: 0 }}
+                style={{ top: i * 56 }}
               >
                 <span className="text-[#d4af37] mr-3">✦</span>
                 {line}
