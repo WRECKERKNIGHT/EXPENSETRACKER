@@ -1,18 +1,20 @@
 import React from 'react';
 import { TrendingDown, TrendingUp, CalendarClock, Zap } from 'lucide-react';
-import { Category, DashboardConfig, Tx, fmt } from '../engine';
+import { Category, DashboardConfig, Tx, fmt, todayISOOn } from '../engine';
 
 interface MomentumProps {
   cfg: DashboardConfig;
   tx: Tx[];
 }
 
+const iso = (d: Date) => todayISOOn(d);
+
 const weekSpend = (tx: Tx[], weeksAgo: number) => {
   const now = new Date();
   const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - weeksAgo * 7 - (now.getDay() || 7) + 1);
   const end = new Date(start.getTime() + 7 * 864e5);
-  const s = start.toISOString().slice(0, 10);
-  const e = end.toISOString().slice(0, 10);
+  const s = iso(start);
+  const e = iso(end);
   return tx
     .filter((t) => t.cat !== 'Savings' && t.date >= s && t.date < e)
     .reduce((sum, t) => sum + t.amount, 0);
