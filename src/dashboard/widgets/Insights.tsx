@@ -19,12 +19,15 @@ const Insights: React.FC<InsightsProps> = ({ cfg, tx, toggles, streak }) => {
     .reduce((s, t) => s + t.amount, 0);
 
   const list = insightsFor(cfg, spentToday, tx, toggles, streak);
-  const current = list[Math.min(idx, list.length - 1)] || 'Your autonomy is watching your money.';
+  const safeIdx = list.length > 0 ? idx % list.length : 0;
+  const current = list[safeIdx] || 'Your autonomy is watching your money.';
 
   useEffect(() => {
-    const t = setInterval(() => setIdx((i) => i + 1), 5000);
+    setIdx(0);
+    if (list.length <= 1) return;
+    const t = setInterval(() => setIdx((i) => (i + 1) % list.length), 5000);
     return () => clearInterval(t);
-  }, []);
+  }, [list.length]);
 
   useEffect(() => {
     if (!textRef.current) return;
@@ -56,7 +59,7 @@ const Insights: React.FC<InsightsProps> = ({ cfg, tx, toggles, streak }) => {
               <span
                 key={i}
                 className="inline-block w-1.5 h-1.5 rounded-full transition-colors duration-300"
-                style={{ background: i === Math.min(idx, list.length - 1) ? '#d4af37' : 'rgba(255,255,255,0.2)' }}
+                style={{ background: i === safeIdx ? '#d4af37' : 'rgba(255,255,255,0.2)' }}
               />
             ))}
             <span className="ml-auto">regenerating · {fmt(cfg.dailyAllowance)}/day allowance</span>
