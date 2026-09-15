@@ -8,6 +8,7 @@ import {
   Tx,
   fmt,
   todayISO,
+  todayISOOn,
   statusOfDay,
 } from './engine';
 import { loadProfile, saveProfile, clearProfile, emptyToggles, nextId, Profile } from './storage';
@@ -22,7 +23,11 @@ import Charts from './widgets/Charts';
 import Insights from './widgets/Insights';
 
 const seedTransactions = (cfg: ReturnType<typeof buildConfig>): Tx[] => {
-  const daysAgo = (n: number) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
+  const daysAgo = (n: number) => {
+    const d = new Date();
+    d.setDate(d.getDate() - n);
+    return todayISOOn(d);
+  };
   const today = daysAgo(0);
   const daily = cfg.dailyAllowance;
   return [

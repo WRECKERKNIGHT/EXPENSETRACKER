@@ -83,7 +83,26 @@ export const buildConfig = (i: OnboardInputs): DashboardConfig => {
   return { inputs: i, fixed, spendable, dailyAllowance, monthlySave, goalPct, runwayDays, style: i.style };
 };
 
-export const todayISO = () => new Date().toISOString().slice(0, 10);
+export const todayISO = () => {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = `${d.getMonth() + 1}`.padStart(2, '0');
+  const day = `${d.getDate()}`.padStart(2, '0');
+  return `${y}-${m}-${day}`;
+};
+
+export const daysAgoISO = (n: number) => {
+  const d = new Date();
+  d.setDate(d.getDate() - n);
+  return todayISOOn(d);
+};
+
+export const todayISOOn = (d: Date) => {
+  const y = d.getFullYear();
+  const m = `${d.getMonth() + 1}`.padStart(2, '0');
+  const day = `${d.getDate()}`.padStart(2, '0');
+  return `${y}-${m}-${day}`;
+};
 
 export const parseRupee = (v: string) => {
   const n = parseFloat(v.replace(/[^\d.]/g, ''));
@@ -163,7 +182,7 @@ export const seedTransactions = (inputs: OnboardInputs): Tx[] => {
   const iso = (off: number) => {
     const c = new Date(d);
     c.setDate(c.getDate() - off);
-    return c.toISOString().slice(0, 10);
+    return todayISOOn(c);
   };
   const base: Array<[string, number, Category, number]> = [
     ['Coffee run', 90, 'Food', 0],
